@@ -39,12 +39,7 @@ export default function MyWatchList() {
         new MovieData("The Starving Games", "https://m.media-amazon.com/images/S/pv-target-images/fe59fe64d6bb431fd8d9dcf7466d5924d1d73b0e04f26f6036b7c3bb78a830c7.jpg", "some vid url", true),
         new MovieData("The Room", "https://m.media-amazon.com/images/M/MV5BYmNkMThiODYtZTAzMC00ODJkLTg5MmEtMWIyMGFlZDlkYmNlXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", "some vid url", false),
         new MovieData("Iron Sky: The Coming Race", "https://m.media-amazon.com/images/M/MV5BMzgzODhkY2QtZGMwMi00NDczLTkyN2ItNzUxYzMwMGVlZjgzXkEyXkFqcGc@._V1_.jpg", "some vid url", false),
-        new MovieData("The Good, The Bad and The Ugly", "https://m.media-amazon.com/images/S/pv-target-images/a8275e14cf7e2380ad1c6536d214e372c73c53908b26b7e95a70f68e3470d070.jpg", "some vid url", true),
-        new MovieData("The Good, The Bad and The Ugly", "https://m.media-amazon.com/images/S/pv-target-images/a8275e14cf7e2380ad1c6536d214e372c73c53908b26b7e95a70f68e3470d070.jpg", "some vid url", true),
-        new MovieData("The Good, The Bad and The Ugly", "https://m.media-amazon.com/images/S/pv-target-images/a8275e14cf7e2380ad1c6536d214e372c73c53908b26b7e95a70f68e3470d070.jpg", "some vid url", true),
-        new MovieData("The Good, The Bad and The Ugly", "https://m.media-amazon.com/images/S/pv-target-images/a8275e14cf7e2380ad1c6536d214e372c73c53908b26b7e95a70f68e3470d070.jpg", "some vid url", true),
-        new MovieData("The Good, The Bad and The Ugly", "https://m.media-amazon.com/images/S/pv-target-images/a8275e14cf7e2380ad1c6536d214e372c73c53908b26b7e95a70f68e3470d070.jpg", "some vid url", true),
-        new MovieData("The Good, The Bad and The Ugly", "https://m.media-amazon.com/images/S/pv-target-images/a8275e14cf7e2380ad1c6536d214e372c73c53908b26b7e95a70f68e3470d070.jpg", "some vid url", true),
+        new MovieData("The Good, The Bad and The Ugly", "https://m.media-amazon.com/images/S/pv-target-images/a8275e14cf7e2380ad1c6536d214e372c73c53908b26b7e95a70f68e3470d070.jpg", "some vid url", true)
     ];
 
     // Divide the list of movies into watched and unwatched
@@ -55,25 +50,32 @@ export default function MyWatchList() {
     const mapMoviesToList = (movies: MovieData[]) => {
         return movies.map((movie: MovieData, index: number) => 
             <div className="flex flex-col items-center max-w-[185px]" key={index}>
-                <div className=" w-full h-full">
+                <div className=" w-full h-full relative group">
                     <img className="object-cover w-[185px] aspect-[2/3]" src={movie.getThumbnail()} 
                     alt={`${movie.getName()}_thumbnail.png`}/>
+                    <div className="group-hover:opacity-75 transition-opacity opacity-0 absolute top-0 left-0 bg-black h-full w-full flex justify-center items-center">
+                        <p>[description]</p>
+                    </div>
                 </div>
                 <h3 className="text-l mt-2 text-center">{movie.getName()}</h3>
+
+                {/* Show your rating as well if you've watched it */}
+                {movie.hasWatched() ? <h5 className="text-sm opacity-50">You rated it: 3.4 Stars</h5> : <div></div>}
+                
             </div>);
     }
 
     return (
-        <div className="flex flex-col items-left gap-10 py-10 px-10">
-            <div className=" p-4">
+        <div className="flex flex-col items-left py-10 px-10 bg-background_secondary font-[family-name:var(--font-alatsi)]">
+            <div className="p-4">
                 <h1 className="text-2xl">Watched</h1>
                 <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
                     {mapMoviesToList(watchedMovies)}
                 </div>
             </div>
-            <div className=" p-4">
+            <div className="p-4">
                 <h1 className="text-2xl">Plan to watch</h1>
-                <div className="flex gap-5 mt-2 py-4">
+                <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
                     {mapMoviesToList(planToWatchMovies)}
                 </div>
             </div>
