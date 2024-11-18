@@ -1,5 +1,14 @@
+export default async function MyWatchList() {
 
-export default function MyWatchList() {
+    let data;
+    try {
+        const response = await fetch('http://localhost:8080/user/watchlist?userId=1');
+        data = await response.json();
+      } catch (error) {
+        console.log(error);
+      }
+
+    return <div>{JSON.stringify(data)}</div>;
 
     // Temporary, to be moved to a 'models' folder later
     class MovieData {
@@ -49,7 +58,7 @@ export default function MyWatchList() {
     // Returns a list of movies in JSX format
     const mapMoviesToList = (movies: MovieData[]) => {
         return movies.map((movie: MovieData, index: number) => 
-            <div className="flex flex-col items-center max-w-[185px]" key={index}>
+            <div className="flex flex-col items-center max-w-[185px] cursor-pointer" key={index}>
                 <div className=" w-full h-full relative group">
                     <img className="object-cover w-[185px] aspect-[2/3]" src={movie.getThumbnail()} 
                     alt={`${movie.getName()}_thumbnail.png`}/>
