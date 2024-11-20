@@ -59,7 +59,7 @@ export default async function MyWatchList() {
 
     // If page content is empty, show it on the screen. Otherwise, show the lists of movies.
     let pageContent;
-    if(watchlist.length == 0)
+    if(watchlist.length === 0)
         pageContent = 
         <div>
             <h2 className="text-3xl">Still empty here...</h2>
