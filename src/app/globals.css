@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+
 :root {
   --white: #FFFFFF;
   --background-primary: #202020;
@@ -24,5 +28,10 @@ h1 {
 
 p {
   font-family: var(--font-alatsi);
+  font-size: 20px;
+}
+
+p.details {
+  font-family: var(--font-jura);
   font-size: 20px;
 }

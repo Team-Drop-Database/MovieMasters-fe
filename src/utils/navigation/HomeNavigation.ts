@@ -7,3 +7,7 @@ export function navigateToSignup() {
 export function navigateToLogin() {
   redirect("/signin")
 }
+
+export function navigateToWatchlist() {
+  redirect("/mywatchlist")
+}
