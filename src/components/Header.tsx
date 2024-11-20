@@ -6,7 +6,7 @@ import { Button } from "./generic/Button"
 
 export default function Header() {
   return (
-    <header className="p-5 w-full flex items-center drop-shadow-m bg-primary font-[family-name:var(--font-alatsi)]">
+    <header className="p-5 w-full flex items-center bg-primary drop-shadow-md font-[family-name:var(--font-alatsi)]">
       <div className="flex grow items-center gap-[15rem]">
         <Image 
           src={logo}
@@ -37,8 +37,13 @@ function SearchBar(props: SearchBarProps) {
       value={searchInput}
       placeholder="Search movies"
       type="text"
+      onKeyDown={(e) => { if (e.key === "Enter") onConfirmSearch(searchInput) }}
       onChange={(e) => setSearchInput(e.target.value)}
-      className={`${props.className} outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey hover:bg-light_grey_active hover:duration-300 hover:cursor-text font-[family-name:var(--font-jura)]`}
+      className={`${props.className} outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey hover:bg-light_grey_active duration-300 hover:duration-300 font-[family-name:var(--font-jura)]`}
     />
   )
+}
+
+function onConfirmSearch(input: string) {
+  console.log(`Search for ${input}`)
 }
