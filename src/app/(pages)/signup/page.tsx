@@ -1,5 +1,4 @@
 "use client"
-
 import { FormEvent, useState } from "react";
 
 export default function Page() {
@@ -65,24 +64,26 @@ export default function Page() {
           {succesfullMessage && (
             <p>{succesfullMessage}</p>
           )}
-          <input type="email" name="email" placeholder="E-mail" className="outline-none placeholder-black
-                               py-1 px-2 h-fit rounded-md text-black bg-light_grey hover:bg-light_grey_active
-                               hover:duration-300 hover:cursor-text font-[family-name:var(--font-jura)]" required/>
-          <input name="username" placeholder="Username" minLength={5} className="outline-none
-                               placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                               hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                               font-[family-name:var(--font-jura)]" required/>
-          <input type="password" name="password" placeholder="Password" minLength={8}
-                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
-                               bg-light_grey hover:bg-light_grey_active hover:duration-300
-                               hover:cursor-text font-[family-name:var(--font-jura)]" required/>
-          <input type="password" name="repeatPassword" placeholder="Confirm password"
-                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
-                               bg-light_grey hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                               font-[family-name:var(--font-jura)]" required/>
-          <button type="submit" className="drop-shadow-lg rounded px-3 py-1 bg-accent_blue
-                               hover:bg-accent_blue_active hover:duration-300 hover:cursor-pointer
-                               font-[family-name:var(--font-alatsi)]">Create account
+          <input type="email" name="email" placeholder="E-mail" required
+            className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
+              bg-light_grey hover:bg-light_grey_active hover:duration-300 hover:cursor-text font-[family-name:var(--font-jura)]" />
+          <input name="username" placeholder="Username" minLength={5} 
+            className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
+              bg-light_grey hover:bg-light_grey_active hover:duration-300 hover:cursor-text
+              font-[family-name:var(--font-jura)]" required/>
+          <input type="password" name="password" placeholder="Password" minLength={8} required
+            className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
+              bg-light_grey hover:bg-light_grey_active hover:duration-300
+              hover:cursor-text font-[family-name:var(--font-jura)]" />
+          <input type="password" name="repeatPassword" placeholder="Confirm password" required
+            className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
+              bg-light_grey hover:bg-light_grey_active hover:duration-300 hover:cursor-text
+              font-[family-name:var(--font-jura)]" />
+          <button type="submit" 
+            className="drop-shadow-lg rounded px-3 py-1 bg-accent_blue
+              hover:bg-accent_blue_active hover:duration-300 hover:cursor-pointer
+              font-[family-name:var(--font-alatsi)]">
+            Create account
           </button>
         </form>
       </div>
