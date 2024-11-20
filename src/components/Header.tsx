@@ -3,7 +3,7 @@ import React from "react"
 import Image from "next/image"
 import logo from "@/assets/images/studio_gibby.jpeg"
 import { Button } from "./generic/Button"
-import { navigateToWatchlist } from "@/utils/navigation/HomeNavigation"
+import { navigateToLogin, navigateToSignup, navigateToWatchlist } from "@/utils/navigation/HomeNavigation"
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false)
@@ -26,8 +26,8 @@ export default function Header() {
           <ProfileButton />
         </div> :
         <div className="flex gap-5">
-          <Button text="Register" onClick={() => console.log("Navigate to register")}/>
-          <Button text="Log in" onClick={() => console.log("Navigate to Login")}/>
+          <Button text="Register" onClick={navigateToSignup}/>
+          <Button text="Log in" onClick={navigateToLogin}/>
         </div>
       }
     </header>
