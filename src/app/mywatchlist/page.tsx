@@ -59,14 +59,15 @@ export default async function MyWatchList() {
 
     // If page content is empty, show it on the screen. Otherwise, show the lists of movies.
     let pageContent;
-    if(watchlist.length === 0)
+    if(watchlist.length === 0) {
         pageContent = 
         <div>
             <h2 className="text-3xl">Still empty here...</h2>
             <p>Add some movies to make them show up here!</p>
         </div>
-    else
-    // Display both the watched and unwatched movies in separate sections
+    }
+    else {
+        // Display both the watched and unwatched movies in separate sections
         pageContent = (
             <div>
                 <div className="p-4">
@@ -83,6 +84,7 @@ export default async function MyWatchList() {
                 </div>
             </div>
         )
+    }
 
     // Finally, return the content
     return (
