@@ -28,7 +28,7 @@ export default async function MyWatchList() {
     } catch (error: unknown) {
         if (error instanceof Error) {
             return <p>Failed to fetch data. Error: {error.message}</p>; 
-        }else {
+        } else {
             return <p>Failed to fetch data. Unknown error occurred.</p>;
         }
     }
