@@ -23,7 +23,7 @@ export default async function MyWatchList() {
     let watchlist: WatchlistItem[];
     try{
         //TODO: Change this hardcoded user ID of '1' to the logged in user's ID
-        const response = await fetch('http://localhost:8080/user/watchlist?userId=1');
+        const response = await fetch('http://localhost:8080/users/watchlist?userId=1');
          watchlist = await response.json();
     } catch (error: unknown) {
         if (error instanceof Error) {
