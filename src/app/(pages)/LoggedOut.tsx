@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Button } from "@/components/generic/Button"
 import { navigateToSignup, navigateToLogin } from "@/utils/navigation/HomeNavigation"
 import gibby from "@/assets/images/studio_gibby.jpeg" // TODO: remove once actual reviews are used
+import { Star } from "@/components/generic/review/Star"
 
 export default function LoggedOut() {
   return (
@@ -41,7 +42,7 @@ function ReviewList() {
   }, [sliderRef.current])
 
   return (
-    <div className="h-60 overflow-hidden mb-[4rem]">
+    <div className="h-72 overflow-hidden mb-[4rem]">
       <div ref={sliderRef} className={`animate-slide w-fit flex gap-16`}>
         { reviewList.map((review, index) => {
           return <ReviewItem 
@@ -66,7 +67,7 @@ type ReviewItemProps = {
 
 function ReviewItem(props: ReviewItemProps) {
   return (
-    <div className="slide w-60 p-2 shrink-0 flex flex-col rounded-xl shadow-lg border-background_secondary border-4 gap-5">
+    <div className="slide w-72 p-2 shrink-0 flex flex-col rounded-xl shadow-lg border-background_secondary border-4 gap-5">
       <div className="flex items-start gap-2">
         <Image
           src={gibby}
@@ -77,8 +78,25 @@ function ReviewItem(props: ReviewItemProps) {
         />
         <p className="details grow">{props.reviewerName}</p>
       </div>
+      <ReviewItemStars starAmount={props.starAmount} />
       <p className="details">On: {props.movieName}</p>
       <p className="details">{props.reviewBody}</p>
+    </div>
+  )
+}
+
+type ReviewItemStarsProps = {
+  starAmount: number
+}
+
+function ReviewItemStars({ starAmount }: ReviewItemStarsProps) {
+  return (
+    <div className="flex gap-2">
+      <Star isYellow={starAmount >= 1} />
+      <Star isYellow={starAmount >= 2} />
+      <Star isYellow={starAmount >= 3} />
+      <Star isYellow={starAmount >= 4} />
+      <Star isYellow={starAmount >= 5} />
     </div>
   )
 }

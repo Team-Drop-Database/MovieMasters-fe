@@ -6,7 +6,7 @@ import { Button } from "./generic/Button"
 import { navigateToLogin, navigateToSignup, navigateToWatchlist } from "@/utils/navigation/HomeNavigation"
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false) // TODO: fix when logging in works
 
   return (
     <header className="p-5 w-full flex items-center bg-primary shadow-lg font-[family-name:var(--font-alatsi)]">

@@ -16,9 +16,10 @@ export default {
         accent_blue_active: "var(--accent-blue-active)",
         light_grey: "var(--light-grey)",
         light_grey_active: "var(--light-grey-active)",
+        accent_yellow: "var(--accent-yellow)",
       },
       animation: {
-        slide: "slide 25s linear infinite"
+        slide: "slide 60s linear infinite"
       },
       keyframes: {
         slide: {
