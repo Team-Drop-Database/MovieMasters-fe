@@ -34,8 +34,8 @@ export default async function MyWatchList() {
     }
 
     // Divide the list of movies into watched and unwatched
-    const watchedMovies: WatchlistItem[] = watchlist.filter((item: WatchlistItem) => item.watched);
-    const planToWatchMovies: WatchlistItem[] = watchlist.filter((item: WatchlistItem) => !item.watched);
+    const watchedMovies = watchlist.filter((item: WatchlistItem) => item.watched);
+    const planToWatchMovies = watchlist.filter((item: WatchlistItem) => !item.watched);
 
     // Returns a list of movies in JSX format
     const mapMoviesToList = (items: WatchlistItem[]) => {
