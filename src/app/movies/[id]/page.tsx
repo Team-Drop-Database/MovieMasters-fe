@@ -36,12 +36,27 @@ export default async function Movies({params}: {
     return (
         <div className="flex mx-10 my-5 space-x-20">
             <div className="">
-                <div className="text-4xl">{movie.title}</div>
+                <div className="text-4xl mb-5">{movie.title}</div>
                 <Image src={movie.posterPath} alt={movie.title} width="300" height="300"/>
             </div>
             <div className="">
-                <div className="text-2xl">Description</div>
-                <p>{movie.description}</p>
+                <div id="movie-ratings" className="flex flex-row space-between justify-between w-1/2 mb-5">
+                    <div>
+                        <div className="text-2xl">TMDB rating</div>
+                        <p>{movie.tmdbRating}</p>
+                    </div>
+                    <div>
+                        <div className="text-2xl">Movie Master rating</div>
+                        <p>8.2</p>
+                    </div>
+                </div>
+                <div>
+                    <div className="text-2xl">Description</div>
+                    <p>{movie.description}</p>
+                </div>
+                <div>
+
+                </div>
             </div>
         </div>
     );

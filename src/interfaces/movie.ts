@@ -6,4 +6,5 @@
     releaseDate: Date;
     rating: number;
     posterPath: string;
+    tmdbRating: number;
 }
