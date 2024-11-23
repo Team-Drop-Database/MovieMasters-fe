@@ -1,6 +1,13 @@
 import WatchlistItem from "@/models/WatchListItem";
 import retrieveWatchlistByUser from "@/services/WatchListService";
 
+/**
+ * Displays an overview of the movies that a specific user has 
+ * added on his watchlist, divided into 'Plan to watch' and 
+ * 'Watched' categories.
+ * 
+ * @returns JSX markup displaying the page.
+ */
 export default async function MyWatchList() {
 
     // CURRENTLY HARDCODED, CHANGE LATER:
