@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+
 :root {
   --white: #FFFFFF;
   --background-primary: #202020;
@@ -10,9 +14,25 @@
   --accent-blue-active: #002A68;
   --light-grey: #888888;
   --light-grey-active: #CCCCCC;
+  --accent-yellow: #EEFF00;
 }
 
 body {
   color: var(--white);
   background: var(--background-primary);
+}
+
+h1 {
+  font-family: var(--font-alatsi);
+  font-size: 35px;
+}
+
+p {
+  font-family: var(--font-alatsi);
+  font-size: 20px;
+}
+
+p.details {
+  font-family: var(--font-jura);
+  font-size: 20px;
 }
