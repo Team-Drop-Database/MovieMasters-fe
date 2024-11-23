@@ -1,30 +1,15 @@
+import WatchlistItem from "@/models/WatchListItem";
+import retrieveWatchlistByUser from "@/services/WatchListService";
+
 export default async function MyWatchList() {
 
-    // These interfaces give structure to the fetched data. They are temporarily 
-    // placed here and should be moved to something like a 'models' folder later.
-    interface Movie {
-        id: number;
-        title: string;
-        description: string;
-        language: string;
-        releaseDate: Date;
-        rating: number;
-        posterPath: string;
-    }
-      
-    interface WatchlistItem {
-        id: number;
-        movie: Movie;  
-        watched: boolean;
-        rating: number;
-    }
+    // CURRENTLY HARDCODED, CHANGE LATER:
+    const TEMP_USER_ID = 1;
 
     // Retrieve this user's watchlist, containing all the movies that he's added
     let watchlist: WatchlistItem[];
     try{
-        //TODO: Change this hardcoded user ID of '1' to the logged in user's ID
-        const response = await fetch('http://localhost:8080/users/watchlist?userId=1');
-         watchlist = await response.json();
+        watchlist = await retrieveWatchlistByUser(TEMP_USER_ID);
     } catch (error: unknown) {
         if (error instanceof Error) {
             return <p>Failed to fetch data. Error: {error.message}</p>; 
