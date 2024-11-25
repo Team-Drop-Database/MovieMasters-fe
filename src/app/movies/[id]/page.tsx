@@ -55,7 +55,6 @@ export default async function Movies({params}: {
                     <p>{movie.description}</p>
                 </div>
                 <div>
-
                 </div>
             </div>
         </div>
