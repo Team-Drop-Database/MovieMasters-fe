@@ -7,7 +7,7 @@ export type Movie = {
     description: string;
     language: string;
     releaseDate: Date;
-    rating: number;
+    tmdbRating: number;
     posterPath: string;
 }
 

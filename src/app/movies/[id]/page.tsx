@@ -1,6 +1,6 @@
 ﻿import Image from "next/image";
 import Movie from "@/app/model/movie";
-import getMovieById from "@/Service/MovieService";
+import getMovieById from "@/services/MovieService";
 
 export default async function Movies({params}: {
     params: Promise<{id: number}>
@@ -12,7 +12,10 @@ export default async function Movies({params}: {
         return <div>The movie ID must be a number.</div>;
     }
 
-    const movie: Movie = await getMovieById(movieId);
+    const movie: Movie | undefined = await getMovieById(movieId);
+    if (!movie) {
+        return <div>Something went wrong while trying to get the movie with ID {id}</div>;
+    }
 
     return (
         <div className="flex mx-10 my-5 space-x-20">
