@@ -3,6 +3,7 @@
 import {useRef, FormEvent, useState} from "react";
 import Link from "next/link";
 import {Button} from "@/components/generic/Button";
+import Cookies from 'js-cookie';
 
 export default function Page() {
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -15,12 +16,22 @@ export default function Page() {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
-    //TODO: Replace this with actual login system
-    if (username === "test1234" && password === "password123") {
-      setErrorMessage(null);
-      alert("Login successful!");
-    } else {
-      setErrorMessage("Incorrect username and/or password. Please try again.");
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+
+      const token = await response.text();
+      Cookies.set('jwt', token, { expires: 1, secure: true, sameSite: 'Strict' });
+
+      alert('Login successful!');
+      window.location.reload();
+    } catch (error) {
+      setErrorMessage('Incorrect username and/or password. Please try again.');
+      console.error(error);
     }
   }
 
