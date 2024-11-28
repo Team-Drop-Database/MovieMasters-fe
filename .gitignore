@@ -43,5 +43,5 @@ next-env.d.ts
 # Environment
 .env
 
-# JetBreans
+# JetBrains
 .idea
