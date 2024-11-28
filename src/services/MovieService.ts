@@ -1,6 +1,6 @@
 ﻿import Movie from "@/models/Movie"
 
-export default async function getMovieById(movieId: number): Promise<Movie | undefined> {
+export default async function getMovieById(movieId: number): Promise<Movie | null> {
   try {
     const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/movies/${movieId}`);
 
@@ -11,15 +11,16 @@ export default async function getMovieById(movieId: number): Promise<Movie | und
         return movie;
       }
       case 404: {
-        console.error("Could not find movie with ID: " + movieId);
-        break;
+        console.warn("Could not find movie with ID: " + movieId);
+        return null;
       }
       default: {
-        console.error("Something went wrong while trying to get the movie with ID: " + movieId);
-        break;
+        console.warn("Something went wrong while trying to get the movie with ID: " + movieId);
+        return null;
       }
     }
   } catch (error: unknown) {
     console.error("An error occurred while trying to retrieve the movie.");
+    return null;
   }
 }
