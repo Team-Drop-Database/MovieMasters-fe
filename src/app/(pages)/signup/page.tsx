@@ -44,8 +44,6 @@ export default function Page() {
       console.log("Response:", result);
     } catch (error) {
       console.error("Network error:", error);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       setErrorMessage("An unkown error occured: " + (error as Error).message);
     }
   }
