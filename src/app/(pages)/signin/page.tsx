@@ -3,7 +3,8 @@
 import {useRef, FormEvent, useState} from "react";
 import Link from "next/link";
 import {Button} from "@/components/generic/Button";
-import Cookies from 'js-cookie';
+import {router} from "next/client";
+import {loginUser} from "@/services/authService";
 
 export default function Page() {
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -13,25 +14,15 @@ export default function Page() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
 
     try {
-      const response = await fetch('http://localhost:8080/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-
-      const token = await response.text();
-      Cookies.set('jwt', token, { expires: 1, secure: true, sameSite: 'Strict' });
-
+      await loginUser(username, password);
       alert('Login successful!');
-      window.location.reload();
+      await router.push('/');
     } catch (error) {
-      setErrorMessage('Incorrect username and/or password. Please try again.');
-      console.error(error);
+      setErrorMessage((error as Error).message || 'An unexpected error occurred.');
     }
   }
 
