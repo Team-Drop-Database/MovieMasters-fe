@@ -12,9 +12,9 @@ export default async function Movies({params}: {
     return <div>The movie ID must be a number.</div>;
   }
 
-  const movie: Movie | null = await getMovieById(movieId);
-  if (!movie) {
-    return <div>Something went wrong while trying to get the movie with ID {id}</div>;
+  const movie: Movie | string = await getMovieById(movieId);
+  if (typeof movie === "string") {
+    return <div>{movie}</div>;
   }
 
   return (
