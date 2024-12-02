@@ -1,7 +1,7 @@
 ﻿import Image from "next/image";
 import Movie from "@/models/Movie"
 import getMovieById from "@/services/MovieService";
-import AddToWatchListButton from "./AddToWatchListButton";
+import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
 
 export default async function Movies({params}: {
   params: Promise<{id: number}>
@@ -39,7 +39,7 @@ export default async function Movies({params}: {
           <div className="text-2xl">Description</div>
           <p>{movie.description}</p>
         </div>
-          <AddToWatchListButton params={params}></AddToWatchListButton>
+          <WatchListButtonWrapper></WatchListButtonWrapper>
         <div>
         </div>
       </div>

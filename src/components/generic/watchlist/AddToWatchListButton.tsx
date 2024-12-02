@@ -1,12 +1,7 @@
 'use client'
 
+import { WatchedState } from "@/services/WatchListService";
 import { useState } from "react";
-
-enum WatchedState {
-    WATCHED,
-    UNWATCHED,
-    ERROR
-};
 
 export default function AddToWatchListButton({params}: {
   params: Promise<{id: number}>
@@ -19,6 +14,7 @@ export default function AddToWatchListButton({params}: {
   const handleAddMovieToWatchlist = () => {
 
     //TODO: Hier het PUT request om de watched status te updaten
+    //const response = watchlistService.addToWatched(userId, movieId);
     
     // Als alles goed ging:
     setWatched(WatchedState.WATCHED);
@@ -35,11 +31,6 @@ export default function AddToWatchListButton({params}: {
   } else {
     watchedWidget = <p className="text-red-500">Something went wrong. Please try again later.</p>
   }
-
-//   let watchedWidget = watched == WatchedState.WATCHED ? <p>On your watchlist (vinkje)</p> : 
-//   <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-xl
-//   hover:shadow-xl shadow:blue outline hover:ring-2  outline-1 outline-blue-600
-//    hover:bg-blue-400 transition-all" onClick={handleAddMovieToWatchlist}>Add to my watchlist</button>;
 
   return (<div className="mt-4">
             {watchedWidget}
