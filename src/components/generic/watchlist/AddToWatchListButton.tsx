@@ -3,12 +3,12 @@
 import { WatchedState } from "@/services/WatchListService";
 import { useState } from "react";
 
-export default function AddToWatchListButton({params}: {
-  params: Promise<{id: number}>
+export default function AddToWatchListButton({watchedInitially}: {
+  watchedInitially: WatchedState
 }) {
 
   // Pak later de default value (nu 'false') uit params. Dit is wat de server initieel laadt.
-  const [watched, setWatched] = useState(WatchedState.UNWATCHED);
+  const [watched, setWatched] = useState(watchedInitially);
 
   // Handler for adding a movie to the users watchlist
   const handleAddMovieToWatchlist = () => {
@@ -20,8 +20,10 @@ export default function AddToWatchListButton({params}: {
     setWatched(WatchedState.WATCHED);
   }
 
+  // Holds the final JSX For this component
   let watchedWidget;
 
+  // Determine JSX based on watched state
   if (watched == WatchedState.WATCHED) {
     watchedWidget = <p>On your watchlist (vinkje)</p>;
   } else if (watched == WatchedState.UNWATCHED ) {
@@ -31,7 +33,7 @@ export default function AddToWatchListButton({params}: {
   } else {
     watchedWidget = <p className="text-red-500">Something went wrong. Please try again later.</p>
   }
-
+  
   return (<div className="mt-4">
             {watchedWidget}
         </div>);
