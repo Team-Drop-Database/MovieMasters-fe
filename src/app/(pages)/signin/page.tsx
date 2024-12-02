@@ -3,12 +3,13 @@
 import {useRef, FormEvent, useState} from "react";
 import Link from "next/link";
 import {Button} from "@/components/generic/Button";
-import {router} from "next/client";
-import {loginUser} from "@/services/authService";
+import { useRouter } from "next/navigation";
+import {loginUser} from "@/services/AuthService";
 
 export default function Page() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
