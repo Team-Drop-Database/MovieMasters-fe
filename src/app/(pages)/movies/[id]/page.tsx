@@ -39,7 +39,7 @@ export default async function Movies({params}: {
           <div className="text-2xl">Description</div>
           <p>{movie.description}</p>
         </div>
-        <AddToWatchListButton params={params}></AddToWatchListButton>
+          <AddToWatchListButton params={params}></AddToWatchListButton>
         <div>
         </div>
       </div>
