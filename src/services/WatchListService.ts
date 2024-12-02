@@ -15,7 +15,7 @@ export enum WatchedState {
  * of WatchlistItems
  */
 export async function retrieveWatchlistByUser(userId: number): Promise<WatchlistItem[]> {
-    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist`;
+    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist`;
 
     try {
         const response = await fetch(QUERY_URL);
@@ -28,7 +28,7 @@ export async function retrieveWatchlistByUser(userId: number): Promise<Watchlist
     }
 }
 
-export async function hasWatched(userId: number, movieId: number): Promise<Boolean> {
+export async function hasWatched(userId: number, movieId: number): Promise<WatchedState> {
 
     // Fetch the watchlist first
     let watchlist: WatchlistItem[];
@@ -37,15 +37,16 @@ export async function hasWatched(userId: number, movieId: number): Promise<Boole
     } catch(error: unknown) {
         if (error instanceof Error)
             console.error(`Failed to lookup 'hasWatched' data 
-        for user '${userId}' and movieId '${movieId
+        for user userId '${userId}' and movieId '${movieId
             }'.\nError message: ${error.message}.`);
-        throw error;
+        return WatchedState.ERROR;
     }
 
     // Filter on the movieId, check whether its in the list of movies
     const includesMovie = watchlist
         .filter((item) => item.movie.id == movieId);
-    const watched = includesMovie.length > 0;
+    const watched = includesMovie.length > 0 ? 
+        WatchedState.WATCHED : WatchedState.UNWATCHED;
 
     // Return the result
     return watched;
