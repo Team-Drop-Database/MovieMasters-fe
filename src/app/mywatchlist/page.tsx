@@ -1,5 +1,5 @@
 import WatchlistItem from "@/models/WatchListItem";
-import retrieveWatchlistByUser from "@/services/WatchListService";
+import { retrieveWatchlistByUser } from "@/services/WatchListService";
 
 /**
  * Displays an overview of the movies that a specific user has 
