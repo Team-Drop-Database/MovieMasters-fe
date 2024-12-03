@@ -43,7 +43,7 @@ export default function Profile() {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-slate-600">
+      <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-background_secondary">
         <div className="flex justify-center items-center">
           <img
             src={profileData.profilePictureURL}
@@ -78,9 +78,11 @@ export default function Profile() {
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text
                          font-[family-name:var(--font-jura)] w-full"
             />
-            <label className="block text-m text-red-500">
-              Username must be at least 5 characters
-            </label>
+            {profileData.username.length < 5 && (
+              <label className="block text-m text-red-500">
+                Username must be at least 5 characters
+              </label>
+            )}
             <label className="block text-m font-medium mt-4">
               E-mail
             </label>
@@ -105,6 +107,11 @@ export default function Profile() {
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text
                          font-[family-name:var(--font-jura)] w-full"
             />
+            {profileData.password.length < 8 && (
+              <label className="block text-m text-red-500">
+                Password must be at least 8 characters
+              </label>
+            )}
           </div>
         ) : (
           <div>
