@@ -7,7 +7,7 @@ const HOME_PATH = '/';
 const SIGNIN_PATH = '/signin';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get("jwt");
+  const token = request.cookies.get('jwt');
   const url = request.nextUrl.clone();
 
   if (AUTH_REQUIRED_PATHS.has(url.pathname) && !token) {

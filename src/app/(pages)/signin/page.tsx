@@ -20,10 +20,12 @@ export default function Page() {
 
     try {
       await loginUser(username, password);
-      alert('Login successful!');
       await router.push('/');
+      location.reload();
     } catch (error) {
-      setErrorMessage((error as Error).message || 'An unexpected error occurred.');
+      const errorMessage =
+        (error as Error).message || 'An unexpected error occurred. Please try again.';
+      setErrorMessage(errorMessage);
     }
   }
 

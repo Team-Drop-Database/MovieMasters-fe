@@ -9,14 +9,18 @@ import Cookies from 'js-cookie';
  * @throws An error if the request fails or credentials are incorrect.
  */
 export async function loginUser(username: string, password: string): Promise<string> {
-  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/auth/login`
+  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/auth/login`;
 
   try {
     const response = await fetch(url, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({username, password}),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
     });
+
+    if (!response.ok) {
+      throw new Error('Login failed: Incorrect username and/or password');
+    }
 
     const token = await response.text();
 

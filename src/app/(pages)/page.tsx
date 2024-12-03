@@ -14,7 +14,7 @@ export default function Home() {
       {isLoggedIn ? (
         <LoggedIn
           onLogout={() => {
-            Cookies.remove("jwt");
+            Cookies.remove('jwt');
             location.reload(); //Reload for now
           }}
           userDetails={userDetails}

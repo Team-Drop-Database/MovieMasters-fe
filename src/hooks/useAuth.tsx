@@ -7,7 +7,7 @@ export function useAuth() {
   const [userDetails, setUserDetails] = useState<{ username?: string, userId?: number } | null>(null);
 
   useEffect(() => {
-    const token = Cookies.get("jwt");
+    const token = Cookies.get('jwt');
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
