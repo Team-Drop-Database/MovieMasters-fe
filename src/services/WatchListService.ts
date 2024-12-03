@@ -9,7 +9,7 @@ import WatchlistItem from "@/models/WatchListItem";
  * of WatchlistItems
  */
 export default async function retrieveWatchlistByUser(userId: number): Promise<WatchlistItem[]> {
-    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist`;
+    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist`;
 
     try {
         const response = await fetch(QUERY_URL);
