@@ -107,6 +107,29 @@ export async function addToWatchlist(userId: number, movieId: number): Promise<W
 }
 
 /**
+ * Removes a movie from a users' watchlist.
+ * 
+ * @param userId id of the user
+ * @param movieId id of the movie
+ * @returns enum representing the new watched-state 
+ * of the user and the movie
+ */
+export async function removeFromWatchlist(userId: number, movieId: number): Promise<WatchedState> {
+    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process
+        .env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist/remove/${movieId}`;
+
+    try {
+        await fetch(QUERY_URL, {method: 'PUT'});
+        return WatchedState.NOT_WATCHLISTED;
+    } catch(error: unknown) {
+        if (error instanceof Error)
+            console.error(`Failed to update data using query: ${
+                QUERY_URL}.\nError message: ${error.message}`)
+        return WatchedState.ERROR;
+    }
+}
+
+/**
  * Updates the watched/unwatched status that a user
  *  has with a movie. The 'watched' property will 
  * essentially be updated by this method.

@@ -48,3 +48,6 @@ next-env.d.ts
 
 # Todo file
 TODO.txt
+
+# Vscode
+.vscode
