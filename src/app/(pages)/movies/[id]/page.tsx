@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Movie from "@/models/Movie"
 import getMovieById from "@/services/MovieService";
 
@@ -21,7 +21,9 @@ export default async function Movies({params}: {
     <div className="flex mx-10 my-5 space-x-20">
       <div className="">
         <div className="text-4xl mb-5">{movie.title}</div>
-        <Image src={movie.posterPath} alt={movie.title} width="300" height="300"/>
+        <div className="w-[300px]">
+          <img className="object-cover aspect-2/3" src={movie.posterPath} alt={movie.title}/>
+        </div>
       </div>
       <div className="">
         <div id="movie-ratings" className="flex flex-row space-between justify-between w-1/2 mb-5">
