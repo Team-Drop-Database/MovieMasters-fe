@@ -106,4 +106,31 @@ export async function addToWatchlist(userId: number, movieId: number): Promise<W
     }
 }
 
+/**
+ * Updates the watched/unwatched status that a user
+ *  has with a movie. The 'watched' property will 
+ * essentially be updated by this method.
+ * 
+ * @param userId id of a user
+ * @param movieId id of a movie
+ * @param watched whether the user has watched this 
+ * movie or not
+ * @returns enum representing the new watched-state 
+ * of the user and the movie
+ */
+export async function updateWatchedStatus(userId: number, movieId: number, watched: WatchedState): Promise<WatchedState> {
+    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process
+        .env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist/update/${
+            movieId}?watched=${watched == WatchedState.WATCHED ? 'true' : 'false'}`;
+    try {
+        const response = await fetch(QUERY_URL, {method: 'PUT'});
+        const data = await response.json();
+        const hasWatched = data.association_object.watched;
+        return hasWatched ? WatchedState.WATCHED : WatchedState.UNWATCHED;
+    } catch(error: unknown) {
+        if (error instanceof Error)
+            console.error(`Failed to update data using query: ${
+                QUERY_URL}.\nError message: ${error.message}`)
+        return WatchedState.ERROR;    
+    }
 }
