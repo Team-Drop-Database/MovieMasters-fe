@@ -1,4 +1,4 @@
-import { hasWatched, WatchedState } from "@/services/WatchListService";
+import { getWatchedStatus, WatchedState } from "@/services/WatchListService";
 import AddToWatchListButton from "./AddToWatchListButton";
 
 /**
@@ -16,9 +16,13 @@ export default async function WatchListButtonWrapper({params}: {
     }
 }) {
 
-    // Query database whether the user has watched this movie
-    let watched: WatchedState = await hasWatched(params.userId, params.movieId);
+    // Query database whether the user has watchlisted and/or watched this movie
+    let watched: WatchedState = await getWatchedStatus(params.userId, params.movieId);
 
     // Render the client-side component
-    return <AddToWatchListButton watchedInitially={watched}></AddToWatchListButton>
+    return <AddToWatchListButton params={{
+        initialWatchedStatus: watched,
+        userId: params.userId,
+        movieId: params.movieId
+    }}></AddToWatchListButton>
 }
