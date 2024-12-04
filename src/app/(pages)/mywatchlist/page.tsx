@@ -31,23 +31,43 @@ export default async function MyWatchList() {
 
     // Returns a list of movies in JSX format
     const mapMoviesToList = (items: WatchlistItem[]) => {
-        return items.map((item: WatchlistItem, index: number) => 
-            <div className="flex flex-col items-center max-w-[185px] cursor-pointer" key={index}>
+
+        // Maybe move this value somewhere else
+        const MAX_CHARS = 175;
+
+        return items.map((item: WatchlistItem, index: number) => {
+
+            let description = item.movie.description;
+            if (description.length > MAX_CHARS) {
+                description = `${description.substring(0, MAX_CHARS)}...`;
+            }
+
+            // Construct message about what the user has rated
+            let ratingMessage;
+            if (item.watched && item.review) {
+                ratingMessage = <h5 className="text-xs opacity-50">You rated it: {item.review.rating} Stars</h5>;
+            } else if (item.watched) {
+                ratingMessage = <h5 className="text-xs opacity-50 w-[80%] text-center text-blue-500 hover:underline">Review this movie</h5>;
+            } else {
+                ratingMessage = '';
+            }
+
+            return <div className="flex flex-col items-center max-w-[185px] cursor-pointer" key={index}>
                 <div className=" w-full h-full relative group">
                     <img className="object-cover w-[185px] aspect-[2/3]" src={item.movie.posterPath} 
                     alt={`${item.movie.title}_thumbnail.png`}/>
                     <div className="group-hover:opacity-75 transition-opacity opacity-0 absolute
-                     top-0 left-0 bg-black h-full w-full flex justify-center items-center">
-                        <p>[description]</p>
+                     top-0 left-0 bg-black h-full w-full flex justify-evenly items-center flex-col">
+                        <p className="text-center text-sm w-[90%]">{description}</p>
+                        <p className="text-center text-sm">TMDB Rating: <span className="text-blue-500">{item.movie.tmdbRating}</span></p>
                     </div>
                 </div>
                 <h3 className="text-l mt-2 text-center">{item.movie.title}</h3>
 
-                {/* Show your rating as well if you've watched it */}
-                {/* TODO: replace the hardcoded 'rating' down here*/}
-                { item.watched && <h5 className="text-sm opacity-50">You rated it: 3.4 Stars</h5>}
-                
-            </div>);
+                {/* Show your rating as well if you've watched it (and reviewed it)*/}
+                { ratingMessage }
+
+            </div>});
     }
 
     // If page content is empty, show it on the screen. Otherwise, show the lists of movies.
