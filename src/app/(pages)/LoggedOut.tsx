@@ -34,7 +34,7 @@ function ReviewList() {
       const mappedResponse = mapReviewResponsesToItems(reviewResponse)
 
       const multiplier = reviewAmount / mappedResponse.length
-      let multiplied: ReviewItemProps[] = []
+      const multiplied: ReviewItemProps[] = []
       for (let i = 0; i < multiplier; i++) {
         multiplied.push(...mappedResponse)
       }
