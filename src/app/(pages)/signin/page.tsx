@@ -20,8 +20,8 @@ export default function Page() {
 
     try {
       await loginUser(username, password);
-      await router.push('/');
-      location.reload();
+      router.push('/');
+      location.reload(); //Reload for now
     } catch (error) {
       const errorMessage =
         (error as Error).message || 'An unexpected error occurred. Please try again.';
