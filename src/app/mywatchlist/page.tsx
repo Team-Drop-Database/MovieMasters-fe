@@ -11,7 +11,7 @@ import { retrieveWatchlistByUser } from "@/services/WatchListService";
 export default async function MyWatchList() {
 
     // CURRENTLY HARDCODED, CHANGE LATER:
-    const TEMP_USER_ID = 35;
+    const TEMP_USER_ID = 1;
 
     // Retrieve this user's watchlist, containing all the movies that he's added
     let watchlist: WatchlistItem[];
