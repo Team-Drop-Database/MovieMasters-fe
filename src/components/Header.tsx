@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import logo from "@/assets/images/studio_gibby.jpeg";
+import logo from "@/assets/images/moviemaster1.png"
 import { Button } from "./generic/Button";
 import { navigateToLogin, navigateToSignup, navigateToWatchlist } from "@/utils/navigation/HomeNavigation";
 import { useAuth } from "@/hooks/useAuth";
