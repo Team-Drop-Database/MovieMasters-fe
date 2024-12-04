@@ -31,11 +31,11 @@ export default async function Movies({params}: {
         <Image src={movie.posterPath} alt={movie.title} width={300} height={300}/>
       </div>
       <div className="">
-        <div className=" mb-5 border-b border-slate-400 border-opacity-10 pb-4">
+        <div className=" mb-5 border-b border-slate-400 border-opacity-20 pb-4">
           <div className="text-4xl font-medium">{movie.title}</div>
-          <h5 className="font-semibold opacity-30 text-sm">{movieReleaseYear} - {movie.language.toUpperCase()}</h5>
+          <h5 className="font-semibold opacity-40 text-sm">{movieReleaseYear} - {movie.language.toUpperCase()}</h5>
         </div>
-        <div id="movie-ratings" className="flex flex-row space-between justify-between w-1/2 mb-5  border-b border-slate-400 border-opacity-10 pb-4">
+        <div id="movie-ratings" className="flex flex-row space-between justify-between w-1/2 mb-5  border-b border-slate-400 border-opacity-20 pb-4">
           <div>
             <div className="text-2xl">TMDB rating</div>
             <p className="text-2xl font-sans font-semibold">{movie.tmdbRating}</p>
@@ -45,7 +45,7 @@ export default async function Movies({params}: {
             <p className="text-2xl font-sans font-semibold">8.2</p>
           </div>
         </div>
-        <div className="border-b border-slate-400 border-opacity-10 pb-4">
+        <div className="border-b border-slate-400 border-opacity-20 pb-4">
           <div className="text-2xl font-semibold">Description</div>
           <p className="font-sans">{movie.description}</p>
         </div>
