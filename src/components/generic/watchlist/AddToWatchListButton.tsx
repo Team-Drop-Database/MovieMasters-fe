@@ -2,6 +2,7 @@
 
 import { addToWatchlist, removeFromWatchlist, updateWatchedStatus, WatchedState } from "@/services/WatchListService";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function AddToWatchListButton({params}: {
   params : {
@@ -50,8 +51,10 @@ export default function AddToWatchListButton({params}: {
   }
 
   return (<div className="mt-4">
-            <p>On your watchlist (vinkje). <a onClick={handleRemoveMovieFromWatchlist}>
-              <span className="text-blue-400 hover:underline cursor-pointer font-extralight text-sm">Remove</span></a></p>
+            <div className="flex gap-1 items-end">
+              <p className="flex items-center gap-1">On your watchlist<Image src={'/checkmark.svg'} width={16} height={16} alt={"checkmark.svg"}></Image></p>
+              <a onClick={handleRemoveMovieFromWatchlist}><span className="text-blue-400 hover:underline cursor-pointer text-xs">Remove</span></a>
+            </div>
             <select id="selectWatchedStatus" name="SelectWatchedStatus" 
                 className="mt-2 px-4 py-2 bg-blue-500 rounded-md text-white font-semibold" 
                 value={watchStatus} 
