@@ -1,7 +1,7 @@
 "use client"
 import React from "react"
 import Image from "next/image"
-import logo from "@/assets/images/studio_gibby.jpeg"
+import logo from "@/assets/images/moviemaster1.png"
 import { Button } from "./generic/Button"
 import { navigateToLogin, navigateToSignup, navigateToWatchlist } from "@/utils/navigation/HomeNavigation"
 
@@ -26,7 +26,7 @@ export default function Header() {
           <ProfileButton />
         </div> :
         <div className="flex gap-5">
-          <Button text="Register" onClick={navigateToSignup}/>
+          <Button text="Sign up" onClick={navigateToSignup}/>
           <Button text="Log in" onClick={navigateToLogin}/>
         </div>
       }
