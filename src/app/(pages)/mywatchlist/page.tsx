@@ -32,14 +32,16 @@ export default async function MyWatchList() {
     // Returns a list of movies in JSX format
     const mapMoviesToList = (items: WatchlistItem[]) => {
 
-        // Maybe move this value somewhere else
-        const MAX_CHARS = 175;
+        // Set movie description to max 175 characters
+        const DESCRIPTION_MAX_CHARS = 175;
 
         return items.map((item: WatchlistItem, index: number) => {
 
+            // Construct movie description for when the user hovers over 
+            // a movie. Make sure to cut it off at the max-length.
             let description = item.movie.description;
-            if (description.length > MAX_CHARS) {
-                description = `${description.substring(0, MAX_CHARS)}...`;
+            if (description.length > DESCRIPTION_MAX_CHARS) {
+                description = `${description.substring(0, DESCRIPTION_MAX_CHARS)}...`;
             }
 
             // Construct message about what the user has rated
@@ -52,6 +54,8 @@ export default async function MyWatchList() {
                 ratingMessage = '';
             }
 
+            // Return the movie widget including information such as the 
+            // description, TMDB rating and possibly the users' own rating
             return <div className="flex flex-col items-center max-w-[185px] cursor-pointer" key={index}>
                 <div className=" w-full h-full relative group">
                     <img className="object-cover w-[185px] aspect-[2/3]" src={item.movie.posterPath} 
