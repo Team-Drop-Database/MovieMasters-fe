@@ -44,6 +44,7 @@ export default async function MyWatchList() {
                 <h3 className="text-l mt-2 text-center">{item.movie.title}</h3>
 
                 {/* Show your rating as well if you've watched it */}
+                {/* TODO: replace the hardcoded 'rating' down here*/}
                 { item.watched && <h5 className="text-sm opacity-50">You rated it: 3.4 Stars</h5>}
                 
             </div>);
