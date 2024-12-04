@@ -22,26 +22,32 @@ export default async function Movies({params}: {
     return <div>{movie}</div>;
   }
 
+
+  const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
+
   return (
-    <div className="flex mx-10 my-5 space-x-20">
+    <div className="flex mx-10 my-5 space-x-20 font-sans">
       <div className="flex flex-col gap-5">
         <Image src={movie.posterPath} alt={movie.title} width={300} height={300}/>
-        <div className="text-4xl mb-5">{movie.title}</div>
       </div>
       <div className="">
-        <div id="movie-ratings" className="flex flex-row space-between justify-between w-1/2 mb-5">
+        <div className=" mb-5 border-b border-slate-400 border-opacity-10 pb-4">
+          <div className="text-4xl font-medium">{movie.title}</div>
+          <h5 className="font-semibold opacity-30 text-sm">{movieReleaseYear} - {movie.language.toUpperCase()}</h5>
+        </div>
+        <div id="movie-ratings" className="flex flex-row space-between justify-between w-1/2 mb-5  border-b border-slate-400 border-opacity-10 pb-4">
           <div>
             <div className="text-2xl">TMDB rating</div>
-            <p className="text-2xl">{movie.tmdbRating}</p>
+            <p className="text-2xl font-sans font-semibold">{movie.tmdbRating}</p>
           </div>
           <div>
             <div className="text-2xl">Movie Master rating</div>
-            <p className="text-2xl">8.2</p>
+            <p className="text-2xl font-sans font-semibold">8.2</p>
           </div>
         </div>
-        <div>
-          <div className="text-2xl">Description</div>
-          <p>{movie.description}</p>
+        <div className="border-b border-slate-400 border-opacity-10 pb-4">
+          <div className="text-2xl font-semibold">Description</div>
+          <p className="font-sans">{movie.description}</p>
         </div>
           <WatchListButtonWrapper params={{
           userId: TEMP_USER_ID,
