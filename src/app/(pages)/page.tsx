@@ -15,6 +15,7 @@ export default function Home() {
         <LoggedIn
           onLogout={() => {
             Cookies.remove('jwt');
+            Cookies.remove('refresh_token');
             location.reload(); //Reload for now
           }}
           userDetails={userDetails}
