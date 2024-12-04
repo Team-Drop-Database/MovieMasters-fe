@@ -1,5 +1,6 @@
 import WatchlistItem from "@/models/WatchListItem";
 import { retrieveWatchlistByUser } from "@/services/WatchListService";
+import Link from "next/link";
 
 /**
  * Displays an overview of the movies that a specific user has 
@@ -49,21 +50,24 @@ export default async function MyWatchList() {
             if (item.watched && item.review) {
                 ratingMessage = <h5 className="text-xs opacity-50">You rated it: {item.review.rating} Stars</h5>;
             } else if (item.watched) {
-                ratingMessage = <h5 className="text-xs opacity-50 w-[80%] text-center text-blue-500 hover:underline">Review this movie</h5>;
+                ratingMessage = <h5 className="text-xs opacity-50 w-[80%] text-center 
+                text-blue-500 hover:underline">Review this movie</h5>;
             } else {
                 ratingMessage = '';
             }
 
             // Return the movie widget including information such as the 
             // description, TMDB rating and possibly the users' own rating
-            return <div className="flex flex-col items-center max-w-[185px] cursor-pointer" key={index}>
+            return <Link className="flex flex-col items-center max-w-[185px] cursor-pointer"
+             key={index} href={`/movies/${item.movie.id}`}>
                 <div className=" w-full h-full relative group">
                     <img className="object-cover w-[185px] aspect-[2/3]" src={item.movie.posterPath} 
                     alt={`${item.movie.title}_thumbnail.png`}/>
                     <div className="group-hover:opacity-75 transition-opacity opacity-0 absolute
                      top-0 left-0 bg-black h-full w-full flex justify-evenly items-center flex-col">
                         <p className="text-center text-sm w-[90%]">{description}</p>
-                        <p className="text-center text-sm">TMDB Rating: <span className="text-blue-500">{item.movie.tmdbRating}</span></p>
+                        <p className="text-center text-sm">TMDB Rating: <span 
+                            className="text-blue-500">{item.movie.tmdbRating}</span></p>
                     </div>
                 </div>
                 <h3 className="text-l mt-2 text-center">{item.movie.title}</h3>
@@ -71,7 +75,7 @@ export default async function MyWatchList() {
                 {/* Show your rating as well if you've watched it (and reviewed it)*/}
                 { ratingMessage }
 
-            </div>});
+            </Link>});
     }
 
     // If page content is empty, show it on the screen. Otherwise, show the lists of movies.
