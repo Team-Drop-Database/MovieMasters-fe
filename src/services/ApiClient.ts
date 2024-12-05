@@ -14,7 +14,6 @@ const apiClient = async (endpoint: string, options: RequestInit = {}) => {
     const requestCookies = await cookies();  // Access cookies from the request
 
     const token = requestCookies.get('jwt').value;
-    console.log(token)
 
     const headers = new Headers({
       'Content-Type': 'application/json',
