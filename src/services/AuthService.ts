@@ -47,7 +47,7 @@ export async function refreshToken(): Promise<string> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({refreshToken}),
+    body: JSON.stringify({ jwt: refreshToken }),
   });
 
   if (!response.ok) {
