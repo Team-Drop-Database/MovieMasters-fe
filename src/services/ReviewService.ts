@@ -1,3 +1,5 @@
+"use server"
+
 export async function requestReviewsByAmount(amount: number): Promise<ReviewResponse[]> {
   const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/reviews/${amount}`
   const response = await fetch(url)

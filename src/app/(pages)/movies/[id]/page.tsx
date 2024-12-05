@@ -1,6 +1,6 @@
 ﻿import Image from "next/image";
 import Movie from "@/models/Movie"
-import getMovieById from "@/services/MovieService";
+import { getMovieById } from "@/services/MovieService";
 
 export default async function Movies({params}: {
   params: Promise<{id: number}>

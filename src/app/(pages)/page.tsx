@@ -4,7 +4,7 @@ import LoggedOut from "./LoggedOut";
 import LoggedIn from "./LoggedIn";
 
 export default function Home() {
-  const loggedIn = false
+  const loggedIn = true
 
   return (
     <main className="flex flex-col gap-14 font-[family-name:var(--font-alatsi)]">
@@ -13,3 +13,12 @@ export default function Home() {
   );
 }
 
+export type MovieListResponse = {
+  page: number
+  results: MovieItemResponse[]
+}
+
+export type MovieItemResponse = {
+  original_title: string
+  poster_path: string
+}
