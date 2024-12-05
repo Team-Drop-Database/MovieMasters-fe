@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Movie from "@/models/Movie"
 import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
@@ -27,9 +27,9 @@ export default async function Movies({params}: {
 
   return (
     <div className="flex mx-10 my-5 space-x-20 font-sans">
-      <div className="flex flex-col gap-5">
-        <Image src={movie.posterPath} alt={movie.title} width={300} height={300}/>
-      </div>
+        <div className="max-w-[300px]">
+          <img className="object-cover aspect-2/3" src={movie.posterPath} alt={movie.title}/>
+        </div>
       <div className="">
         <div className=" mb-5 border-b border-slate-400 border-opacity-20 pb-4">
           <div className="text-4xl font-medium">{movie.title}</div>
