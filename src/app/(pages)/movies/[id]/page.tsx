@@ -1,12 +1,17 @@
 ﻿import Image from "next/image";
 import Movie from "@/models/Movie"
 import getMovieById from "@/services/MovieService";
+import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
 
 export default async function Movies({params}: {
   params: Promise<{id: number}>
 }) {
   const { id } = await params;
   const movieId: number = id;
+
+  // Temporarily hardcoded ID of user. Delete later
+  // when user ID can be accessed.
+  const TEMP_USER_ID = 1;
 
   if (isNaN(movieId)) {
     return <div>The movie ID must be a number.</div>;
@@ -38,6 +43,10 @@ export default async function Movies({params}: {
           <div className="text-2xl">Description</div>
           <p>{movie.description}</p>
         </div>
+          <WatchListButtonWrapper params={{
+          userId: TEMP_USER_ID,
+          movieId
+        }}></WatchListButtonWrapper>
         <div>
         </div>
       </div>
