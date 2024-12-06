@@ -1,7 +1,6 @@
 import WatchlistItem from "@/models/WatchListItem";
 import { retrieveWatchlistByUser } from "@/services/WatchListService";
 import Link from "next/link";
-import {getToken} from "@/utils/tokenUtils";
 
 /**
  * Displays an overview of the movies that a specific user has
@@ -18,7 +17,7 @@ export default async function MyWatchList() {
     // Retrieve this user's watchlist, containing all the movies that he's added
     let watchlist: WatchlistItem[];
     try{
-        watchlist = await retrieveWatchlistByUser(TEMP_USER_ID, getToken());
+        watchlist = await retrieveWatchlistByUser(TEMP_USER_ID);
     } catch (error: unknown) {
         if (error instanceof Error) {
             return <p>Failed to fetch data. Error: {error.message}</p>;
