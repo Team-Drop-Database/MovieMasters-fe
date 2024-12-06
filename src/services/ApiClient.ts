@@ -1,4 +1,4 @@
-import {cookies} from "next/headers";
+import Cookies from "js-cookie"
 
 /**
  * API Client to handle requests with default headers, including Authorization if logged in.
@@ -11,9 +11,7 @@ import {cookies} from "next/headers";
 const apiClient = async (endpoint: string, options: RequestInit = {}) => {
 
   try {
-    const requestCookies = await cookies();  // Access cookies from the request
-
-    const token = requestCookies.get('jwt').value;
+    const token = Cookies.get('jwt')
 
     const headers = new Headers({
       'Content-Type': 'application/json',

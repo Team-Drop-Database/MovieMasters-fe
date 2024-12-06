@@ -5,7 +5,7 @@ import {refreshToken} from "@/services/AuthService";
 
 export function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userDetails, setUserDetails] = useState<{ username?: string; userId?: number } | null>(null);
+  const [userDetails, setUserDetails] = useState<{ username: string; userId: number } | null>(null);
 
   useEffect(() => {
     async function initAuth() {

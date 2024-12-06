@@ -33,10 +33,7 @@ function ReviewList() {
       const reviewResponse = await requestReviewsByAmount(reviewAmount)
       const mappedResponse = mapReviewResponsesToItems(reviewResponse)
 
-      if (mappedResponse.length === 0) {
-        return;
-      }
-
+      if (mappedResponse.length === 0) return
       const multiplier = reviewAmount / mappedResponse.length
       const multiplied: ReviewItemProps[] = []
       for (let i = 0; i < multiplier; i++) {
