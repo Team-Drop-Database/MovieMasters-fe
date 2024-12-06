@@ -1,4 +1,4 @@
-import PageTransition from "@/components/generic/PageTransition";
+import ElementTransition from "@/components/generic/transitions/ElementTransition";
 import WatchlistItem from "@/models/WatchListItem";
 import { retrieveWatchlistByUser } from "@/services/WatchListService";
 import Link from "next/link";
@@ -91,7 +91,7 @@ export default async function MyWatchList() {
     else {
         // Display both the watched and unwatched movies in separate sections
         pageContent = (
-            <PageTransition>
+            <ElementTransition>
                 <div>
                     <div className="p-4">
                         <h1 className="text-2xl">Watched</h1>
@@ -106,7 +106,7 @@ export default async function MyWatchList() {
                         </div>
                     </div>
                 </div>
-            </PageTransition>
+            </ElementTransition>
         )
     }
 
