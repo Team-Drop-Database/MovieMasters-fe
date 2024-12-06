@@ -9,9 +9,6 @@ export default function LoggedIn({ onLogout, userDetails }: LoggedInProps) {
       <h1 className="text-3xl font-semibold">
         Welcome Back, {userDetails?.username || "User"}!
       </h1>
-      <p className="text-xl text-center mt-2">
-        You are logged in with ID: <strong>{userDetails?.userId || "N/A"}</strong>
-      </p>
       <button
         onClick={onLogout}
         className="px-6 py-2 mt-4 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-300"
