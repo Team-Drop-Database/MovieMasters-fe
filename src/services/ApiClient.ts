@@ -1,4 +1,4 @@
-import {cookies} from "next/headers";
+import Cookies from "js-cookie"
 
 /**
  * API Client to handle requests with default headers, including Authorization if logged in.
@@ -8,14 +8,11 @@ import {cookies} from "next/headers";
  * @returns Parsed JSON response or appropriate error
  */
 
-const apiClient = async (endpoint: string,  options: RequestInit = {}) => {
+const apiClient = async (endpoint: string, options: RequestInit = {}) => {
 
   try {
-    const requestCookies = await cookies();  // Access cookies from the request
-
-    const token = requestCookies.get('jwt').value;
-
-    console.log(token)
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}${endpoint}`;
+    const token = Cookies.get('jwt')
 
     const headers = new Headers({
       'Content-Type': 'application/json',
@@ -23,8 +20,7 @@ const apiClient = async (endpoint: string,  options: RequestInit = {}) => {
       ...options.headers,  // Merge any additional headers from options
     });
 
-    const response = await fetch(endpoint, {...options, headers});
-    return response.json();
+    return await fetch(url, {...options, headers});
 
   } catch (error: unknown) {
     if (error instanceof Error)

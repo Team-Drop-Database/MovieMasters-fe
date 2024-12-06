@@ -11,10 +11,10 @@ import apiClient from "@/services/ApiClient";
  * state of a user and a movie.
  */
 export enum WatchedState {
-    NOT_WATCHLISTED = 'NOT_WATCHLISTED',
-    WATCHED = 'WATCHED',
-    UNWATCHED = 'UNWATCHED',
-    ERROR = 'ERROR'
+  NOT_WATCHLISTED = 'NOT_WATCHLISTED',
+  WATCHED = 'WATCHED',
+  UNWATCHED = 'UNWATCHED',
+  ERROR = 'ERROR'
 }
 
 /**
@@ -26,17 +26,16 @@ export enum WatchedState {
  * of WatchlistItems
  */
 export async function retrieveWatchlistByUser(userId: number): Promise<WatchlistItem[]> {
-    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process
-        .env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist`;
+  const endpoint = `/users/${userId}/watchlist`
 
-    try {
-        return apiClient(QUERY_URL);
-    } catch(error: unknown) {
-        if(error instanceof Error)
-            console.error(`Failed to fetch data using query: ${
-                QUERY_URL}.\nError message: ${error.message}`)
-        throw error;
-    }
+  try {
+    return (await apiClient(endpoint)).json();
+  } catch (error: unknown) {
+    if (error instanceof Error)
+      console.error(`Failed to fetch data using query: ${
+        endpoint}.\nError message: ${error.message}`)
+    throw error;
+  }
 }
 
 /**
@@ -50,34 +49,34 @@ export async function retrieveWatchlistByUser(userId: number): Promise<Watchlist
  */
 export async function getWatchedStatus(userId: number, movieId: number): Promise<WatchedState> {
 
-    // Fetch the watchlist first
-    let watchlist: WatchlistItem[];
-    try {
-        watchlist = await retrieveWatchlistByUser(userId);
-    } catch(error: unknown) {
-        if (error instanceof Error)
-            console.error(`Failed to lookup 'getWatchedStatus' data 
+  // Fetch the watchlist first
+  let watchlist: WatchlistItem[];
+  try {
+    watchlist = await retrieveWatchlistByUser(userId);
+  } catch (error: unknown) {
+    if (error instanceof Error)
+      console.error(`Failed to lookup 'getWatchedStatus' data 
         for user userId '${userId}' and movieId '${movieId
-            }'.\nError message: ${error.message}.`);
-        return WatchedState.ERROR;
-    }
+      }'.\nError message: ${error.message}.`);
+    return WatchedState.ERROR;
+  }
 
-    // Filter on the movieId, check whether its in the list of movies
-    const includesMovie = watchlist
-        .filter((item) => item.movie.id == movieId);
+  // Filter on the movieId, check whether its in the list of movies
+  const includesMovie = watchlist
+    .filter((item) => item.movie.id == movieId);
 
-    // Is it on his watchlist? If not, return that
-    const watchListed = includesMovie.length > 0;
-    if(!watchListed)
-        return WatchedState.NOT_WATCHLISTED;
+  // Is it on his watchlist? If not, return that
+  const watchListed = includesMovie.length > 0;
+  if (!watchListed)
+    return WatchedState.NOT_WATCHLISTED;
 
-    // Otherwise, take the data and check his watched status
-    const movieAssociation = includesMovie[0];
-    const hasWatched = movieAssociation.watched ?
-        WatchedState.WATCHED : WatchedState.UNWATCHED;
+  // Otherwise, take the data and check his watched status
+  const movieAssociation = includesMovie[0];
+  const hasWatched = movieAssociation.watched ?
+    WatchedState.WATCHED : WatchedState.UNWATCHED;
 
-    // Return the result
-    return hasWatched;
+  // Return the result
+  return hasWatched;
 }
 
 /**
@@ -89,21 +88,20 @@ export async function getWatchedStatus(userId: number, movieId: number): Promise
  * of the user and the movie
  */
 export async function addToWatchlist(userId: number, movieId: number): Promise<WatchedState> {
-    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process
-        .env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist/add/${movieId}`;
+  const endpoint = `/users/${userId}/watchlist/add/${movieId}`
 
-    try {
-         await apiClient(QUERY_URL, {method: 'PUT'});
+  try {
+    await apiClient(endpoint, {method: 'PUT'});
 
-        // When adding an item to the watchlist, default
-        // behaviour is to set it to unwatched
-        return WatchedState.UNWATCHED;
-    } catch(error: unknown) {
-        if (error instanceof Error)
-            console.error(`Failed to update data using query: ${
-                QUERY_URL}.\nError message: ${error.message}`)
-        return WatchedState.ERROR;
-    }
+    // When adding an item to the watchlist, default
+    // behaviour is to set it to unwatched
+    return WatchedState.UNWATCHED;
+  } catch (error: unknown) {
+    if (error instanceof Error)
+      console.error(`Failed to update data using query: ${
+        endpoint}.\nError message: ${error.message}`)
+    return WatchedState.ERROR;
+  }
 }
 
 /**
@@ -115,18 +113,17 @@ export async function addToWatchlist(userId: number, movieId: number): Promise<W
  * of the user and the movie
  */
 export async function removeFromWatchlist(userId: number, movieId: number): Promise<WatchedState> {
-    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process
-        .env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist/remove/${movieId}`;
+  const endpoint = `/users/${userId}/watchlist/remove/${movieId}`;
 
-    try {
-        await apiClient(QUERY_URL, {method: 'PUT'});
-        return WatchedState.NOT_WATCHLISTED;
-    } catch(error: unknown) {
-        if (error instanceof Error)
-            console.error(`Failed to update data using query: ${
-                QUERY_URL}.\nError message: ${error.message}`)
-        return WatchedState.ERROR;
-    }
+  try {
+    await apiClient(endpoint, {method: 'PUT'});
+    return WatchedState.NOT_WATCHLISTED;
+  } catch (error: unknown) {
+    if (error instanceof Error)
+      console.error(`Failed to update data using query: ${
+        endpoint}.\nError message: ${error.message}`)
+    return WatchedState.ERROR;
+  }
 }
 
 /**
@@ -142,17 +139,17 @@ export async function removeFromWatchlist(userId: number, movieId: number): Prom
  * of the user and the movie
  */
 export async function updateWatchedStatus(userId: number, movieId: number, watched: WatchedState): Promise<WatchedState> {
-    const QUERY_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process
-        .env.NEXT_PUBLIC_API_VERSION}/users/${userId}/watchlist/update/${
-            movieId}?watched=${watched == WatchedState.WATCHED ? 'true' : 'false'}`;
-    try {
-        const data =  await apiClient(QUERY_URL, {method: 'PUT'});
-        const hasWatched = data.association_object.watched;
-        return hasWatched ? WatchedState.WATCHED : WatchedState.UNWATCHED;
-    } catch(error: unknown) {
-        if (error instanceof Error)
-            console.error(`Failed to update data using query: ${
-                QUERY_URL}.\nError message: ${error.message}`)
-        return WatchedState.ERROR;
-    }
+  const endpoint = `/users/${userId}/watchlist/update/${movieId}?watched=${watched == WatchedState.WATCHED
+    ? 'true' : 'false'}`;
+  try {
+    const response = await (apiClient(endpoint, {method: 'PUT'}));
+    const data = await response.json();
+    const hasWatched = data.association_object.watched;
+    return hasWatched ? WatchedState.WATCHED : WatchedState.UNWATCHED;
+  } catch (error: unknown) {
+    if (error instanceof Error)
+      console.error(`Failed to update data using query: ${
+        endpoint}.\nError message: ${error.message}`)
+    return WatchedState.ERROR;
+  }
 }
