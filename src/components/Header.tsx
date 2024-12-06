@@ -4,6 +4,7 @@ import Image from "next/image"
 import logo from "@/assets/images/moviemaster1.png"
 import { Button } from "./generic/Button"
 import {navigateToHome, navigateToLogin, navigateToSignup, navigateToWatchlist} from "@/utils/navigation/HomeNavigation"
+import TransitionLink from "./generic/transitions/TransitionLink"
 
 export default function Header() {
   const isLoggedIn = false
@@ -11,14 +12,16 @@ export default function Header() {
   return (
     <header className="p-5 w-full flex items-center bg-primary shadow-lg font-[family-name:var(--font-alatsi)]">
       <div className="flex grow items-center gap-[15rem]">
-        <Image 
-          src={logo}
-          width={69}
-          height={69}
-          alt="logo"
-          className="rounded-md shadow-md cursor-pointer"
-          onClick={navigateToHome}
-        />
+        <TransitionLink href={"/"}>
+          <Image 
+            src={logo}
+            width={69}
+            height={69}
+            alt="logo"
+            className="rounded-md shadow-md cursor-pointer"
+            onClick={console.log}
+          />
+        </TransitionLink>
         <SearchBar className="w-1/2" />
       </div>
       { isLoggedIn ?
@@ -27,8 +30,8 @@ export default function Header() {
           <ProfileButton />
         </div> :
         <div className="flex gap-5">
-          <Button text="Sign up" onClick={navigateToSignup}/>
-          <Button text="Log in" onClick={navigateToLogin}/>
+          <TransitionLink href={"/signup"}> Sign up</TransitionLink>
+          <TransitionLink href={"/signin"}>Log in</TransitionLink>
         </div>
       }
     </header>
