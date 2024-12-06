@@ -22,6 +22,11 @@ export default function TransitionLink({ children, href, ...props }:
   ) => {
     e.preventDefault();
 
+    // TODO: Het hele animatie ding hieronder kun je beter in een 
+    // callback stoppen die je meegeeft als argument aan
+    // TransitionLink. Op die manier kunnen we verschillende animaties hebben
+    // voor het navigeren naar verschillende paginas.
+
     const TRANSITION_LENGTH = 150;
 
     // How much time nextjs should be given to load the other 

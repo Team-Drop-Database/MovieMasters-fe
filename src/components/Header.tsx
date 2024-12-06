@@ -30,8 +30,8 @@ export default function Header() {
           <ProfileButton />
         </div> :
         <div className="flex gap-5">
-          <TransitionLink href={"/signup"}> Sign up</TransitionLink>
-          <TransitionLink href={"/signin"}>Log in</TransitionLink>
+          <TransitionLink href={"/signup"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div></TransitionLink>
+          <TransitionLink href={"/signin"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div></TransitionLink>
         </div>
       }
     </header>
