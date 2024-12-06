@@ -1,3 +1,4 @@
+import PageTransition from "@/components/generic/PageTransition";
 import WatchlistItem from "@/models/WatchListItem";
 import { retrieveWatchlistByUser } from "@/services/WatchListService";
 import Link from "next/link";
@@ -90,20 +91,22 @@ export default async function MyWatchList() {
     else {
         // Display both the watched and unwatched movies in separate sections
         pageContent = (
-            <div>
-                <div className="p-4">
-                    <h1 className="text-2xl">Watched</h1>
-                    <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
-                        {mapMoviesToList(watchedMovies)}
+            <PageTransition>
+                <div>
+                    <div className="p-4">
+                        <h1 className="text-2xl">Watched</h1>
+                        <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+                            {mapMoviesToList(watchedMovies)}
+                        </div>
+                    </div>
+                    <div className="p-4">
+                        <h1 className="text-2xl">Plan to watch</h1>
+                        <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+                            {mapMoviesToList(planToWatchMovies)}
+                        </div>
                     </div>
                 </div>
-                <div className="p-4">
-                    <h1 className="text-2xl">Plan to watch</h1>
-                    <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
-                        {mapMoviesToList(planToWatchMovies)}
-                    </div>
-                </div>
-            </div>
+            </PageTransition>
         )
     }
 
