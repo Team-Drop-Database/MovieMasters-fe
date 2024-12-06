@@ -40,3 +40,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Environment
+.env
+
+# JetBrains
+.idea
+
+# Todo file
+TODO.txt
+
+# Vscode
+.vscode
