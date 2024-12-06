@@ -28,7 +28,7 @@ export default function Header() {
         </div>
       ) : (
         <div className="flex gap-5">
-          <Button text="Register" onClick={navigateToSignup} />
+          <Button text="Sign up" onClick={navigateToSignup} />
           <Button text="Log in" onClick={navigateToLogin} />
         </div>
       )}
