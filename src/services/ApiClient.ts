@@ -1,4 +1,4 @@
-import Cookies from "js-cookie"
+import {cookies} from "next/headers";
 
 /**
  * API Client to handle requests with default headers, including Authorization if logged in.
@@ -8,10 +8,14 @@ import Cookies from "js-cookie"
  * @returns Parsed JSON response or appropriate error
  */
 
-const apiClient = async (endpoint: string, options: RequestInit = {}) => {
+const apiClient = async (endpoint: string,  options: RequestInit = {}) => {
 
   try {
-    const token = Cookies.get('jwt')
+    const requestCookies = await cookies();  // Access cookies from the request
+
+    const token = requestCookies.get('jwt').value;
+
+    console.log(token)
 
     const headers = new Headers({
       'Content-Type': 'application/json',
