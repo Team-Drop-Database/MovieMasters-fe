@@ -28,7 +28,9 @@ export default function RootLayout({
         className={`${alatsi.variable} ${jura.variable} antialiased text-white bg-primary`}
       >
         <Header />
-        {children}
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );
