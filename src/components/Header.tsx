@@ -3,7 +3,7 @@ import React from "react"
 import Image from "next/image"
 import logo from "@/assets/images/moviemaster1.png"
 import { Button } from "./generic/Button"
-import { navigateToLogin, navigateToSignup, navigateToWatchlist } from "@/utils/navigation/HomeNavigation"
+import {navigateToHome, navigateToLogin, navigateToSignup, navigateToWatchlist} from "@/utils/navigation/HomeNavigation"
 
 export default function Header() {
   const isLoggedIn = false
@@ -16,7 +16,8 @@ export default function Header() {
           width={69}
           height={69}
           alt="logo"
-          className="rounded-md shadow-md"
+          className="rounded-md shadow-md cursor-pointer"
+          onClick={navigateToHome}
         />
         <SearchBar className="w-1/2" />
       </div>

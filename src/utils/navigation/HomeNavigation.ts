@@ -11,3 +11,7 @@ export function navigateToLogin() {
 export function navigateToWatchlist() {
   redirect("/mywatchlist")
 }
+
+export function navigateToHome() {
+  redirect("/");
+}
