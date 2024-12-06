@@ -9,8 +9,7 @@ export default function Profile() {
     profilePictureURL: "https://lumiere-a.akamaihd.net/v1/images/r2-d2-main_f315b094.jpeg?" +
       "region=273%2C0%2C951%2C536",
     username: "ViesBotje",
-    email: "botje@gmail.com",
-    password: "password123"
+    email: "botje@gmail.com"
   }); // TODO: Make this so it takes everything from the user.
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   
@@ -20,12 +19,10 @@ export default function Profile() {
     const { name, value } = e.target;
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
 
-    if ((name === "username" && value.length < 5) || (name === "password" && value.length < 8 )) {
+    if ((name === "username" && value.length < 5)) {
       setIsSaveDisabled(true)
     } else {
-      const isInvalid =
-        (name !== "username" && profileData.username.length < 5) ||
-        (name !== "password" && profileData.password.length < 8);
+      const isInvalid = (name !== "username" && profileData.username.length < 5);
       setIsSaveDisabled(isInvalid);
     }
   };
@@ -33,7 +30,7 @@ export default function Profile() {
   const toggleEditMode = () => {
     if (isEditing) {
       if (isSaveDisabled) {
-        alert("Please make sure username is minimal 5 characters and password is minimal 8 long.")
+        alert("Please make sure username is 5 or more characters.")
         return;
       }
       console.log("Saved profile data:", profileData);
@@ -95,23 +92,6 @@ export default function Profile() {
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text
                          font-[family-name:var(--font-jura)] w-full"
             />
-            <label className="block text-m font-medium mt-4">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              minLength={8}
-              onChange={handleInputChange}
-              className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)] w-full"
-            />
-            {profileData.password.length < 8 && (
-              <label className="block text-m text-red-500">
-                Password must be at least 8 characters
-              </label>
-            )}
           </div>
         ) : (
           <div>
