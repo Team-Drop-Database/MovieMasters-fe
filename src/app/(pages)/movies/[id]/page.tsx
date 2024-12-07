@@ -45,6 +45,10 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
     return <div>Loading...</div>;
   }
 
+  if (typeof movie === "string") {
+    return <div>{movie}</div>;
+  }
+  
   const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
 
   return (
