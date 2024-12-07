@@ -13,7 +13,7 @@ import Link from "next/link";
  * @returns JSX markup displaying the page.
  */
 export default function MyWatchList() {
-  const TEMP_USER_ID = 10;
+  const TEMP_USER_ID = 1;
 
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +57,7 @@ export default function MyWatchList() {
         );
       } else if (item.watched) {
         ratingMessage = (
-          <h5 className="text-xs opacity-50 w-[80%] text-center text-blue-500 hover:underline">
+          <h5 className="text-xs opacity-80 w-[80%] text-center text-blue-500 hover:underline">
             Review this movie
           </h5>
         );

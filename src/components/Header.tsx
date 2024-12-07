@@ -59,7 +59,7 @@ function SearchBar(props: SearchBarProps) {
 }
 
 function onConfirmSearch(input: string) {
-  console.log(`Search for ${input}`);
+  //TODO: Make search functional for the header
 }
 
 type ProfileButtonProps = {
