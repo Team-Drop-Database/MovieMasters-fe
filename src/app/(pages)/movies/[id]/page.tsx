@@ -1,46 +1,41 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import Movie from "@/models/Movie";
 import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
 
-export default function Movies({params}: { params: Promise<{ id: string }> }) {
+export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [id, setId] = useState<string | null>(null); // Store the id in state
-
+  const [id, setId] = useState<string | null>(null);
   const TEMP_USER_ID = 1;
 
-  // Function to fetch the movie data
-  async function fetchMovie(movieId: string) {
-    try {
-      const data = await getMovieById(Number(movieId)); // Convert `id` to number for API request
-      setMovie(data as Movie);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unknown error occurred.");
-      }
-    }
-  }
+  const fetchMovie = (movieId: string) => {
+    getMovieById(Number(movieId))
+      .then((data) => {
+        setMovie(data as Movie);
+      })
+      .catch((err: unknown) => {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred.");
+        }
+      });
+  };
 
-  // Wait for params to resolve and extract the id
   useEffect(() => {
-    async function fetchParams() {
-      const resolvedParams = await params;  // Wait for params to resolve
-      setId(resolvedParams.id); // Set the id in state
-    }
-
-    fetchParams();
+    params.then((resolvedParams) => {
+      setId(resolvedParams.id);
+    });
   }, [params]);
 
   useEffect(() => {
     if (id) {
-      fetchMovie(id); // Call fetchMovie when id is available
+      fetchMovie(id);
     }
-  }, [id]); // Trigger fetchMovie when `id` changes
+  }, [id]);
 
   if (error) {
     return <div>{error}</div>;
@@ -48,10 +43,6 @@ export default function Movies({params}: { params: Promise<{ id: string }> }) {
 
   if (!movie) {
     return <div>Loading...</div>;
-  }
-
-  if (typeof movie === "string") {
-    return <div>{movie}</div>; 
   }
 
   const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
@@ -92,7 +83,7 @@ export default function Movies({params}: { params: Promise<{ id: string }> }) {
         <WatchListButtonWrapper
           params={{
             userId: TEMP_USER_ID,
-            movieId: Number(id), // Ensure `id` is treated as a number
+            movieId: Number(id),
           }}
         />
       </div>
