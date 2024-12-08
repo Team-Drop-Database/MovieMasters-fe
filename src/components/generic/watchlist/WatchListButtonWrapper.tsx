@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { getWatchedStatus, WatchedState } from "@/services/WatchListService";
 import AddToWatchListButton from "./AddToWatchListButton";
 
@@ -9,20 +10,41 @@ import AddToWatchListButton from "./AddToWatchListButton";
  * pass it to AddToWatchListButton when client-side
  * rendering begins.
  */
-export default async function WatchListButtonWrapper({params}: {
+export default function WatchListButtonWrapper({ params }: {
     params: {
         userId: number,
         movieId: number
     }
 }) {
+    const [watchedStatus, setWatchedStatus] = useState<WatchedState | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
-    // Query database whether the user has watchlisted and/or watched this movie
-    let watched: WatchedState = await getWatchedStatus(params.userId, params.movieId);
+    useEffect(() => {
+        const fetchWatchedStatus = async () => {
+            try {
+                const status = await getWatchedStatus(params.userId, params.movieId);
+                setWatchedStatus(status);
+            } catch (error) {
+                console.error("Error fetching watched status:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    // Render the client-side component
-    return <AddToWatchListButton params={{
-        initialWatchedStatus: watched,
-        userId: params.userId,
-        movieId: params.movieId
-    }}></AddToWatchListButton>
+        fetchWatchedStatus();
+    }, [params.userId, params.movieId]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+      <AddToWatchListButton
+        params={{
+            initialWatchedStatus: watchedStatus,
+            userId: params.userId,
+            movieId: params.movieId
+        }}
+      />
+    );
 }
