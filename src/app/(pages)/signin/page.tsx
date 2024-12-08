@@ -1,33 +1,39 @@
 'use client';
 
-import {useRef, FormEvent, useState} from "react";
+import {useRef, FormEvent, useState, useEffect} from "react";
 import Link from "next/link";
 import {Button} from "@/components/generic/Button";
 import { useRouter } from "next/navigation";
 import {loginUser} from "@/services/AuthService";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function Page() {
   const formRef = useRef<HTMLFormElement | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { isLoggedIn, initAuth } = useAuth();
   const router = useRouter();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const formData = new FormData(event.currentTarget);
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
 
     try {
       await loginUser(username, password);
-      router.push('/');
-      location.reload(); //Reload for now
+      await initAuth()
     } catch (error) {
       const errorMessage =
         (error as Error).message || 'An unexpected error occurred. Please try again.';
       setErrorMessage(errorMessage);
     }
   }
+  useEffect(() => {
+    if (isLoggedIn) {
+      location.reload();
+      router.push("/");
+    }
+  }, [isLoggedIn, router]);
 
   return (
     <div className="flex justify-center">
