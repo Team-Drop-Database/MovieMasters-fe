@@ -8,7 +8,8 @@ function sleep(ms: number): Promise<void> {
 }
 
 /**
- * Wrapper component for a Link that adds a transition effect.
+ * Wrapper component for a Link that 
+ * adds a transition effect.
  * 
  * @param param0 
  * @returns 
@@ -16,8 +17,6 @@ function sleep(ms: number): Promise<void> {
 export default function TransitionLink({ children, href, ...props }: 
     { children: React.ReactNode; href: string }) {
   const router = useRouter();
-
-  let firstLoad = true;
 
   const handleTransition = async (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
@@ -28,11 +27,6 @@ export default function TransitionLink({ children, href, ...props }:
     // callback stoppen die je meegeeft als argument aan
     // TransitionLink. Op die manier kunnen we verschillende animaties hebben
     // voor het navigeren naar verschillende paginas.
-
-    if (firstLoad){
-      await sleep(250);
-      firstLoad = false;
-    }
 
     const TRANSITION_LENGTH = 150;
 
