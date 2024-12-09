@@ -5,6 +5,7 @@ import Movie from "@/models/Movie";
 import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
 import ElementTransition from '@/components/generic/transitions/ElementTransition';
+import Loading from '@/components/generic/Loading';
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -43,7 +44,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
   }
 
   if (!movie) {
-    return <div>Loading...</div>;
+    return <Loading/>
   }
 
   if (typeof movie === "string") {
