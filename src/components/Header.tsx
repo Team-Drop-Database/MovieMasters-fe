@@ -6,6 +6,7 @@ import { Button } from "./generic/Button";
 import { navigateToWatchlist } from "@/utils/navigation/HomeNavigation";
 import {useAuthContext} from "@/contexts/authContext";
 import TransitionLink from "./generic/transitions/TransitionLink"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
