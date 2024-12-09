@@ -1,13 +1,14 @@
 "use client";
 
 import {Button} from "@/components/generic/Button";
-import {useEffect, useState} from "react";
-import {useAuthContext} from "@/contexts/authContext";
-import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
+import {useState} from "react";
+// import {useAuthContext} from "@/contexts/authContext";
+// import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 
 export default function Profile() {
-  const { isLoggedIn, userDetails } = useAuthContext();
-  const [isEditing, setIsEditing] = useState(false)
+  // const { isLoggedIn, userDetails } = useAuthContext();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState({
     profilePictureURL: "https://lumiere-a.akamaihd.net/v1/images/r2-d2-main_f315b094.jpeg?" +
@@ -16,11 +17,11 @@ export default function Profile() {
     email: "botje@gmail.com"
   }); // TODO: Make this so it takes everything from the user.
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigateToLogin();
-    }
-  }, [isLoggedIn])
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     navigateToLogin();
+  //   }
+  // }, [isLoggedIn])
   
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -45,6 +46,13 @@ export default function Profile() {
       console.log("Saved profile data:", profileData);
     }
     setIsEditing(!isEditing);
+  };
+
+  const toggleFriendMode = () => {
+    if (isAddingFriend) {
+      console.log("Adding friend.")
+    }
+    setIsAddingFriend(!isAddingFriend);
   };
 
   return (
@@ -112,18 +120,16 @@ export default function Profile() {
             </p>
           </div>
         )}
-        {/*/!* Using img over Image because for Image a config would be needed for all domains *!/*/}
-        {/*/!* eslint-disable-next-line @next/next/no-img-element *!/*/}
-        {/*<p className="m-2">*/}
-        {/*  {profileData.username}*/}
-        {/*</p>*/}
-        {/*<p className="m-2">*/}
-        {/*  {profileData.email}*/}
-        {/*</p>*/}
         <div className="m-10">
           <Button
             text={isEditing ? "Save" : "Edit"}
             onClick={toggleEditMode}
+          />
+        </div>
+        <div className="m-10">
+          <Button
+            text={isAddingFriend ? "Send  friend request" : "Add friend"}
+            onClick={toggleFriendMode}
           />
         </div>
       </div>
