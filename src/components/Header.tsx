@@ -5,8 +5,7 @@ import logo from "@/assets/images/moviemaster1.png"
 import { Button } from "./generic/Button";
 import { navigateToWatchlist } from "@/utils/navigation/HomeNavigation";
 import {useAuthContext} from "@/contexts/authContext";
-import TransitionLink from "./generic/transitions/TransitionLink"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
@@ -14,7 +13,7 @@ export default function Header() {
   return (
     <header className="p-5 w-full flex items-center bg-primary shadow-lg font-[family-name:var(--font-alatsi)]">
       <div className="flex grow items-center gap-[15rem]">
-        <TransitionLink href={"/"}>
+        <BasicTransitionLink href={"/"}>
           <Image 
             src={logo}
             width={69}
@@ -23,7 +22,7 @@ export default function Header() {
             className="rounded-md shadow-md cursor-pointer"
             onClick={console.log}
           />
-        </TransitionLink>
+        </BasicTransitionLink>
         <SearchBar className="w-1/2" />
       </div>
       {isLoggedIn ? (
@@ -33,8 +32,8 @@ export default function Header() {
         </div>
       ) : (
         <div className="flex gap-5">
-          <TransitionLink href={"/signup"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div></TransitionLink>
-          <TransitionLink href={"/signin"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div></TransitionLink>
+          <BasicTransitionLink href={"/signup"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div></BasicTransitionLink>
+          <BasicTransitionLink href={"/signin"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div></BasicTransitionLink>
         </div>
       )}
     </header>
