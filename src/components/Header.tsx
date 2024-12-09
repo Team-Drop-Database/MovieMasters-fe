@@ -27,13 +27,19 @@ export default function Header() {
       </div>
       {isLoggedIn ? (
         <div className="flex gap-5 items-center">
-          <Button text="My Watchlist" onClick={navigateToWatchlist} />
+          <BasicTransitionLink href={"/mywatchlist"}>
+            <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">My Watchlist</div>
+          </BasicTransitionLink>
           <ProfileButton username={userDetails?.username} />
         </div>
       ) : (
         <div className="flex gap-5">
-          <BasicTransitionLink href={"/signup"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div></BasicTransitionLink>
-          <BasicTransitionLink href={"/signin"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div></BasicTransitionLink>
+          <BasicTransitionLink href={"/signup"}>
+          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div>
+          </BasicTransitionLink>
+          <BasicTransitionLink href={"/signin"}>
+          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div>
+          </BasicTransitionLink>
         </div>
       )}
     </header>
