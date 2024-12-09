@@ -3,7 +3,12 @@ import { getTrendingMovies } from "@/services/MovieService"
 import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps"
 import React from "react"
 
-export default function LoggedIn() {
+interface LoggedInProps {
+  onLogout: () => void;
+  userDetails?: { username: string; userId: number };
+}
+
+export default function LoggedIn({ onLogout, userDetails }: LoggedInProps) {
   const [trendingMovies, setTrendingMovies] = React.useState<MovieListItemProps[]>([])
 
   React.useEffect(() => {

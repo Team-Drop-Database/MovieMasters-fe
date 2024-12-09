@@ -1,16 +1,16 @@
-﻿"use server"
-
-import Movie from "@/models/Movie"
+﻿import Movie from "@/models/Movie"
+import apiClient from "@/services/ApiClient";
 import Constants from "@/utils/Constants";
 import { mapMovieListToProps, MovieListItemProps, MovieListResponse } from "@/utils/mapper/MovieResponseMaps";
 
 export async function getMovieById(movieId: number): Promise<Movie | string> {
   try {
-    const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/movies/${movieId}`);
+    const endpoint = `/movies/${movieId}`
+    const response: Response = await apiClient(endpoint);
 
     let movie: Movie;
     let message: string;
-    switch(response.status) {
+    switch (response.status) {
       case 200: {
         movie = await response.json();
         return movie;

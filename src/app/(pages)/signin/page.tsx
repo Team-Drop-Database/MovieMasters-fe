@@ -1,26 +1,32 @@
 'use client';
 
-import {useRef, FormEvent, useState} from "react";
+import {useRef, FormEvent, useState, useEffect} from "react";
 import Link from "next/link";
 import {Button} from "@/components/generic/Button";
+import { useRouter } from "next/navigation";
+import {loginUser} from "@/services/AuthService";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Page() {
   const formRef = useRef<HTMLFormElement | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const router = useRouter();
+  const { login } = useAuthContext();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const formData = new FormData(event.currentTarget);
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
 
-    //TODO: Replace this with actual login system
-    if (username === "test1234" && password === "password123") {
-      setErrorMessage(null);
-      alert("Login successful!");
-    } else {
-      setErrorMessage("Incorrect username and/or password. Please try again.");
+    try {
+      await loginUser(username, password);
+      await login();
+      router.push("/");
+    } catch (error) {
+      const errorMessage =
+        (error as Error).message || 'An unexpected error occurred. Please try again.';
+      setErrorMessage(errorMessage);
     }
   }
 

@@ -1,14 +1,23 @@
-"use client"
+"use client";
+
 import React from "react";
-import LoggedOut from "./LoggedOut";
 import LoggedIn from "./LoggedIn";
+import LoggedOut from "./LoggedOut";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Home() {
-  const loggedIn = false
+  const { isLoggedIn, userDetails, logout } = useAuthContext();
 
   return (
     <main className="flex flex-col gap-14 font-[family-name:var(--font-alatsi)]">
-      { loggedIn ? <LoggedIn /> : <LoggedOut /> }
+      {isLoggedIn ? (
+        <LoggedIn
+          onLogout={() => { logout(); }}
+          userDetails={userDetails}
+        />
+      ) : (
+        <LoggedOut/>
+      )}
     </main>
   );
 }
