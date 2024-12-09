@@ -134,21 +134,6 @@ export default function Profile() {
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text
                          font-[family-name:var(--font-jura)] w-full"
             />
-            <div className="justify-items-center">
-              <p className="mt-4">Or</p>
-            </div>
-            <label className="block text-m font-medium mt-4">
-              Add friend&#39;s e-mail
-            </label>
-            <input
-              type="text"
-              name="friendEmail"
-              placeholder="Friend's e-mail"
-              // onChange={handleInputChange}
-              className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)] w-full"
-            />
           </div>
         )}
         {!isAddingFriend && (
