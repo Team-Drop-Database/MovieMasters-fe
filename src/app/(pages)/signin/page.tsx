@@ -24,8 +24,7 @@ export default function Page() {
       await login();
       router.push("/");
     } catch (error) {
-      const errorMessage =
-        (error as Error).message || 'An unexpected error occurred. Please try again.';
+      const errorMessage = (error as Error).message || 'An unexpected error occurred. Please try again.';
       setErrorMessage(errorMessage);
     }
   }

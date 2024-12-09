@@ -30,7 +30,7 @@ export async function loginUser(username: string, password: string): Promise<{ a
 
     return {accessToken, refreshToken};
   } catch (error) {
-    console.error('Error during login:', error);
+    console.warn('Error during login:', error);
     throw error;
   }
 }
