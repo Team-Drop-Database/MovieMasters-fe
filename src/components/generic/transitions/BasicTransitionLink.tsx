@@ -14,7 +14,17 @@ export default function BasicTransitionLink({children, href}:
     {   children: React.ReactNode; 
         href: string
     }) {
-    const handleMainTransition = async (timeOut: (ms: number) => Promise<void>, router: AppRouterInstance): Promise<void> => {
+
+    /**
+     * Contains the animation for the standard transition 
+     * that this TransitionLink will have.
+     * 
+     * @param timeOut a sleep/wait utility function
+     * @param router the router of this app
+     */
+    const handleMainTransition = async (
+        timeOut: (ms: number) => Promise<void>, 
+            router: AppRouterInstance): Promise<void> => {
     
         // TODO: Het hele animatie ding hieronder kun je beter in een 
         // callback stoppen die je meegeeft als argument aan
@@ -61,5 +71,7 @@ export default function BasicTransitionLink({children, href}:
         // for the next transition
         main?.classList.remove("transition-all", "ease-in-out");
       }
+
+      // Return a TransitionLink with the added transition handler
       return <TransitionLink children={children} href={href} transitionHandler={handleMainTransition}></TransitionLink>
 }
