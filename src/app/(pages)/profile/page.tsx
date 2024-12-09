@@ -151,18 +151,30 @@ export default function Profile() {
             />
           </div>
         )}
-        <div className="m-10">
-          <Button
-            text={isEditing ? "Save" : "Edit"}
-            onClick={toggleEditMode}
-          />
-        </div>
-        <div className="m-10">
-          <Button
-            text={isAddingFriend ? "Send  friend request" : "Add friend"}
-            onClick={toggleFriendMode}
-          />
-        </div>
+        {!isAddingFriend && (
+          <div className="m-10">
+            <Button
+              text={isEditing ? "Save" : "Edit"}
+              onClick={toggleEditMode}
+            />
+          </div>
+        )}
+        {!isEditing && (
+          <div className="m-10">
+            <Button
+              text={isAddingFriend ? "Send  friend request" : "Add friend"}
+              onClick={toggleFriendMode}
+            />
+            {isAddingFriend && (
+              <div className="mt-5">
+                <Button
+                  text="Cancel"
+                  onClick={toggleFriendMode}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
