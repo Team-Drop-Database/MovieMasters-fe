@@ -1,13 +1,14 @@
-"use client"
-import React from "react"
-import Image from "next/image"
+"use client";
+import React from "react";
+import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
-import { Button } from "./generic/Button"
-import {navigateToHome, navigateToLogin, navigateToSignup, navigateToWatchlist} from "@/utils/navigation/HomeNavigation"
+import { Button } from "./generic/Button";
+import { navigateToWatchlist } from "@/utils/navigation/HomeNavigation";
+import {useAuthContext} from "@/contexts/authContext";
 import TransitionLink from "./generic/transitions/TransitionLink"
 
 export default function Header() {
-  const isLoggedIn = false
+  const { isLoggedIn, userDetails } = useAuthContext();
 
   return (
     <header className="p-5 w-full flex items-center bg-primary shadow-lg font-[family-name:var(--font-alatsi)]">
@@ -24,51 +25,55 @@ export default function Header() {
         </TransitionLink>
         <SearchBar className="w-1/2" />
       </div>
-      { isLoggedIn ?
+      {isLoggedIn ? (
         <div className="flex gap-5 items-center">
           <Button text="My Watchlist" onClick={navigateToWatchlist} />
-          <ProfileButton />
-        </div> :
+          <ProfileButton username={userDetails?.username} />
+        </div>
+      ) : (
         <div className="flex gap-5">
           <TransitionLink href={"/signup"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div></TransitionLink>
           <TransitionLink href={"/signin"}><div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div></TransitionLink>
         </div>
-      }
+      )}
     </header>
-  )
+  );
 }
 
 type SearchBarProps = {
-  className: string,
-}
+  className: string;
+};
 
 function SearchBar(props: SearchBarProps) {
-  const [searchInput, setSearchInput] = React.useState("")
+  const [searchInput, setSearchInput] = React.useState("");
 
   return (
     <input
       value={searchInput}
       placeholder="Search movies"
       type="text"
-      onKeyDown={(e) => { if (e.key === "Enter") onConfirmSearch(searchInput) }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") onConfirmSearch(searchInput);
+      }}
       onChange={(e) => setSearchInput(e.target.value)}
       className={`${props.className} outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey hover:bg-light_grey_active duration-300 hover:duration-300 font-[family-name:var(--font-jura)]`}
     />
-  )
+  );
 }
 
 function onConfirmSearch(input: string) {
-  console.log(`Search for ${input}`)
+  //TODO: Make search functional for the header
 }
 
-function ProfileButton() {
-  /* TODO: add dropdown functionality */
+type ProfileButtonProps = {
+  username?: string;
+};
+
+function ProfileButton({ username }: ProfileButtonProps) {
   return (
     <div className="flex items-center gap-5 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300">
-      <p className="details">
-        Username  {/* TODO: Username will be injected once known */}
-      </p>
-      <Image 
+      <p className="details">{username || "Username"}</p>
+      <Image
         src={logo}
         width={55}
         height={55}
@@ -76,5 +81,5 @@ function ProfileButton() {
         className="rounded-full shadow-md"
       />
     </div>
-  )
+  );
 }
