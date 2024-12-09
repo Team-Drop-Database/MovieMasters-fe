@@ -1,23 +1,18 @@
 "use client";
 
 import React from "react";
-import Cookies from 'js-cookie';
-import {useAuth} from "@/hooks/useAuth";
 import LoggedIn from "./LoggedIn";
 import LoggedOut from "./LoggedOut";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Home() {
-  const {isLoggedIn, userDetails} = useAuth();
+  const { isLoggedIn, userDetails, logout } = useAuthContext();
 
   return (
     <main className="flex flex-col gap-14 font-[family-name:var(--font-alatsi)]">
       {isLoggedIn ? (
         <LoggedIn
-          onLogout={() => {
-            Cookies.remove('jwt');
-            Cookies.remove('refresh_token');
-            location.reload(); //Reload for now
-          }}
+          onLogout={() => { logout(); }}
           userDetails={userDetails}
         />
       ) : (

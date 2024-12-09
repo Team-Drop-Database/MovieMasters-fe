@@ -5,13 +5,13 @@ import Link from "next/link";
 import {Button} from "@/components/generic/Button";
 import { useRouter } from "next/navigation";
 import {loginUser} from "@/services/AuthService";
-import {useAuth} from "@/hooks/useAuth";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Page() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const { isLoggedIn, initAuth } = useAuth();
   const router = useRouter();
+  const { login } = useAuthContext();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,7 +21,8 @@ export default function Page() {
 
     try {
       await loginUser(username, password);
-      await initAuth()
+      await login();
+      router.push("/");
     } catch (error) {
       const errorMessage =
         (error as Error).message || 'An unexpected error occurred. Please try again.';
