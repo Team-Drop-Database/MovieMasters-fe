@@ -2,8 +2,8 @@
 import React from "react";
 import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
-import {useAuthContext} from "@/contexts/authContext";
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
