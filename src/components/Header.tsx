@@ -2,8 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
-import { Button } from "./generic/Button";
-import { navigateToWatchlist } from "@/utils/navigation/HomeNavigation";
 import {useAuthContext} from "@/contexts/authContext";
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 
