@@ -1,17 +1,26 @@
 "use client";
 
 import {Button} from "@/components/generic/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useAuthContext} from "@/contexts/authContext";
+import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 
 export default function Profile() {
+  const { isLoggedIn, userDetails } = useAuthContext();
   const [isEditing, setIsEditing] = useState(false)
+  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState({
     profilePictureURL: "https://lumiere-a.akamaihd.net/v1/images/r2-d2-main_f315b094.jpeg?" +
       "region=273%2C0%2C951%2C536",
     username: "ViesBotje",
     email: "botje@gmail.com"
   }); // TODO: Make this so it takes everything from the user.
-  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigateToLogin();
+    }
+  }, [isLoggedIn])
   
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
