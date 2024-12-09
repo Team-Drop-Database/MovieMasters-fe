@@ -26,13 +26,14 @@ export default function LoggedOut() {
 function ReviewList() {
   const reviewAmount = 10
   const [reviewList, setReviewList] = React.useState<ReviewItemProps[]>([])
-  const sliderRef = React.useRef<HTMLDivElement>(null)
+  const sliderRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     async function loadReviews() {
       const reviewResponse = await requestReviewsByAmount(reviewAmount)
       const mappedResponse = mapReviewResponsesToItems(reviewResponse)
 
+      if (mappedResponse.length === 0) return
       const multiplier = reviewAmount / mappedResponse.length
       const multiplied: ReviewItemProps[] = []
       for (let i = 0; i < multiplier; i++) {
