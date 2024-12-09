@@ -4,7 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
 import { Button } from "./generic/Button";
 import { navigateToHome, navigateToLogin, navigateToSignup, navigateToWatchlist } from "@/utils/navigation/HomeNavigation";
-import {useAuthContext} from "@/contexts/authContext";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
