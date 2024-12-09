@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import WatchlistItem from "@/models/WatchListItem";
 import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
-import {useAuthContext} from "@/contexts/authContext";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 /**
  * Displays an overview of the movies that a specific user has

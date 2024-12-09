@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Movie from "@/models/Movie";
 import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
-import {useAuthContext} from "@/contexts/authContext";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -96,7 +96,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
         {isUserReady && (
           <WatchListButtonWrapper
             params={{
-              userId: userDetails?.userId, 
+              userId: userDetails?.userId,
               movieId: Number(id),
             }}
           />
