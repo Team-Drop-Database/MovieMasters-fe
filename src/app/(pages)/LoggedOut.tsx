@@ -6,6 +6,7 @@ import { Star } from "@/components/generic/review/Star"
 import { requestReviewsByAmount } from "@/services/ReviewService"
 import { mapReviewResponsesToItems, ReviewItemProps } from "@/utils/mapper/ReviewResponseMaps"
 import neutral from "@/assets/images/no-profile-pic.jpg"
+import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink"
 
 export default function LoggedOut() {
   return (
@@ -15,8 +16,12 @@ export default function LoggedOut() {
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id sem varius ligula imperdiet euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec posuere pharetra neque, aliquam pretium sem vestibulum eget. Nunc vel nibh vel lorem aliquam varius</p>
       </div>
       <div className="mx-[4rem] flex gap-5">
-        <Button text="Sign up" onClick={navigateToSignup} />
-        <Button text="Log in" onClick={navigateToLogin} />
+        <BasicTransitionLink href={"/signup"}>
+          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div>
+          </BasicTransitionLink>
+          <BasicTransitionLink href={"/signin"}>
+          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div>
+          </BasicTransitionLink>
       </div>
       <ReviewList />
     </>

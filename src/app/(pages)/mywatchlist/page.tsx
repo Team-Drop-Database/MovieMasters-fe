@@ -1,5 +1,5 @@
 'use client';
-
+import ElementTransition from "@/components/generic/transitions/ElementTransition";
 import {useEffect, useState} from 'react';
 import WatchlistItem from "@/models/WatchListItem";
 import {retrieveWatchlistByUser} from "@/services/WatchListService";
@@ -111,20 +111,22 @@ export default function MyWatchList() {
     );
   } else {
     pageContent = (
-      <div>
-        <div className="p-4">
-          <h1 className="text-2xl">Watched</h1>
-          <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
-            {mapMoviesToList(watchedMovies)}
+      <ElementTransition>
+        <div>
+          <div className="p-4">
+            <h1 className="text-2xl">Watched</h1>
+            <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {mapMoviesToList(watchedMovies)}
+            </div>
+          </div>
+          <div className="p-4">
+            <h1 className="text-2xl">Plan to watch</h1>
+            <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {mapMoviesToList(planToWatchMovies)}
+            </div>
           </div>
         </div>
-        <div className="p-4">
-          <h1 className="text-2xl">Plan to watch</h1>
-          <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
-            {mapMoviesToList(planToWatchMovies)}
-          </div>
-        </div>
-      </div>
+      </ElementTransition>
     );
   }
 
