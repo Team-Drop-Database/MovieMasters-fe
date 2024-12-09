@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Movie from "@/models/Movie";
 import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
+import ElementTransition from '@/components/generic/transitions/ElementTransition';
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -52,6 +53,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
   const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
 
   return (
+    <ElementTransition>
     <div className="flex mx-10 my-5 space-x-20 font-sans">
       <div className="max-w-[300px]">
         <img
@@ -92,5 +94,6 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
         />
       </div>
     </div>
+    </ElementTransition>
   );
 }
