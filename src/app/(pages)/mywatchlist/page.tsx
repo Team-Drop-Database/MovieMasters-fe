@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import WatchlistItem from "@/models/WatchListItem";
 import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 /**
  * Displays an overview of the movies that a specific user has
@@ -13,16 +14,17 @@ import Link from "next/link";
  * @returns JSX markup displaying the page.
  */
 export default function MyWatchList() {
-  const TEMP_USER_ID = 1;
-
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const { userDetails } = useAuthContext();
 
   useEffect(() => {
     async function fetchWatchlist() {
       try {
-        const data = await retrieveWatchlistByUser(TEMP_USER_ID);
-        setWatchlist(data);
+        if (userDetails) {
+          const data = await retrieveWatchlistByUser(userDetails.userId);
+          setWatchlist(data);
+        }
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -33,7 +35,7 @@ export default function MyWatchList() {
     }
 
     fetchWatchlist();
-  }, []);
+  }, [userDetails]);
 
   // Divide the list of movies into watched and unwatched
   const watchedMovies = watchlist.filter((item) => item.watched);

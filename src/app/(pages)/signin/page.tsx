@@ -5,7 +5,7 @@ import Link from "next/link";
 import {Button} from "@/components/generic/Button";
 import { useRouter } from "next/navigation";
 import {loginUser} from "@/services/AuthService";
-import {useAuthContext} from "@/contexts/authContext";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Page() {
   const formRef = useRef<HTMLFormElement | null>(null);
