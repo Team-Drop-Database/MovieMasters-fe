@@ -25,12 +25,8 @@ export default function BasicTransitionLink({children, href}:
     const handleMainTransition = async (
         timeOut: (ms: number) => Promise<void>, 
             router: AppRouterInstance): Promise<void> => {
-    
-        // TODO: Het hele animatie ding hieronder kun je beter in een 
-        // callback stoppen die je meegeeft als argument aan
-        // TransitionLink. Op die manier kunnen we verschillende animaties hebben
-        // voor het navigeren naar verschillende paginas.
-    
+
+        // Length of the Transition
         const TRANSITION_LENGTH = 150;
     
         // How much time nextjs should be given to load the other 
@@ -38,6 +34,7 @@ export default function BasicTransitionLink({children, href}:
         // not slower than how fast nextjs typically loads it.
         const NEXTJS_LOAD_TIME = 20;
     
+        // Grab the main element; the transition will focus on modifying this part
         const main = document.querySelector("main");
     
         // Initial movement; moves the object right, with a delay \
