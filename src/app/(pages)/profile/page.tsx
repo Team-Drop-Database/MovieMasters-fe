@@ -16,6 +16,7 @@ export default function Profile() {
     username: "",
     email: ""
   });
+  const [originalData, setOriginalData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = Cookies.get("jwt");
@@ -27,8 +28,6 @@ export default function Profile() {
 
     const fetchUserData = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         const response = await fetch(`http://localhost:8080/api/v1/users/username/${userDetails.username}`, {
           method: "GET",
           headers: {
@@ -41,14 +40,21 @@ export default function Profile() {
         }
 
         const userData = await response.json();
-        setProfileData({
+
+        const initialData = {
           username: userData.username || "",
           email: userData.email || "",
-          profilePictureURL: userData.profile_picture || "", // TODO Find a way to have a default picture when empty
-         });
+          profilePictureURL: userData.profile_picture || ""
+        };
+        // setProfileData({
+        //   username: userData.username || "",
+        //   email: userData.email || "",
+        //   profilePictureURL: userData.profile_picture || "", // TODO Find a way to have a default picture when empty
+        //  });
+
+        setProfileData(initialData);
+        setOriginalData(initialData);
       } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         console.error(err.message);
         setError(err.message);
       } finally {
@@ -66,9 +72,7 @@ export default function Profile() {
   if (error) {
     return <div>Error: {error}</div>
   }
-  
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
@@ -101,11 +105,12 @@ export default function Profile() {
             profilePicture: profileData.profilePictureURL, // Renamed to match backend
           }),
         });
-        console.log(profileData); //TODO DEZE WEG HALEN!!!
+
         if (!response.ok) {
           throw new Error(`Failed to update profile data. Status: ${response.status}`);
         }
         alert("Profile updated succesfully!");
+        setOriginalData(profileData);
       } catch (err) {
         console.error("Error updating profile: ", err.message);
         alert("Failed to update profile. Please try again.");
@@ -113,6 +118,11 @@ export default function Profile() {
     }
     setIsEditing(!isEditing);
   };
+
+  const cancelEdit = () => {
+    setProfileData(originalData);
+    setIsEditing(false);
+  }
 
   return (
     <div className="flex justify-center">
@@ -187,12 +197,19 @@ export default function Profile() {
         {/*<p className="m-2">*/}
         {/*  {profileData.email}*/}
         {/*</p>*/}
-        <div className="m-10">
+        <div className="ml-10 mr-10 mt-5">
           <Button
             text={isEditing ? "Save" : "Edit"}
             onClick={toggleEditMode}
           />
         </div>
+        {isEditing && (
+          <div className="ml-10 mr-10 mt-5">
+            <Button
+              text="Cancel"
+              onClick={cancelEdit}/>
+          </div>
+        )}
       </div>
     </div>
   );
