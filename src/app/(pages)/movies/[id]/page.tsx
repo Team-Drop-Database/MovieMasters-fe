@@ -4,12 +4,16 @@ import { useEffect, useState } from 'react';
 import Movie from "@/models/Movie";
 import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
+import {useAuthContext} from "@/contexts/AuthContext";
+import ElementTransition from '@/components/generic/transitions/ElementTransition';
+import Loading from '@/components/generic/Loading';
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [id, setId] = useState<string | null>(null);
-  const TEMP_USER_ID = 1;
+  const [isUserReady, setIsUserReady] = useState<boolean>(false);
+  const { userDetails } = useAuthContext();
 
   const fetchMovie = (movieId: string) => {
     getMovieById(Number(movieId))
@@ -37,12 +41,19 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
     }
   }, [id]);
 
+  useEffect(() => {
+    if (userDetails?.userId) {
+      setIsUserReady(true); // Set as ready when userDetails are available
+    }
+  }, [userDetails]);
+
+
   if (error) {
     return <div>{error}</div>;
   }
 
   if (!movie) {
-    return <div>Loading...</div>;
+    return <Loading/>
   }
 
   if (typeof movie === "string") {
@@ -52,6 +63,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
   const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
 
   return (
+    <ElementTransition>
     <div className="flex mx-10 my-5 space-x-20 font-sans">
       <div className="max-w-[300px]">
         <img
@@ -84,13 +96,16 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
           <div className="text-2xl font-semibold">Description</div>
           <p className="font-sans">{movie.description}</p>
         </div>
-        <WatchListButtonWrapper
-          params={{
-            userId: TEMP_USER_ID,
-            movieId: Number(id),
-          }}
-        />
+        {isUserReady && (
+          <WatchListButtonWrapper
+            params={{
+              userId: userDetails?.userId as number,
+              movieId: Number(id),
+            }}
+          />
+        )}
       </div>
     </div>
+    </ElementTransition>
   );
 }
