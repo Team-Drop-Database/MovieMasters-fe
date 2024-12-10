@@ -2,25 +2,71 @@
 
 import {Button} from "@/components/generic/Button";
 import {useEffect, useState} from "react";
-import {useAuthContext} from "@/contexts/authContext";
+import {useAuthContext} from "@/contexts/AuthContext";
 import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
+import Loading from "@/components/generic/Loading";
+import * as process from "node:process";
+import Cookies from "js-cookie";
 
 export default function Profile() {
   const { isLoggedIn, userDetails } = useAuthContext();
   const [isEditing, setIsEditing] = useState(false)
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState({
-    profilePictureURL: "https://lumiere-a.akamaihd.net/v1/images/r2-d2-main_f315b094.jpeg?" +
-      "region=273%2C0%2C951%2C536",
-    username: "ViesBotje",
-    email: "botje@gmail.com"
-  }); // TODO: Make this so it takes everything from the user.
+    profilePictureURL: "",
+    username: "",
+    email: ""
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = Cookies.get("jwt");
 
   useEffect(() => {
     if (!isLoggedIn) {
       navigateToLogin();
     }
-  }, [isLoggedIn])
+
+    const fetchUserData = async () => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const response = await fetch(`http://localhost:8080/api/v1/users/username/${userDetails.username}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user data. Status: ${response.status}`);
+        }
+
+        const userData = await response.json();
+        setProfileData({
+          profilePictureURL: userData.profilePictureUrl || null, // TODO Find a way to have a default picture when empty
+          username: userData.username || "",
+          email: userData.email || ""
+         });
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        console.error(err.message);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchUserData();
+  }, [isLoggedIn, userDetails]);
+  
+  if (isLoading) {
+    return <Loading/>;
+  }
+  
+  if (error) {
+    return <div>Error: {error}</div>
+  }
   
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
