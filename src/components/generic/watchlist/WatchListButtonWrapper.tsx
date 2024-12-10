@@ -41,7 +41,7 @@ export default function WatchListButtonWrapper({ params }: {
     return (
       <AddToWatchListButton
         params={{
-            initialWatchedStatus: watchedStatus,
+            initialWatchedStatus: watchedStatus as WatchedState,
             userId: params.userId,
             movieId: params.movieId
         }}
