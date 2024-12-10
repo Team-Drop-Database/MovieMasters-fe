@@ -65,7 +65,9 @@ function SearchBar(props: SearchBarProps) {
   );
 }
 
-function onConfirmSearch(input: string) {
+// Note: commented out the 'input' argument to 
+// prevent Typescript error
+function onConfirmSearch(/*input: string*/) {
   //TODO: Make search functional for the header
 }
 

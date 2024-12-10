@@ -70,5 +70,5 @@ export default function BasicTransitionLink({children, href}:
       }
 
       // Return a TransitionLink with the added transition handler
-      return <TransitionLink children={children} href={href} transitionHandler={handleMainTransition}></TransitionLink>
+      return <TransitionLink href={href} transitionHandler={handleMainTransition}>{children}</TransitionLink>
 }
