@@ -5,7 +5,6 @@ import {useEffect, useState} from "react";
 import {useAuthContext} from "@/contexts/AuthContext";
 import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
-import * as process from "node:process";
 import Cookies from "js-cookie";
 
 export default function Profile() {
@@ -43,9 +42,9 @@ export default function Profile() {
 
         const userData = await response.json();
         setProfileData({
-          profilePictureURL: userData.profile_picture || "", // TODO Find a way to have a default picture when empty
           username: userData.username || "",
-          email: userData.email || ""
+          email: userData.email || "",
+          profilePictureURL: userData.profile_picture || "", // TODO Find a way to have a default picture when empty
          });
       } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -82,13 +81,35 @@ export default function Profile() {
     }
   };
 
-  const toggleEditMode = () => {
+  const toggleEditMode = async () => {
     if (isEditing) {
       if (isSaveDisabled) {
         alert("Please make sure username is 5 or more characters.")
         return;
       }
-      console.log("Saved profile data:", profileData);
+
+      try {
+        const response = await fetch(`http://localhost:8080/api/v1/users/${userDetails?.userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            username: profileData.username,
+            email: profileData.email,
+            profilePicture: profileData.profilePictureURL, // Renamed to match backend
+          }),
+        });
+        console.log(profileData); //TODO DEZE WEG HALEN!!!
+        if (!response.ok) {
+          throw new Error(`Failed to update profile data. Status: ${response.status}`);
+        }
+        alert("Profile updated succesfully!");
+      } catch (err) {
+        console.error("Error updating profile: ", err.message);
+        alert("Failed to update profile. Please try again.");
+      }
     }
     setIsEditing(!isEditing);
   };
