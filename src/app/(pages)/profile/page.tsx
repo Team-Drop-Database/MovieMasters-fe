@@ -43,7 +43,7 @@ export default function Profile() {
 
         const userData = await response.json();
         setProfileData({
-          profilePictureURL: userData.profilePictureUrl || null, // TODO Find a way to have a default picture when empty
+          profilePictureURL: userData.profile_picture || "", // TODO Find a way to have a default picture when empty
           username: userData.username || "",
           email: userData.email || ""
          });
