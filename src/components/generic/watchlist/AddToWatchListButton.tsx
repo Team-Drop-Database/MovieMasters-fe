@@ -87,7 +87,6 @@ export default function AddToWatchListButton({params}: {
         <a
           onClick={handleRemoveMovieFromWatchlist}
           className="text-blue-400 hover:underline cursor-pointer text-xs"
-          disabled={loading}
         >
           {loading ? "Removing..." : "Remove"}
         </a>
