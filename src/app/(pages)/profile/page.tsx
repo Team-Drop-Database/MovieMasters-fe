@@ -1,30 +1,80 @@
 "use client";
 
 import {Button} from "@/components/generic/Button";
+import {useEffect, useState} from "react";
+import {useAuthContext} from "@/contexts/AuthContext";
+import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
+import Loading from "@/components/generic/Loading";
+import Cookies from "js-cookie";
 import {useState} from "react";
-// import {useAuthContext} from "@/contexts/authContext";
-// import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 
 export default function Profile() {
-  // const { isLoggedIn, userDetails } = useAuthContext();
+  const { isLoggedIn, userDetails } = useAuthContext();
   const [isEditing, setIsEditing] = useState(false);
   const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState({
-    profilePictureURL: "https://lumiere-a.akamaihd.net/v1/images/r2-d2-main_f315b094.jpeg?" +
-      "region=273%2C0%2C951%2C536",
-    username: "ViesBotje",
-    email: "botje@gmail.com"
-  }); // TODO: Make this so it takes everything from the user.
+    profilePictureURL: "",
+    username: "",
+    email: ""
+  });
+  const [originalData, setOriginalData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = Cookies.get("jwt");
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigateToLogin();
-  //   }
-  // }, [isLoggedIn])
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigateToLogin();
+    }
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/v1/users/username/${userDetails.username}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user data. Status: ${response.status}`);
+        }
+
+        const userData = await response.json();
+
+        const initialData = {
+          username: userData.username || "",
+          email: userData.email || "",
+          profilePictureURL: userData.profile_picture || ""
+        };
+        // setProfileData({
+        //   username: userData.username || "",
+        //   email: userData.email || "",
+        //   profilePictureURL: userData.profile_picture || "", // TODO Find a way to have a default picture when empty
+        //  });
+
+        setProfileData(initialData);
+        setOriginalData(initialData);
+      } catch (err) {
+        console.error(err.message);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [isLoggedIn, userDetails]);
+
+  if (isLoading) {
+    return <Loading/>;
+  }
   
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  if (error) {
+    return <div>Error: {error}</div>
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
@@ -37,16 +87,44 @@ export default function Profile() {
     }
   };
 
-  const toggleEditMode = () => {
+  const toggleEditMode = async () => {
     if (isEditing) {
       if (isSaveDisabled) {
         alert("Please make sure username is 5 or more characters.")
         return;
       }
-      console.log("Saved profile data:", profileData);
+
+      try {
+        const response = await fetch(`http://localhost:8080/api/v1/users/${userDetails?.userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            username: profileData.username,
+            email: profileData.email,
+            profilePicture: profileData.profilePictureURL, // Renamed to match backend
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to update profile data. Status: ${response.status}`);
+        }
+        alert("Profile updated succesfully!");
+        setOriginalData(profileData);
+      } catch (err) {
+        console.error("Error updating profile: ", err.message);
+        alert("Failed to update profile. Please try again.");
+      }
     }
     setIsEditing(!isEditing);
   };
+
+  const cancelEdit = () => {
+    setProfileData(originalData);
+    setIsEditing(false);
+  }
 
   const toggleFriendMode = () => {
     if (isAddingFriend) {
@@ -158,6 +236,27 @@ export default function Profile() {
                 />
               </div>
             )}
+          </div>
+        )}
+        {/*/!* Using img over Image because for Image a config would be needed for all domains *!/*/}
+        {/*/!* eslint-disable-next-line @next/next/no-img-element *!/*/}
+        {/*<p className="m-2">*/}
+        {/*  {profileData.username}*/}
+        {/*</p>*/}
+        {/*<p className="m-2">*/}
+        {/*  {profileData.email}*/}
+        {/*</p>*/}
+        <div className="ml-10 mr-10 mt-5">
+          <Button
+            text={isEditing ? "Save" : "Edit"}
+            onClick={toggleEditMode}
+          />
+        </div>
+        {isEditing && (
+          <div className="ml-10 mr-10 mt-5">
+            <Button
+              text="Cancel"
+              onClick={cancelEdit}/>
           </div>
         )}
       </div>

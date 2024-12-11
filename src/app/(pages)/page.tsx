@@ -3,7 +3,7 @@
 import React from "react";
 import LoggedIn from "./LoggedIn";
 import LoggedOut from "./LoggedOut";
-import {useAuthContext} from "@/contexts/authContext";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Home() {
   const { isLoggedIn, userDetails, logout } = useAuthContext();
