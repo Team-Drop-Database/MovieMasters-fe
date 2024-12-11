@@ -64,7 +64,7 @@ export default function Profile() {
     };
 
     fetchUserData();
-  }, [isLoggedIn, userDetails]);
+  }, [isLoggedIn, userDetails, token]);
 
   if (isLoading) {
     return <Loading/>;
