@@ -8,7 +8,7 @@ import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 
 export default function Profile() {
-  const { isLoggedIn, userDetails } = useAuthContext();
+  const {isLoggedIn, userDetails} = useAuthContext();
   const [isEditing, setIsEditing] = useState(false)
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -60,22 +60,22 @@ export default function Profile() {
         setIsLoading(false);
       }
     };
-    
+
     fetchUserData();
   }, [isLoggedIn, userDetails]);
-  
+
   if (isLoading) {
     return <Loading/>;
   }
-  
+
   if (error) {
     return <div>Error: {error}</div>
   }
 
   // @ts-expect-error e has type of any
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData((prevData) => ({ ...prevData, [name]: value }));
+    const {name, value} = e.target;
+    setProfileData((prevData) => ({...prevData, [name]: value}));
 
     if ((name === "username" && value.length < 5)) {
       setIsSaveDisabled(true)
@@ -108,6 +108,12 @@ export default function Profile() {
 
         if (!response.ok) {
           throw new Error(`Failed to update profile data. Status: ${response.status}`);
+        } else {
+          const tokens = await response.json();
+
+          if (tokens) {Cookies.set('jwt', tokens.accessToken, {expires: 1, secure: true, sameSite: 'Strict'});
+          Cookies.set('refresh_token', tokens.refreshToken, {expires: 3, secure: true, sameSite: 'Strict'});
+          }
         }
         alert("Profile updated succesfully!");
         // @ts-expect-error to leave the red lines
