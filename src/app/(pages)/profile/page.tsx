@@ -6,7 +6,6 @@ import {useAuthContext} from "@/contexts/AuthContext";
 import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
-import {useState} from "react";
 
 export default function Profile() {
   const { isLoggedIn, userDetails } = useAuthContext();
