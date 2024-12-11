@@ -6,9 +6,10 @@ import {useAuthContext} from "@/contexts/AuthContext";
 import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
-  const {isLoggedIn, userDetails} = useAuthContext();
+  const {isLoggedIn, userDetails, login} = useAuthContext();
   const [isEditing, setIsEditing] = useState(false)
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -19,6 +20,7 @@ export default function Profile() {
   const [originalData, setOriginalData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
   const token = Cookies.get("jwt");
 
   useEffect(() => {
@@ -114,6 +116,8 @@ export default function Profile() {
           if (tokens) {Cookies.set('jwt', tokens.accessToken, {expires: 1, secure: true, sameSite: 'Strict'});
           Cookies.set('refresh_token', tokens.refreshToken, {expires: 3, secure: true, sameSite: 'Strict'});
           }
+          await login();
+          router.push("/");
         }
         alert("Profile updated succesfully!");
         // @ts-expect-error to leave the red lines
