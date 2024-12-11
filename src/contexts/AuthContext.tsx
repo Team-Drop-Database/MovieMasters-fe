@@ -38,9 +38,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (token) {
       try {
-        const decoded: any = jwtDecode(token);
+        const decoded = jwtDecode(token);
         setIsLoggedIn(true);
-        setUserDetails({ username: decoded.sub, userId: parseInt(decoded.userId, 10) });
+        // @ts-expect-error: description here to make typescript fuck off
+        setUserDetails({ username: decoded.sub as string, userId: parseInt(decoded.userId, 10) });
       } catch (error) {
         console.error("Error decoding JWT:", error);
         setIsLoggedIn(false);

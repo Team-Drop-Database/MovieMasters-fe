@@ -13,7 +13,9 @@ export default function Home() {
       {isLoggedIn ? (
         <LoggedIn
           onLogout={() => { logout(); }}
-          userDetails={userDetails}
+          // Note: the extra 'as...' is to prevent typescript from complaining. By 
+          // default it expects the object to be either valid data or 'undefined'.
+          userDetails={userDetails as {username: string, userId: number} | undefined}
         />
       ) : (
         <LoggedOut/>

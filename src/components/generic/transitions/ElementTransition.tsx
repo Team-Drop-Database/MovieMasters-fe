@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
 
-// @ts-ignore
-export default function ElementTransition({ children }) {
+export default function ElementTransition({ children }: 
+  {children: React.ReactNode}) {
   useEffect(() => {
 
     gsap.fromTo(
