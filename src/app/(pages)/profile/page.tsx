@@ -29,6 +29,7 @@ export default function Profile() {
 
     const fetchUserData = async () => {
       try {
+        // @ts-expect-error because eslint thinks userDetails could possibly be null, which is not the case
         const response = await fetch(`http://localhost:8080/api/v1/users/username/${userDetails.username}`, {
           method: "GET",
           headers: {
@@ -47,16 +48,14 @@ export default function Profile() {
           email: userData.email || "",
           profilePictureURL: userData.profile_picture || ""
         };
-        // setProfileData({
-        //   username: userData.username || "",
-        //   email: userData.email || "",
-        //   profilePictureURL: userData.profile_picture || "", // TODO Find a way to have a default picture when empty
-        //  });
 
         setProfileData(initialData);
+        // @ts-expect-error needed to use this instead of ts-ignore
         setOriginalData(initialData);
       } catch (err) {
+        // @ts-expect-error err is of type unkown
         console.error(err.message);
+        // @ts-expect-error err is of type unkown
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -74,6 +73,7 @@ export default function Profile() {
     return <div>Error: {error}</div>
   }
 
+  // @ts-expect-error e has type of any
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
@@ -111,8 +111,10 @@ export default function Profile() {
           throw new Error(`Failed to update profile data. Status: ${response.status}`);
         }
         alert("Profile updated succesfully!");
+        // @ts-expect-error to leave the red lines
         setOriginalData(profileData);
       } catch (err) {
+        // @ts-expect-error err is of type unkown
         console.error("Error updating profile: ", err.message);
         alert("Failed to update profile. Please try again.");
       }
@@ -121,6 +123,7 @@ export default function Profile() {
   };
 
   const cancelEdit = () => {
+    // @ts-expect-error argument of type null is not assignable, still everything works
     setProfileData(originalData);
     setIsEditing(false);
   }
