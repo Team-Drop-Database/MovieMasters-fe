@@ -1,7 +1,5 @@
 import React from "react"
 import Image from "next/image"
-import { Button } from "@/components/generic/Button"
-import { navigateToSignup, navigateToLogin } from "@/utils/navigation/HomeNavigation"
 import { Star } from "@/components/generic/review/Star"
 import { requestReviewsByAmount } from "@/services/ReviewService"
 import { mapReviewResponsesToItems, ReviewItemProps } from "@/utils/mapper/ReviewResponseMaps"
