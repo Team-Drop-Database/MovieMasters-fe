@@ -5,6 +5,8 @@ import { requestReviewsByAmount } from "@/services/ReviewService"
 import { mapReviewResponsesToItems, ReviewItemProps } from "@/utils/mapper/ReviewResponseMaps"
 import neutral from "@/assets/images/no-profile-pic.jpg"
 import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink"
+import ElementTransition from "@/components/generic/transitions/ElementTransition"
+import TransitionLink from "@/components/generic/transitions/TransitionLink"
 
 export default function LoggedOut() {
   return (
@@ -21,12 +23,20 @@ export default function LoggedOut() {
           <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div>
           </BasicTransitionLink>
       </div> */}
-      <section className="flex items-center w-full justify-evenly p-24 pt-32 bg-gradient-to-b from-background_primary via-slate-600 to-background_primary">
-        <img className="" src={"https://img.freepik.com/premium-photo/vintage-people-watching-movie-cinema-wearing-3d-glasses-photography-portrait-adult_53876-316632.jpg"} width={800} height={800} alt={"popcorn.png"}></img>
-        <div className="flex flex-col gap-3 max-w-[550px]">
-          <h1 className="text-white text-5xl font-inter font-bold">Movies made <span className="text-blue-500">social</span>.</h1>
-          <p className="font-inter text-white text-2xl opacity-70">Explore the latest blockbusters, share reviews, and connect with fellow film lovers.</p>
-        </div>
+      <section className="flex w-full min-h-[800px] justify-evenly p-24 pt-32 bg-gradient-to-b from-background_primary via-slate-600 to-background_primary">
+        {/* <div className="">
+        </div> */}
+        {/* <img className="opacity-70" src={"https://img.freepik.com/premium-photo/vintage-people-watching-movie-cinema-wearing-3d-glasses-photography-portrait-adult_53876-316632.jpg"} width={800} height={800} alt={"popcorn.png"}></img> */}
+        {/* <Image className="opacity-100" src={"/popcorn2_sharp.png"} width={800} height={800} alt="popcorn.png"></Image> */}
+        <ElementTransition startYState={-50}>
+          <div className="flex flex-col gap-3 max-w-[550px] items-center">
+            <h1 className="text-white text-5xl font-inter font-bold text-center">Movies made <span className="text-blue-500">social</span>.</h1>
+            <p className="font-inter text-white text-2xl opacity-70 text-center mb-5">Explore the latest blockbusters, share reviews, and connect with fellow film lovers.</p>
+            <BasicTransitionLink href="/movies/129">
+              <button className="opacity-60 hover:opacity-100 px-4 py-2 rounded-2xl bg-indigo-500 hover:ring-1 hover:scale-105 shadow-md font-inter text-2xl font-semibold transition-all">Start Browsing</button>
+            </BasicTransitionLink>
+          </div>
+        </ElementTransition>
       </section>
       <ReviewList />
     </>
