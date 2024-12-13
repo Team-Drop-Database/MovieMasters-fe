@@ -9,18 +9,25 @@ import BasicTransitionLink from "@/components/generic/transitions/BasicTransitio
 export default function LoggedOut() {
   return (
     <>
-      <div className="mx-[4rem] mt-[4rem] flex flex-col">
+      {/* <div className="mx-[4rem] mt-[4rem] flex flex-col">
         <h1>Welcome to Movie Master</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id sem varius ligula imperdiet euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec posuere pharetra neque, aliquam pretium sem vestibulum eget. Nunc vel nibh vel lorem aliquam varius</p>
-      </div>
-      <div className="mx-[4rem] flex gap-5">
+        <p>Discover movies. Connect with friends. Join the fun.</p>
+      </div> */}
+      {/* <div className="mx-[4rem] flex gap-5">
         <BasicTransitionLink href={"/signup"}>
           <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div>
           </BasicTransitionLink>
           <BasicTransitionLink href={"/signin"}>
           <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div>
           </BasicTransitionLink>
-      </div>
+      </div> */}
+      <section className="flex items-center w-full justify-evenly p-24 mt-8">
+        <img className="" src={"https://img.freepik.com/premium-photo/vintage-people-watching-movie-cinema-wearing-3d-glasses-photography-portrait-adult_53876-316632.jpg"} width={800} height={800} alt={"popcorn.png"}></img>
+        <div className="flex flex-col gap-3 max-w-[550px]">
+          <h1 className="text-white text-5xl font-inter font-bold">Movies made <span className="text-blue-500">social</span>.</h1>
+          <p className="font-inter text-white text-2xl opacity-70">Explore the latest blockbusters, share reviews, and connect with fellow film lovers.</p>
+        </div>
+      </section>
       <ReviewList />
     </>
   )
