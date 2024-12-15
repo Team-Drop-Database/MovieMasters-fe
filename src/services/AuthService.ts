@@ -24,9 +24,12 @@ export async function loginUser(username: string, password: string): Promise<{ a
 
     const {accessToken, refreshToken} = await response.json();
 
+    const JWT_COOKIE_SECURE: boolean = process.env
+    .JWT_COOKIE_SECURE?.toLowerCase() == 'true';
+
     // Store tokens
-    Cookies.set('jwt', accessToken, {expires: 1, secure: true, sameSite: 'Strict'});
-    Cookies.set('refresh_token', refreshToken, {expires: 3, secure: true, sameSite: 'Strict'});
+    Cookies.set('jwt', accessToken, {expires: 1, secure: JWT_COOKIE_SECURE, sameSite: 'Strict'});
+    Cookies.set('refresh_token', refreshToken, {expires: 3, secure: JWT_COOKIE_SECURE, sameSite: 'Strict'});
 
     return {accessToken, refreshToken};
   } catch (error) {
