@@ -2,7 +2,7 @@ import apiClient from "@/services/ApiClient";
 
 export async function fetchUserDataService(username: string) {
   const endpoint = `/users/username/${username}`;
-  const response = await apiClient(endpoint, {method: "GET"});
+  const response = await apiClient(endpoint);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch user data. Status: ${response.status}`);
