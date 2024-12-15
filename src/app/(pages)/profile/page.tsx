@@ -100,7 +100,6 @@ export default function Profile() {
           router.push("/");
         }
 
-        alert("Profile updated succesfully!");
         
         // @ts-expect-error argument of type ... is not assignable, but it's the same
         setOriginalData(profileData);
