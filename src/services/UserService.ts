@@ -7,7 +7,6 @@ export async function fetchUserDataService(username: string) {
   if (!response.ok) {
     throw new Error(`Failed to fetch user data. Status: ${response.status}`);
   }
-  console.log(response);
   return await response.json();
 }
 
