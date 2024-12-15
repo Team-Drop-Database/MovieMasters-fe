@@ -22,6 +22,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const JWT_COOKIE_SECURE: boolean = process.env.JWT_COOKIE_SECURE?.toLowerCase() == 'true';
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -93,13 +94,14 @@ export default function Profile() {
         });
 
         if (tokens) {
-          Cookies.set("jwt", tokens.accessToken, {expires: 1, secure: true, sameSite: "Strict"});
+          Cookies.set("jwt", tokens.accessToken, {expires: 1, secure: JWT_COOKIE_SECURE,
+            sameSite: "Strict"});
           Cookies.set("refresh_token", tokens.refreshToken,
-            {expires: 3, secure: true, sameSite: "strict"});
+            {expires: 3, secure: JWT_COOKIE_SECURE, sameSite: "strict"});
           await login();
           router.push("/");
         }
-        
+
         // @ts-expect-error argument of type ... is not assignable, but it's the same
         setOriginalData(profileData);
       } catch (error) {
