@@ -1,6 +1,8 @@
 import React from "react"
 import Image from "next/image"
-import { Star } from "@/components/generic/review/Star"
+import { Button } from "@/components/generic/Button"
+import { navigateToSignup, navigateToLogin } from "@/utils/navigation/HomeNavigation"
+import { FillAmount, getFillAmount, Star } from "@/components/generic/review/Star"
 import { requestReviewsByAmount } from "@/services/ReviewService"
 import { mapReviewResponsesToItems, ReviewItemProps } from "@/utils/mapper/ReviewResponseMaps"
 import neutral from "@/assets/images/no-profile-pic.jpg"
@@ -93,11 +95,11 @@ type ReviewItemStarsProps = {
 function ReviewItemStars({ starAmount }: ReviewItemStarsProps) {
   return (
     <div className="flex gap-2">
-      <Star isYellow={starAmount >= 1} />
-      <Star isYellow={starAmount >= 2} />
-      <Star isYellow={starAmount >= 3} />
-      <Star isYellow={starAmount >= 4} />
-      <Star isYellow={starAmount >= 5} />
+      <Star fillAmount={getFillAmount(starAmount, 1)} />
+      <Star fillAmount={getFillAmount(starAmount, 2)} />
+      <Star fillAmount={getFillAmount(starAmount, 3)} />
+      <Star fillAmount={getFillAmount(starAmount, 4)} />
+      <Star fillAmount={getFillAmount(starAmount, 5)} />
     </div>
   )
 }
