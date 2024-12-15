@@ -7,7 +7,7 @@ import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import {fetchUserDataService, updateUser} from "@/services/UserService";
+import {fetchUserData, updateUser} from "@/services/UserService";
 
 export default function Profile() {
   const {isLoggedIn, userDetails, login} = useAuthContext();
@@ -28,10 +28,10 @@ export default function Profile() {
       navigateToLogin();
     }
 
-    async function fetchUserData() {
+    async function fetchUserDataProfile() {
       try {
         // @ts-expect-error userDetails could possibly be null, which is not the case
-        const userData = await fetchUserDataService(userDetails.username);
+        const userData = await fetchUserData(userDetails.username);
         const initialData = {
           username: userData.username,
           email: userData.email,
@@ -53,7 +53,7 @@ export default function Profile() {
       }
     }
 
-    fetchUserData();
+    fetchUserDataProfile();
   }, [isLoggedIn, userDetails]);
 
   if (isLoading) {
@@ -99,7 +99,6 @@ export default function Profile() {
           await login();
           router.push("/");
         }
-
         
         // @ts-expect-error argument of type ... is not assignable, but it's the same
         setOriginalData(profileData);

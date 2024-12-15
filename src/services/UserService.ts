@@ -1,6 +1,6 @@
 import apiClient from "@/services/ApiClient";
 
-export async function fetchUserDataService(username: string) {
+export async function fetchUserData(username: string) {
   const endpoint = `/users/username/${username}`;
   const response = await apiClient(endpoint);
 
