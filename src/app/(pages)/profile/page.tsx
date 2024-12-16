@@ -35,7 +35,7 @@ export default function Profile() {
         try {
           const userData = await fetchUserData(userDetails.username);
           const initialData = {
-            username: userData.username as string,
+            username: userData.username,
             email: userData.email,
             profilePictureURL: userData.profile_picture || "https://static.vecteezy.com/system" +
               "/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
