@@ -20,11 +20,14 @@ export default function LoggedOut() {
             <BasicTransitionLink href="/movies/129">
               <button className="opacity-60 hover:opacity-100 px-4 py-2 rounded-2xl bg-indigo-500 hover:ring-1 hover:scale-105 shadow-md font-inter text-2xl font-semibold transition-all">Start Browsing</button>
             </BasicTransitionLink>
+            <a className="hover:scale-110 transition-all origin-bottom" href="#review-section">
+            <Image className="mt-48 animate-bounce cursor-pointer transition-all opacity-40 hover:opacity-100" src={"/double_arrow.svg"} alt={"double_arrow.svg"} width={60} height={60}></Image>
+            </a>
           </div>
         </ElementTransition>
       </section>
       {/* Review section */}
-      <section className="flex flex-col items-center gap-1">
+      <section id="review-section" className="flex flex-col items-center gap-1">
         <h2 className="font-inter text-4xl font-bold"><span className="text-amber-500">Unleash</span> your inner critic.</h2>
         <p className="font-inter text-white text-2xl opacity-40 text-center mb-12 max-w-[600px]">Share your movie reviews, discover new perspectives, and join the conversation.</p>
        <ReviewList/>
