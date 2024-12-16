@@ -75,7 +75,7 @@ function ReviewList() {
 
 function ReviewItem(props: ReviewItemProps) {
   return (
-    <div className="h-72 w-72 p-2 shrink-0 flex flex-col rounded-xl shadow-lg border-background_secondary border-4 gap-5">
+    <div className="h-72 w-72 p-4 shrink-0 flex flex-col rounded-xl border border-slate-500 border-opacity-10 gap-5 shadow-2xl">
       <div className="flex items-start gap-2">
         <Image
           src={props.profilePicture || neutral}
