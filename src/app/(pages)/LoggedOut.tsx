@@ -23,7 +23,7 @@ export default function LoggedOut() {
           <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div>
           </BasicTransitionLink>
       </div> */}
-      <section className="flex w-full min-h-[800px] justify-evenly p-24 pt-32 bg-gradient-to-b from-background_primary via-slate-600 to-background_primary">
+      <section className="flex w-full justify-evenly p-24 pt-32">
         {/* <div className="">
         </div> */}
         {/* <img className="opacity-70" src={"https://img.freepik.com/premium-photo/vintage-people-watching-movie-cinema-wearing-3d-glasses-photography-portrait-adult_53876-316632.jpg"} width={800} height={800} alt={"popcorn.png"}></img> */}

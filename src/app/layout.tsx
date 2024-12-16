@@ -43,8 +43,10 @@ export default function RootLayout({
     >
     <AuthProvider>
       <Header/>
-      <main>
-        {children}
+      <main className="bg-gradient-to-b from-background_primary via-slate-600 to-background_primary h-screen">
+        <div className="main-container">
+          {children}
+        </div>
       </main>
     </AuthProvider>
     </body>
