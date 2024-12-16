@@ -11,23 +11,8 @@ import TransitionLink from "@/components/generic/transitions/TransitionLink"
 export default function LoggedOut() {
   return (
     <>
-      {/* <div className="mx-[4rem] mt-[4rem] flex flex-col">
-        <h1>Welcome to Movie Master</h1>
-        <p>Discover movies. Connect with friends. Join the fun.</p>
-      </div> */}
-      {/* <div className="mx-[4rem] flex gap-5">
-        <BasicTransitionLink href={"/signup"}>
-          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div>
-          </BasicTransitionLink>
-          <BasicTransitionLink href={"/signin"}>
-          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div>
-          </BasicTransitionLink>
-      </div> */}
-      <section className="flex w-full justify-evenly p-24 pt-32">
-        {/* <div className="">
-        </div> */}
-        {/* <img className="opacity-70" src={"https://img.freepik.com/premium-photo/vintage-people-watching-movie-cinema-wearing-3d-glasses-photography-portrait-adult_53876-316632.jpg"} width={800} height={800} alt={"popcorn.png"}></img> */}
-        {/* <Image className="opacity-100" src={"/popcorn2_sharp.png"} width={800} height={800} alt="popcorn.png"></Image> */}
+    {/* Title */}
+      <section className="flex w-full justify-evenly p-24 pt-32 min-h-screen">
         <ElementTransition startYState={-50}>
           <div className="flex flex-col gap-3 max-w-[550px] items-center">
             <h1 className="text-white text-5xl font-inter font-bold text-center">Movies made <span className="text-blue-500">social</span>.</h1>
