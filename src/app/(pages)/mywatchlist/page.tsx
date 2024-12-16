@@ -111,7 +111,7 @@ export default function MyWatchList() {
     );
   } else {
     pageContent = (
-      <ElementTransition>
+      <ElementTransition startYState={50}>
         <div>
           <div className="p-4">
             <h1 className="text-2xl">Watched</h1>

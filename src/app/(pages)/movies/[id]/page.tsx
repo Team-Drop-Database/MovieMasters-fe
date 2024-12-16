@@ -63,7 +63,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
   const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
 
   return (
-    <ElementTransition>
+    <ElementTransition startYState={50}>
     <div className="flex mx-10 my-5 space-x-20 font-sans">
       <div className="max-w-[300px]">
         <img
