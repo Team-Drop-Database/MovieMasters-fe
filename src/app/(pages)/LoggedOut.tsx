@@ -24,9 +24,9 @@ export default function LoggedOut() {
         </ElementTransition>
       </section>
       {/* Review section */}
-      <section className="flex flex-col items-center p-8 gap-1">
+      <section className="flex flex-col items-center gap-1">
         <h2 className="font-inter text-4xl font-bold"><span className="text-amber-500">Unleash</span> your inner critic.</h2>
-        <p className="font-inter text-white text-2xl opacity-40 text-center mb-5 max-w-[600px]">Share your movie reviews, discover new perspectives, and join the conversation.</p>
+        <p className="font-inter text-white text-2xl opacity-40 text-center mb-12 max-w-[600px]">Share your movie reviews, discover new perspectives, and join the conversation.</p>
        <ReviewList/>
       </section>
     </>
@@ -75,7 +75,9 @@ function ReviewList() {
 
 function ReviewItem(props: ReviewItemProps) {
   return (
-    <div className="h-72 w-72 p-4 shrink-0 flex flex-col rounded-xl border border-slate-500 border-opacity-10 gap-5 shadow-2xl">
+    <div className="h-72 w-72 py-6 px-4 shrink-0 flex flex-col rounded-xl border border-slate-500 border-opacity-10 gap-5 shadow-2xl">
+      <p className="font-inter font-semibold border-b border-b-slate-500 border-opacity-20 text-xl pb-2">{props.movieName}</p>
+      
       <div className="flex items-start gap-2">
         <Image
           src={props.profilePicture || neutral}
@@ -84,11 +86,11 @@ function ReviewItem(props: ReviewItemProps) {
           alt="Profile picture"
           className="rounded-full"
         />
-        <p className="details grow">{props.reviewerName}</p>
+        <p className="grow">{props.reviewerName}</p>
       </div>
       <ReviewItemStars starAmount={props.starAmount} />
-      <p className="details">On: {props.movieName}</p>
-      <p className="details">{props.reviewBody}</p>
+
+      <p className="font-inter font-medium">{props.reviewBody}</p>
     </div>
   )
 }
