@@ -23,7 +23,12 @@ export default function LoggedOut() {
           </div>
         </ElementTransition>
       </section>
-      <ReviewList />
+      {/* Review section */}
+      <section className="flex flex-col items-center p-8 gap-1">
+        <h2 className="font-inter text-4xl font-bold"><span className="text-amber-500">Unleash</span> your inner critic.</h2>
+        <p className="font-inter text-white text-2xl opacity-40 text-center mb-5 max-w-[600px]">Share your movie reviews, discover new perspectives, and join the conversation.</p>
+       <ReviewList/>
+      </section>
     </>
   )
 }
