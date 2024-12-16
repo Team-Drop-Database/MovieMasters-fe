@@ -1,7 +1,7 @@
 "use client";
 
 import {Button} from "@/components/generic/Button";
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {useAuthContext} from "@/contexts/AuthContext";
 import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
@@ -10,17 +10,18 @@ import { useRouter } from "next/navigation";
 import {fetchUserData, updateUser} from "@/services/UserService";
 
 export default function Profile() {
-  const {isLoggedIn, userDetails, login} = useAuthContext();
-  const [isEditing, setIsEditing] = useState(false)
-  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
-  const [profileData, setProfileData] = useState({
+  const profile = {
     profilePictureURL: "",
     username: "",
     email: ""
-  });
-  const [originalData, setOriginalData] = useState(null);
+  }
+  const {isLoggedIn, userDetails, login} = useAuthContext();
+  const [isEditing, setIsEditing] = useState(false)
+  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
+  const [profileData, setProfileData] = useState(profile);
+  const [originalData, setOriginalData] = useState(profile);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const JWT_COOKIE_SECURE: boolean = process.env.JWT_COOKIE_SECURE?.toLowerCase() == 'true';
 
@@ -30,27 +31,26 @@ export default function Profile() {
     }
 
     async function fetchUserDataProfile() {
-      try {
-        // @ts-expect-error userDetails could possibly be null, which is not the case
-        const userData = await fetchUserData(userDetails.username);
-        const initialData = {
-          username: userData.username,
-          email: userData.email,
-          profilePictureURL: userData.profile_picture || "https://static.vecteezy.com/system" +
-            "/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
-          //TODO: issue #97 (make sure there is already image in database)
-        };
-        setProfileData(initialData);
-        // @ts-expect-error says that initialData could not be assigned to originalData but it's the same
-        setOriginalData(initialData); // This is to make sure that when you cancel editting you get the original data back
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-          // @ts-expect-error argument of string is not assignable, but it works
-          setError(error.message);
+      if (userDetails != null) {
+        try {
+          const userData = await fetchUserData(userDetails.username);
+          const initialData = {
+            username: userData.username as string,
+            email: userData.email,
+            profilePictureURL: userData.profile_picture || "https://static.vecteezy.com/system" +
+              "/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+            //TODO: issue #97 (make sure there is already image in database)
+          };
+          setProfileData(initialData);
+          setOriginalData(initialData); // This is to make sure that when you cancel editting you get the original data back
+        } catch (error) {
+          if (error instanceof Error) {
+            console.error(error.message);
+            setError(error.message);
+          }
+        } finally {
+          setIsLoading(false);
         }
-      } finally {
-        setIsLoading(false);
       }
     }
 
@@ -65,8 +65,7 @@ export default function Profile() {
     return <div>Error: {error}</div>
   }
 
-  // @ts-expect-error e has type of any
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
     setProfileData((prevData) => ({...prevData, [name]: value}));
 
@@ -81,33 +80,33 @@ export default function Profile() {
   async function toggleEditMode() {
     if (isEditing) {
       if (isSaveDisabled) {
-        alert("Please make sure username is 5 or more characters."); // TODO veranderen zonder alert
+        alert("Please make sure username is 5 or more characters.");
         return;
       }
 
-      try {
-        // @ts-expect-error userDetails possibly null, without userDetails you can't get to this page
-        const tokens = await updateUser(userDetails.userId, {
-          username: profileData.username,
-          email: profileData.email,
-          profilePicture: profileData.profilePictureURL
-        });
+      if (userDetails != null) {
+        try {
+          const tokens = await updateUser(userDetails.userId, {
+            username: profileData.username,
+            email: profileData.email,
+            profilePicture: profileData.profilePictureURL
+          });
 
-        if (tokens) {
-          Cookies.set("jwt", tokens.accessToken, {expires: 1, secure: JWT_COOKIE_SECURE,
-            sameSite: "Strict"});
-          Cookies.set("refresh_token", tokens.refreshToken,
-            {expires: 3, secure: JWT_COOKIE_SECURE, sameSite: "strict"});
-          await login();
-          router.push("/");
-        }
+          if (tokens) {
+            Cookies.set("jwt", tokens.accessToken, {expires: 1, secure: JWT_COOKIE_SECURE,
+              sameSite: "Strict"});
+            Cookies.set("refresh_token", tokens.refreshToken,
+              {expires: 3, secure: JWT_COOKIE_SECURE, sameSite: "strict"});
+            await login();
+            router.push("/");
+          }
 
-        // @ts-expect-error argument of type ... is not assignable, but it's the same
-        setOriginalData(profileData);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error("Error updating profile: ", error.message);
-          alert("Failed to update profile. Please try again.");
+          setOriginalData(profileData);
+        } catch (error) {
+          if (error instanceof Error) {
+            console.error("Error updating profile: ", error.message);
+            alert("Failed to update profile. Please try again.");
+          }
         }
       }
     }
@@ -116,7 +115,6 @@ export default function Profile() {
   }
 
   const cancelEdit = () => {
-    // @ts-expect-error argument of type null is not assignable, originalData is not null
     setProfileData(originalData);
     setIsEditing(false);
   }
