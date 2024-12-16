@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/Header";
 import {AuthProvider} from "@/contexts/AuthContext";
-import { Head } from "next/document";
 
 const alatsi = localFont({
   src: "../assets/fonts/Alatsi-Regular.ttf",

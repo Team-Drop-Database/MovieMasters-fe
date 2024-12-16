@@ -6,7 +6,6 @@ import { mapReviewResponsesToItems, ReviewItemProps } from "@/utils/mapper/Revie
 import neutral from "@/assets/images/no-profile-pic.jpg"
 import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink"
 import ElementTransition from "@/components/generic/transitions/ElementTransition"
-import TransitionLink from "@/components/generic/transitions/TransitionLink"
 
 export default function LoggedOut() {
   return (
