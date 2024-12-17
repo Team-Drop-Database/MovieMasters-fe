@@ -26,7 +26,7 @@ export default function LoggedOut() {
         </ElementTransition>
       </section>
       {/* Review section */}
-      <section id="review-section" className="flex flex-col items-center gap-1 overflow-hidden">
+      <section id="review-section" className="flex flex-col items-center gap-1 overflow-hidden mb-[300px] scroll-mt-28">
         <h2 className="font-inter text-4xl font-bold"><span className="text-amber-500">Unleash</span> your inner critic.</h2>
         <p className="font-inter text-white text-2xl opacity-40 text-center mb-12 max-w-[600px]">Share your movie reviews, discover new perspectives, and join the conversation.</p>
        <ReviewList/>
