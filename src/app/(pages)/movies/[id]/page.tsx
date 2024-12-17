@@ -64,7 +64,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
 
   return (
     <ElementTransition startYState={50}>
-    <div className="flex mx-10 my-5 space-x-20 font-sans">
+    <div className="flex mx-10 my-5 space-x-20 font-sans mb-[400px]">
       <div className="max-w-[300px]">
         <img
           className="object-cover aspect-2/3"

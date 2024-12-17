@@ -105,7 +105,7 @@ export default function MyWatchList() {
   if (watchlist.length === 0) {
     pageContent = (
       <div>
-        <h2 className="text-3xl">Still empty here...</h2>
+        <h2 className="text-3xl mb-[900px]">Still empty here...</h2>
         <p>Add some movies to make them show up here!</p>
       </div>
     );

@@ -46,6 +46,11 @@ export default function RootLayout({
         <div className="main-container">
           {children}
         </div>
+        {/* Note: Do not take footer out of the <main> element. While it might not
+         look logical, it is necessary to prevent visual bugs. */}
+        <footer className="bg-background_secondary h-28 w-full flex justify-center items-center">
+          <span className="font-inter opacity-40">© 2024 Movie Masters. All Rights Reserved.</span>
+        </footer>
       </main>
     </AuthProvider>
     </body>
