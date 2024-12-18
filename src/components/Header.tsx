@@ -67,9 +67,9 @@ function SearchBar(props: SearchBarProps) {
         if (e.key === "Enter") onConfirmSearch(/*searchInput*/);
       }}
       onChange={(e) => setSearchInput(e.target.value)}
-      className={`${props.className} w-full outline-none placeholder-black font-md py-3 px-4 h-fit rounded-3xl text-black bg-gray-500 focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
+      className={`${props.className}  w-full outline-none placeholder-black font-md py-3 px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
     />
-    <Image src={searchIcon} alt={"search_icon.svg"} width={35} height={35} className="absolute top-2 right-3 origin-center"></Image>
+    <Image src={searchIcon} alt={"search_icon.svg"} width={35} height={35} className="absolute top-2 right-3 origin-center cursor-pointer"></Image>
     </div>
   );
 }
