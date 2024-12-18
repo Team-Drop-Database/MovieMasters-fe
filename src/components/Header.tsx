@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
+import {redirect} from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
@@ -66,7 +67,8 @@ function SearchBar(props: SearchBarProps) {
 }
 
 function onConfirmSearch(input: string) {
-  //TODO: Make search functional for the header
+  console.log("test")
+  redirect(`/search?title=${input}`);
 }
 
 type ProfileButtonProps = {

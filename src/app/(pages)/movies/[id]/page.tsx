@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Movie from "@/models/Movie";
-import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
 import {useAuthContext} from "@/contexts/AuthContext";
 import ElementTransition from '@/components/generic/transitions/ElementTransition';
 import Loading from '@/components/generic/Loading';
+import {getMovieById} from "@/services/MovieService";
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
