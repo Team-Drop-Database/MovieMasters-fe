@@ -110,8 +110,13 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
             />
           </div>
         )}
-        { id !== null &&  watchedState === WatchedState.WATCHED &&
-          <ReviewSection movieId={Number(id)} onReviewCreated={review => console.info(review)} className="mt-4" />
+        { id !== null &&
+          <ReviewSection
+            movieId={Number(id)}
+            hasWatched={watchedState === WatchedState.WATCHED}
+            onReviewCreated={review => console.info(review)}
+            className="mt-4"
+          />
         }
       </div>
     </div>

@@ -9,11 +9,12 @@ import Anonymous from "@/assets/images/no-profile-pic.jpg"
 
 type ReviewSectionProps = {
   movieId: number,
+  hasWatched: boolean,
   onReviewCreated: (review: ReviewResponse) => void,
   className?: string,
 }
 
-export default function ReviewSection({ movieId, onReviewCreated, className = "" }: ReviewSectionProps) {
+export default function ReviewSection({ movieId, hasWatched, onReviewCreated, className = "" }: ReviewSectionProps) {
   const { isLoggedIn, userDetails } = useAuthContext()
   const [reviews, setReviews] = React.useState<ReviewResponse[]>([])
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
@@ -36,7 +37,7 @@ export default function ReviewSection({ movieId, onReviewCreated, className = ""
 
   return (
     <div className={`${className} flex flex-col gap-2`}>
-      { isLoggedIn && userDetails?.userId !== undefined &&
+      { isLoggedIn && userDetails?.userId !== undefined && hasWatched &&
         <PostReviewContainer movieId={movieId} userId={userDetails?.userId} onReviewPosted={onReviewCreated} />
       }
       { errorMessage && <div className="text-red-800">{errorMessage}</div> }
