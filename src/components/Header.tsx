@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/images/logo_nobg.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
@@ -9,8 +9,37 @@ import searchIcon from "@/assets/images/search_icon_black.svg"
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
 
+  const headerRef = useRef(null);
+  const [isSticky, setIsSticky] = useState(false);
+
+  // Adds the 'sticky' effect to the header/navbar.
+  useEffect(() => {
+    const navBar = headerRef.current;
+
+    // initial offset position of the header
+    const sticky = navBar?.offsetTop;
+
+    const handleScroll = () => {
+      if (window.scrollY >= sticky + navBar?.clientHeight) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    // Make sure to have the sticky effect apply initially, if necessary
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Makes sure to clean up the event listener aftwards
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <header className=" px-5 py-2 w-full flex items-center bg-background_primary shadow-md font-[family-name:var(--font-alatsi)] sticky top-0 z-50">
+    <header ref={headerRef} className={`px-5 py-2 w-full flex items-center bg-background_primary shadow-md font-[family-name:var(--font-alatsi)] z-50 transition-transform ${isSticky ? 'sticky -top-10 translate-y-10' : 'translate-y-0'}`}>
       <div className="flex grow items-center">
         <div className="basis-[30%]">
           <BasicTransitionLink href={"/"}>
@@ -69,7 +98,7 @@ function SearchBar(props: SearchBarProps) {
       onChange={(e) => setSearchInput(e.target.value)}
       className={`${props.className}  w-full outline-none placeholder-black font-md py-2 px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
     />
-    <Image src={searchIcon} alt={"search_icon.svg"} width={35} height={35} className="absolute top-1 right-3 origin-center cursor-pointer"></Image>
+    <Image src={searchIcon} alt={"search_icon.svg"} width={35} height={35} className="absolute top-0.5 right-3 origin-center cursor-pointer"></Image>
     </div>
   );
 }
