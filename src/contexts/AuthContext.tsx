@@ -20,6 +20,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [userDetails, setUserDetails] = useState<{ username: string; userId: number } | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const JWT_COOKIE_SECURE: boolean = process.env
+  .JWT_COOKIE_SECURE?.toLowerCase() == 'true';
+
   const initAuth = async () => {
     setLoading(true);
     let token = Cookies.get("jwt");
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (refreshTokenCookie) {
         try {
           token = await refreshToken();
-          if (token) Cookies.set("jwt", token, { expires: 1, secure: true, sameSite: "Strict" });
+          if (token) Cookies.set("jwt", token, { expires: 1, secure: JWT_COOKIE_SECURE, sameSite: "Strict" });
         } catch (error) {
           console.error("Error refreshing token:", error);
         }
@@ -38,9 +41,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (token) {
       try {
-        const decoded: any = jwtDecode(token);
+        const decoded = jwtDecode(token);
         setIsLoggedIn(true);
-        setUserDetails({ username: decoded.sub, userId: parseInt(decoded.userId, 10) });
+        // @ts-expect-error: description here to make typescript fuck off
+        setUserDetails({ username: decoded.sub as string, userId: parseInt(decoded.userId, 10) });
       } catch (error) {
         console.error("Error decoding JWT:", error);
         setIsLoggedIn(false);
