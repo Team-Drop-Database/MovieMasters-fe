@@ -9,7 +9,7 @@ export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
 
   return (
-    <header className="p-5 w-full flex items-center bg-primary shadow-lg font-[family-name:var(--font-alatsi)]">
+    <header className=" px-5 py-3 w-full flex items-center bg-background_primary shadow-md font-[family-name:var(--font-alatsi)] sticky top-0 z-50">
       <div className="flex grow items-center">
         <div className="basis-[30%]">
           <BasicTransitionLink href={"/"}>
@@ -28,14 +28,14 @@ export default function Header() {
         </div>
         <SearchBar className="basis-[30%] mx-auto" />
         {isLoggedIn ? (
-        <div className="flex gap-5 items-center basis-[30%] justify-end pr-5">
+        <div className="flex gap-5 items-center basis-[30%] justify-end">
           <BasicTransitionLink href={"/mywatchlist"}>
             <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">My Watchlist</div>
           </BasicTransitionLink>
           <ProfileButton username={userDetails?.username} />
         </div>
       ) : (
-        <div className="flex gap-5 basis-[30%] border border-red-500 justify-end pr-5">
+        <div className="flex gap-5 basis-[30%] justify-end">
           <BasicTransitionLink href={"/signup"}>
           <div className="py-2 px-3 bg-blue-800 rounded-md text-xl hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign up</div>
           </BasicTransitionLink>
