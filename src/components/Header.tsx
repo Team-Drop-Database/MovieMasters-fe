@@ -9,15 +9,16 @@ import searchIcon from "@/assets/images/search_icon_black.svg"
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
 
-  const headerRef = useRef(null);
+  const headerRef = useRef<HTMLDivElement | null>(null);
   const [isSticky, setIsSticky] = useState(false);
 
   // Adds the 'sticky' effect to the header/navbar.
   useEffect(() => {
-    const navBar = headerRef.current;
+    const navBar = headerRef
+      .current as HTMLDivElement;
 
     // initial offset position of the header
-    const sticky = navBar?.offsetTop;
+    const sticky = navBar?.offsetTop as number;
 
     const handleScroll = () => {
       if (window.scrollY >= sticky + navBar?.clientHeight) {
