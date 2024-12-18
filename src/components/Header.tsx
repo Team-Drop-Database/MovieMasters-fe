@@ -27,7 +27,7 @@ export default function Header() {
             </div>
           </BasicTransitionLink>
         </div>
-        <SearchBar className="basis-[30%] mx-auto" />
+        <SearchBar className="" />
         {isLoggedIn ? (
         <div className="flex gap-5 items-center basis-[30%] justify-end">
           <BasicTransitionLink href={"/mywatchlist"}>
@@ -58,7 +58,8 @@ function SearchBar(props: SearchBarProps) {
   const [searchInput, setSearchInput] = React.useState("");
 
   return (
-    <input
+    <div className="basis-[40%] mx-auto relative">
+      <input
       value={searchInput}
       placeholder="Search for a movie"
       type="text"
