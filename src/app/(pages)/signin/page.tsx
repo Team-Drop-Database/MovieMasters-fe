@@ -29,12 +29,6 @@ export default function Page() {
       setErrorMessage(errorMessage);
     }
   }
-  useEffect(() => {
-    if (isLoggedIn) {
-      location.reload();
-      router.push("/");
-    }
-  }, [isLoggedIn, router]);
 
   return (
     <div className="flex justify-center">

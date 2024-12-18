@@ -3,6 +3,11 @@ import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
 import {refreshToken} from "@/services/AuthService";
 
+type DecodedToken = {
+  sub: string,
+  userId: string,
+}
+
 export function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState<{ username: string; userId: number } | null>(null);
@@ -30,7 +35,7 @@ export function useAuth() {
 
     if (token) {
       try {
-        const decoded: any = jwtDecode(token);
+        const decoded: DecodedToken = jwtDecode(token);
         setIsLoggedIn(true);
         setUserDetails({ username: decoded.sub, userId: parseInt(decoded.userId, 10) });
       } catch (error) {

@@ -2,21 +2,37 @@ import React from "react"
 import BigTextField from "@/components/generic/BigTextField"
 import { getFillAmount, Star } from "@/components/generic/review/Star"
 import { Button } from "@/components/generic/Button"
+import { postReview } from "@/services/ReviewService"
+import { ReviewResponse } from "@/models/Review"
 
 type PostReviewContainerProps = {
   movieId: number,
   userId: number,
+  onReviewPosted: (review: ReviewResponse) => void,
 }
 
-export default function PostReviewContainer({ movieId, userId }: PostReviewContainerProps) {
+export default function PostReviewContainer({ movieId, userId, onReviewPosted }: PostReviewContainerProps) {
   const [rating, setRating] = React.useState(0)
   const [reviewBody, setReviewBody] = React.useState("")
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+
+  async function submitReview() {
+    try {
+      const createdReview = await postReview(userId, movieId, rating, reviewBody)
+      onReviewPosted(createdReview)
+    } catch(error: unknown) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message)
+      }
+    }
+  }
 
   return (
     <div className="flex flex-col items-start gap-2">
       <StarContainer rating={rating} confirmRating={setRating} />
       <BigTextField value={reviewBody} onValueChange={setReviewBody} className="h-[10rem] w-full" />
-      <Button text="Submit" onClick={() => {/* TODO */}} />
+      { errorMessage !== null && <div className="text-red-700">{errorMessage}</div> }
+      <Button text="Submit" onClick={submitReview} />
     </div>
   )
 }

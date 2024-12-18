@@ -1,5 +1,3 @@
-import { CSSProperties, SVGAttributes } from "react"
-
 export enum FillAmount {
   EMPTY,
   HALF,
@@ -8,16 +6,16 @@ export enum FillAmount {
 
 export type StarProps = {
   fillAmount: FillAmount
-  setHalfHoverAmount: () => void
-  setFullHoverAmount: () => void
-  confirmHalfStarAmount: () => void
-  confirmFullStarAmount: () => void
+  setHalfHoverAmount?: () => void
+  setFullHoverAmount?: () => void
+  confirmHalfStarAmount?: () => void
+  confirmFullStarAmount?: () => void
   className?: string
 }
 
 export function getFillAmount(starAmount: number, starNumber: number): FillAmount {
-  let fullValue = starNumber * 2
-  let halfValue = fullValue - 1
+  const fullValue = starNumber * 2
+  const halfValue = fullValue - 1
 
   if (starAmount >= fullValue) {
     return FillAmount.FULL
@@ -54,7 +52,7 @@ export function Star({
   }
 
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask id="mask0_225_147" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="16" y="0" width="16" height="32">
         <rect x="16" width="16" height="32" fill="#EEFF00"/>
       </mask>
