@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/images/logo_nobg.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
+import searchIcon from "@/assets/images/search_icon_black.svg"
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
@@ -65,8 +66,10 @@ function SearchBar(props: SearchBarProps) {
         if (e.key === "Enter") onConfirmSearch(/*searchInput*/);
       }}
       onChange={(e) => setSearchInput(e.target.value)}
-      className={`${props.className} outline-none placeholder-black py-2 px-4 h-fit rounded-md text-black bg-light_grey hover:bg-light_grey_active duration-300 hover:duration-300 font-[family-name:var(--font-jura)]`}
+      className={`${props.className} w-full outline-none placeholder-black font-md py-3 px-4 h-fit rounded-3xl text-black bg-gray-500 focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
     />
+    <Image src={searchIcon} alt={"search_icon.svg"} width={35} height={35} className="absolute top-2 right-3 origin-center"></Image>
+    </div>
   );
 }
 
