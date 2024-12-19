@@ -16,7 +16,7 @@ export default function Page() {
     const email = formData.get("email") as string;
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
-    const repeatPassword = formData.get("repeatPassword") as string;
+    const repeatPassword = formData.get("confirmPassword") as string;
 
     // Check if passwords match
     if (password !== repeatPassword) {
@@ -53,7 +53,9 @@ export default function Page() {
       <div className="w-full max-w-sm p-6 rounded-lg mt-6">
         <h1 className="text-4xl font-bold text-center mb-6">Sign up!</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>
+          <label className="font-bold" htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
             name="email"
             placeholder="E-mail"
@@ -62,7 +64,9 @@ export default function Page() {
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text
                          font-[family-name:var(--font-jura)]"
           />
+          <label className="font-bold" htmlFor="username">Username</label>
           <input
+            id="username"
             name="username"
             placeholder="Username"
             minLength={5}
@@ -71,7 +75,9 @@ export default function Page() {
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text
                          font-[family-name:var(--font-jura)]"
           />
+          <label className="font-bold" htmlFor="password">Password</label>
           <input
+            id="password"
             type="password"
             name="password"
             placeholder="Password"
@@ -81,9 +87,11 @@ export default function Page() {
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text
                          font-[family-name:var(--font-jura)]"
           />
+          <label className="font-bold" htmlFor="confirmPassword">Confirm Password</label>
           <input
+            id="confirmPassword"
             type="password"
-            name="repeatPassword"
+            name="confirmPassword"
             placeholder="Confirm password"
             required
             className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
