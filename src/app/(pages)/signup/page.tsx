@@ -60,17 +60,17 @@ export default function Page() {
         return;
       }
 
-      const errorMessage = await response.text();
+      const userErrorMessage = await response.text();
 
-      if (errorMessage.startsWith("Email")) {
-        console.error(errorMessage);
-        setFormErrors({email: errorMessage, username: "", password: ""});
+      if (userErrorMessage.startsWith("Email")) {
+        console.error(userErrorMessage);
+        setFormErrors({email: userErrorMessage, username: "", password: ""});
         return;
       }
 
-      if (errorMessage.startsWith("Username")) {
-        console.error(errorMessage);
-        setFormErrors({email: "", username: errorMessage, password: ""});
+      if (userErrorMessage.startsWith("Username")) {
+        console.error(userErrorMessage);
+        setFormErrors({email: "", username: userErrorMessage, password: ""});
         return;
       }
     } catch (error) {
