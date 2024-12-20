@@ -105,13 +105,13 @@ export default function MyWatchList() {
   if (watchlist.length === 0) {
     pageContent = (
       <div>
-        <h2 className="text-3xl">Still empty here...</h2>
+        <h2 className="text-3xl mb-[900px]">Still empty here...</h2>
         <p>Add some movies to make them show up here!</p>
       </div>
     );
   } else {
     pageContent = (
-      <ElementTransition>
+      <ElementTransition startYState={50}>
         <div>
           <div className="p-4">
             <h1 className="text-2xl">Watched</h1>
@@ -132,8 +132,8 @@ export default function MyWatchList() {
 
   return (
     <div
-      className="flex flex-col items-left py-10 px-10 bg-background_secondary
-        min-h-[1000px] font-[family-name:var(--font-alatsi)]"
+      className="flex flex-col items-left py-10 px-10 
+         font-[family-name:var(--font-alatsi)]"
     >
       {pageContent}
     </div>
