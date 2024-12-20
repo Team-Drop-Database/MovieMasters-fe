@@ -12,7 +12,9 @@ const apiClient = async (endpoint: string, options: RequestInit = {}) => {
 
   try {
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}${endpoint}`;
+    console.log(url);
     const token = Cookies.get('jwt')
+    console.log(token);
 
     const headers = new Headers({
       'Content-Type': 'application/json',

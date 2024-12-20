@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
+import {redirect} from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
@@ -59,7 +60,7 @@ function SearchBar(props: SearchBarProps) {
       placeholder="Search movies"
       type="text"
       onKeyDown={(e) => {
-        if (e.key === "Enter") onConfirmSearch(/*searchInput*/);
+        if (e.key === "Enter") onConfirmSearch(searchInput);
       }}
       onChange={(e) => setSearchInput(e.target.value)}
       className={`${props.className} outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey hover:bg-light_grey_active duration-300 hover:duration-300 font-[family-name:var(--font-jura)]`}
@@ -67,10 +68,8 @@ function SearchBar(props: SearchBarProps) {
   );
 }
 
-// Note: commented out the 'input' argument to 
-// prevent Typescript error
-function onConfirmSearch(/*input: string*/) {
-  //TODO: Make search functional for the header
+function onConfirmSearch(input: string) {
+  redirect(`/search?title=${input}`)
 }
 
 type ProfileButtonProps = {
