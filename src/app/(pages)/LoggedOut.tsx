@@ -78,23 +78,26 @@ function ReviewList() {
 function ReviewItem(props: ReviewItemProps) {
   return (
     <div className="h-72 w-72 py-6 px-4 shrink-0 flex flex-col rounded-xl border border-slate-500 border-opacity-10 gap-5 shadow-2xl">
-      <p className="font-inter font-semibold border-b border-b-slate-500 border-opacity-20 text-xl pb-2">{props.movieName}</p>
-      
+      <p className="font-inter font-semibold border-b border-b-slate-500 border-opacity-20 text-xl pb-2">
+        {props.movieName}
+      </p>
+
       <div className="flex items-start gap-2">
-        <Image
-          src={props.profilePicture || neutral}
-          width={45}
-          height={45}
-          alt="Profile picture"
-          className="rounded-full"
-        />
+        <div className="relative w-[45px] h-[45px]">
+          <Image
+            src={props.profilePicture || neutral}
+            alt="Profile picture"
+            fill
+            className="rounded-full object-cover"
+          />
+        </div>
         <p className="grow">{props.reviewerName}</p>
       </div>
       <ReviewItemStars starAmount={props.starAmount} />
 
       <p className="font-inter font-medium">{props.reviewBody}</p>
     </div>
-  )
+  );
 }
 
 type ReviewItemStarsProps = {

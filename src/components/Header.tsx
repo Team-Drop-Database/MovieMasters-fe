@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
+import neutral from "@/assets/images/no-profile-pic.jpg"
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
@@ -12,13 +13,12 @@ export default function Header() {
     <header className="p-5 w-full flex items-center bg-primary shadow-lg font-[family-name:var(--font-alatsi)]">
       <div className="flex grow items-center gap-[15rem]">
         <BasicTransitionLink href={"/"}>
-          <Image 
+          <Image
             src={logo}
             width={69}
             height={69}
             alt="logo"
             className="rounded-md shadow-md cursor-pointer"
-            onClick={console.log}
           />
         </BasicTransitionLink>
         <SearchBar className="w-1/2" />
@@ -29,7 +29,7 @@ export default function Header() {
             <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">My Watchlist</div>
           </BasicTransitionLink>
           <BasicTransitionLink href={"/profile"}>
-            <ProfileButton username={userDetails?.username} />
+            <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} />
           </BasicTransitionLink>
         </div>
       ) : (
@@ -75,19 +75,21 @@ function onConfirmSearch(/*input: string*/) {
 
 type ProfileButtonProps = {
   username?: string;
+  profileUrl?: string;
 };
 
-function ProfileButton({ username }: ProfileButtonProps) {
+function ProfileButton({ username, profileUrl }: ProfileButtonProps) {
   return (
     <div className="flex items-center gap-5 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300">
       <p className="details">{username || "Username"}</p>
-      <Image
-        src={logo}
-        width={55}
-        height={55}
-        alt="Profile"
-        className="rounded-full shadow-md"
-      />
+      <div className="relative w-[55px] h-[55px]">
+        <Image
+          src={profileUrl || neutral}
+          alt="Profile"
+          fill
+          className="rounded-full object-cover shadow-md"
+        />
+      </div>
     </div>
   );
 }

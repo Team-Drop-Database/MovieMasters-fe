@@ -8,6 +8,7 @@ import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import {fetchUserData, updateUser, uploadImageToImgbb} from "@/services/UserService";
+import neutral from "@/assets/images/no-profile-pic.jpg"
 
 export default function Profile() {
   const profile = {
@@ -40,8 +41,7 @@ export default function Profile() {
             username: userData.username,
             email: userData.email,
             profilePictureURL:
-              userData.profile_picture ||
-              "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+              userData.profile_picture || neutral,
           };
           setProfileData(initialData);
           setOriginalData(initialData);

@@ -7,7 +7,7 @@ import { refreshToken } from "@/services/AuthService";
 
 type AuthContextType = {
   isLoggedIn: boolean;
-  userDetails: { username: string; userId: number } | null;
+  userDetails: { username: string; userId: number, profileUrl: string } | null;
   loading: boolean;
   login: () => Promise<void>;
   logout: () => void;
@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userDetails, setUserDetails] = useState<{ username: string; userId: number } | null>(null);
+  const [userDetails, setUserDetails] = useState<{ username: string; userId: number; profileUrl: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   const JWT_COOKIE_SECURE: boolean = process.env
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const decoded = jwtDecode(token);
         setIsLoggedIn(true);
         // @ts-expect-error: description here to make typescript fuck off
-        setUserDetails({ username: decoded.sub as string, userId: parseInt(decoded.userId, 10) });
+        setUserDetails({ username: decoded.sub as string, userId: parseInt(decoded.userId, 10), profileUrl: decoded.profileUrl});
       } catch (error) {
         console.error("Error decoding JWT:", error);
         setIsLoggedIn(false);
