@@ -58,7 +58,7 @@ export default function Page() {
                                    hover:cursor-text"
                 required
             />
-            {errorMessage && <p className="font-bold text-base text-red-600">{errorMessage}</p>}
+            {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
             <div className="text-center mt-4 mb-1">
               <p className="text-sm">
                 No account yet?{" "}
