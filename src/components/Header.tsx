@@ -28,7 +28,9 @@ export default function Header() {
           <BasicTransitionLink href={"/mywatchlist"}>
             <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">My Watchlist</div>
           </BasicTransitionLink>
-          <ProfileButton username={userDetails?.username} />
+          <BasicTransitionLink href={"/profile"}>
+            <ProfileButton username={userDetails?.username} />
+          </BasicTransitionLink>
         </div>
       ) : (
         <div className="flex gap-5">
