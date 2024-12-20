@@ -93,10 +93,9 @@ export default function Page() {
                 placeholder="Enter Email"
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)]"
+                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
-            {formErrors.email !== "" && <p className="font-[family-name:var(--font-jura)] text-base text-red-600">{formErrors.email}</p>}
+            {formErrors.email !== "" && <p className="text-base text-red-600">{formErrors.email}</p>}
             <label className="font-bold" htmlFor="username">Username</label>
             <input
                 id="username"
@@ -105,10 +104,9 @@ export default function Page() {
                 minLength={5}
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)]"
+                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
-            {formErrors.username !== "" && <p className="font-[family-name:var(--font-jura)] text-base text-red-600">{formErrors.username}</p>}
+            {formErrors.username !== "" && <p className="text-base text-red-600">{formErrors.username}</p>}
             <label className="font-bold" htmlFor="password">Password</label>
             <input
                 id="password"
@@ -118,8 +116,7 @@ export default function Page() {
                 minLength={8}
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)]"
+                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
             <label className="font-bold" htmlFor="confirmPassword">Confirm Password</label>
             <input
@@ -129,12 +126,11 @@ export default function Page() {
                 placeholder="Confirm Password"
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)]"
+                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
-            {formErrors.password !== "" && <p className="font-[family-name:var(--font-jura)] text-base text-red-600">{formErrors.password}</p>}
-            {errorMessage && <p className="font-[family-name:var(--font-jura)] text-base text-red-600">{errorMessage}</p>}
-            {successMessage && <p className="font-[family-name:var(--font-jura)] text-base text-green-600">{successMessage}</p>}
+            {formErrors.password !== "" && <p className="text-base text-red-600">{formErrors.password}</p>}
+            {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
+            {successMessage && <p className="text-base text-green-600">{successMessage}</p>}
             <div className="text-center mt-4 mb-1">
               <p className="text-sm">
                 Already have an account?{" "}
