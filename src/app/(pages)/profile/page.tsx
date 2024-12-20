@@ -13,11 +13,10 @@ export default function Profile() {
   const profile = {
     profilePictureURL: "",
     username: "",
-    email: "",
-  };
-
-  const { isLoggedIn, userDetails, login } = useAuthContext();
-  const [isEditing, setIsEditing] = useState(false);
+    email: ""
+  }
+  const {isLoggedIn, userDetails, login} = useAuthContext();
+  const [isEditing, setIsEditing] = useState(false)
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState(profile);
   const [originalData, setOriginalData] = useState(profile);
@@ -59,6 +58,14 @@ export default function Profile() {
 
     fetchUserDataProfile();
   }, [isLoggedIn, userDetails]);
+
+  if (isLoading) {
+    return <Loading/>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>
+  }
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -148,13 +155,7 @@ export default function Profile() {
     setSelectedFile(null);
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
     <div className="flex justify-center">
