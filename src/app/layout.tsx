@@ -44,7 +44,7 @@ export default function RootLayout({
       <Header/>
       <main>
         <div className="absolute inset-0 w-full h-screen bg-gradient-to-b from-background_primary via-slate-600 to-background_primary -z-40"></div>
-        <div className="main-container min-h-screen">
+        <div className="main-container min-h-screen pt-12">
           {children}
         </div>
         {/* Note: Do not take footer out of the <main> element. While it might not

@@ -132,7 +132,7 @@ export default function MyWatchList() {
 
   return (
     <div
-      className="flex flex-col items-left py-10 px-10 
+      className="flex flex-col items-left pb-10 px-10 
          font-[family-name:var(--font-alatsi)]"
     >
       {pageContent}
