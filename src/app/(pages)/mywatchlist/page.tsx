@@ -105,7 +105,7 @@ export default function MyWatchList() {
   if (watchlist.length === 0) {
     pageContent = (
       <div>
-        <h2 className="text-3xl mb-[900px]">Still empty here...</h2>
+        <h2 className="text-3xl">Still empty here...</h2>
         <p>Add some movies to make them show up here!</p>
       </div>
     );
@@ -133,7 +133,7 @@ export default function MyWatchList() {
   return (
     <div
       className="flex flex-col items-left py-10 px-10 
-         font-[family-name:var(--font-alatsi)]"
+         font-[family-name:var(--font-alatsi)] min-h-screen"
     >
       {pageContent}
     </div>
