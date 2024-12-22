@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth overflow-scroll">
+    <html lang="en" className="scroll-smooth">
       <head>
 
         {/* Inter */}
@@ -38,11 +38,12 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"></link>
       </head>
     <body
-      className={`${alatsi.variable} ${jura.variable} antialiased text-white bg-primary`}
+      className={`${alatsi.variable} ${jura.variable} antialiased text-white bg-primary border-2 border-red-500 `}
     >
     <AuthProvider>
       <Header/>
-      <main className="bg-gradient-to-b from-background_primary via-slate-600 to-background_primary h-screen">
+      <main className="border border-blue-500">
+        <div className="absolute inset-0 w-full h-screen bg-gradient-to-b from-background_primary via-slate-600 to-background_primary -z-40"></div>
         <div className="main-container">
           {children}
         </div>
