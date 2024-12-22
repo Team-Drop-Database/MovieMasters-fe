@@ -5,7 +5,7 @@ interface LoggedInProps {
 
 export default function LoggedIn({ onLogout, userDetails }: LoggedInProps) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 mt-5 mb-[740px]">
+    <div className="flex flex-col items-center justify-center gap-4 mt-5">
       <h1 className="text-3xl font-semibold">
         Welcome Back, {userDetails?.username || "User"}!
       </h1>
