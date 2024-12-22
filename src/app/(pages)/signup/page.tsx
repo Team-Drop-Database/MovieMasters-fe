@@ -49,7 +49,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex justify-center min-h-screen">
+    <div className="flex justify-center">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6">
         <h1 className="text-4xl font-bold text-center mb-6">Sign up!</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>
