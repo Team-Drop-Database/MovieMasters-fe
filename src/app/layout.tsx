@@ -38,11 +38,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"></link>
       </head>
     <body
-      className={`${alatsi.variable} ${jura.variable} antialiased text-white bg-primary border-2 border-red-500 `}
+      className={`${alatsi.variable} ${jura.variable} antialiased text-white bg-primary`}
     >
     <AuthProvider>
       <Header/>
-      <main className="border border-blue-500">
+      <main>
         <div className="absolute inset-0 w-full h-screen bg-gradient-to-b from-background_primary via-slate-600 to-background_primary -z-40"></div>
         <div className="main-container">
           {children}
