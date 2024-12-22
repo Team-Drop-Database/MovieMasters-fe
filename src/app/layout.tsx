@@ -44,15 +44,13 @@ export default function RootLayout({
       <Header/>
       <main>
         <div className="absolute inset-0 w-full h-screen bg-gradient-to-b from-background_primary via-slate-600 to-background_primary -z-40"></div>
-        <div className="main-container min-h-screen pt-12">
+        <div className="main-container pt-12 min-h-screen">
           {children}
         </div>
-        {/* Note: Do not take footer out of the <main> element. While it might not
-         look logical, it is necessary to prevent visual bugs. */}
-        <footer className="bg-background_secondary h-28 w-full flex justify-center items-center">
-          <span className="font-inter opacity-40">© 2024 Movie Masters. All Rights Reserved.</span>
-        </footer>
       </main>
+      <footer className="bg-background_secondary h-28 w-full flex justify-center items-center">
+          <span className="font-inter opacity-40">© 2024 Movie Masters. All Rights Reserved.</span>
+      </footer>
     </AuthProvider>
     </body>
     </html>
