@@ -16,7 +16,8 @@ export default function Profile() {
     email: ""
   }
   const {isLoggedIn, userDetails, login} = useAuthContext();
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState(profile);
   const [originalData, setOriginalData] = useState(profile);
@@ -127,7 +128,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mb-5">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-background_secondary">
         <div className="flex justify-center items-center">
           <img
@@ -231,20 +232,6 @@ export default function Profile() {
             )}
           </div>
         )}
-        {/*/!* Using img over Image because for Image a config would be needed for all domains *!/*/}
-        {/*/!* eslint-disable-next-line @next/next/no-img-element *!/*/}
-        {/*<p className="m-2">*/}
-        {/*  {profileData.username}*/}
-        {/*</p>*/}
-        {/*<p className="m-2">*/}
-        {/*  {profileData.email}*/}
-        {/*</p>*/}
-        <div className="ml-10 mr-10 mt-5">
-          <Button
-            text={isEditing ? "Save" : "Edit"}
-            onClick={toggleEditMode}
-          />
-        </div>
         {isEditing && (
           <div className="ml-10 mr-10 mt-5">
             <Button
