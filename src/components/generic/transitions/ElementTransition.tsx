@@ -3,13 +3,13 @@
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
 
-// @ts-ignore
-export default function ElementTransition({ children }) {
+export default function ElementTransition({ children, startYState }: 
+  {children: React.ReactNode, startYState: number}) {
   useEffect(() => {
 
     gsap.fromTo(
       '.page-content',
-      { opacity: 0, y: 50 }, // start state
+      { opacity: 0, y: startYState }, // start state
       { opacity: 1, y: 0, duration: 1 } // end state
     );
 

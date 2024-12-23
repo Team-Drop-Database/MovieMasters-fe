@@ -1,3 +1,18 @@
+# Setup
+First, add the following environment variables:
+```
+NEXT_PUBLIC_API_BASE_URL=https://example.com:port
+NEXT_PUBLIC_API_VERSION=/api/v1
+JWT_COOKIE_SECURE=true
+```
+
+Then start the server with:
+```
+npm run dev
+```
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

@@ -35,7 +35,7 @@ export default function BasicTransitionLink({children, href}:
         const NEXTJS_LOAD_TIME = 20;
     
         // Grab the main element; the transition will focus on modifying this part
-        const main = document.querySelector("main");
+        const main = document.querySelector("main .main-container");
     
         // Initial movement; moves the object right, with a delay \
         // to give it time
@@ -70,5 +70,5 @@ export default function BasicTransitionLink({children, href}:
       }
 
       // Return a TransitionLink with the added transition handler
-      return <TransitionLink children={children} href={href} transitionHandler={handleMainTransition}></TransitionLink>
+      return <TransitionLink href={href} transitionHandler={handleMainTransition}>{children}</TransitionLink>
 }

@@ -28,7 +28,7 @@ export default function Page() {
 
     try {
       setErrorMessage(null);
-      const response = await fetch("http://localhost:8080/api/v1/users", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/users`, {
         headers: {"Content-Type": "application/json"},
         method: "POST",
         body: JSON.stringify(payload),
@@ -49,7 +49,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mb-[480px]">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6">
         <h1 className="text-4xl font-bold text-center mb-6">Sign up!</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>

@@ -1,6 +1,6 @@
 'use client';
 
-import {useRef, FormEvent, useState, useEffect} from "react";
+import {useRef, FormEvent, useState} from "react";
 import Link from "next/link";
 import {Button} from "@/components/generic/Button";
 import { useRouter } from "next/navigation";
@@ -31,7 +31,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mb-[540px]">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6">
         <h1 className="text-4xl font-bold text-center mb-6">Sign in!</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>

@@ -1,82 +1,73 @@
 "use client";
 
 import {Button} from "@/components/generic/Button";
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {useAuthContext} from "@/contexts/AuthContext";
 import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import {fetchUserData, updateUser} from "@/services/UserService";
 
 export default function Profile() {
-  const { isLoggedIn, userDetails } = useAuthContext();
-  const [isEditing, setIsEditing] = useState(false);
-  const [isAddingFriend, setIsAddingFriend] = useState(false);
-  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
-  const [profileData, setProfileData] = useState({
+  const profile = {
     profilePictureURL: "",
     username: "",
     email: ""
-  });
-  const [originalData, setOriginalData] = useState(null);
+  }
+  const {isLoggedIn, userDetails, login} = useAuthContext();
+  const [isEditing, setIsEditing] = useState(false)
+  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
+  const [profileData, setProfileData] = useState(profile);
+  const [originalData, setOriginalData] = useState(profile);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const token = Cookies.get("jwt");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const JWT_COOKIE_SECURE: boolean = process.env.JWT_COOKIE_SECURE?.toLowerCase() == 'true';
 
   useEffect(() => {
     if (!isLoggedIn) {
       navigateToLogin();
     }
 
-    const fetchUserData = async () => {
-      try {
-        // @ts-expect-error because eslint thinks userDetails could possibly be null, which is not the case
-        const response = await fetch(`http://localhost:8080/api/v1/users/username/${userDetails.username}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
+    async function fetchUserDataProfile() {
+      if (userDetails != null) {
+        try {
+          const userData = await fetchUserData(userDetails.username);
+          const initialData = {
+            username: userData.username,
+            email: userData.email,
+            profilePictureURL: userData.profile_picture || "https://static.vecteezy.com/system" +
+              "/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+            //TODO: issue #97 (make sure there is already image in database)
+          };
+          setProfileData(initialData);
+          setOriginalData(initialData); // This is to make sure that when you cancel editting you get the original data back
+        } catch (error) {
+          if (error instanceof Error) {
+            console.error(error.message);
+            setError(error.message);
           }
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user data. Status: ${response.status}`);
+        } finally {
+          setIsLoading(false);
         }
-
-        const userData = await response.json();
-
-        const initialData = {
-          username: userData.username || "",
-          email: userData.email || "",
-          profilePictureURL: userData.profile_picture || ""
-        };
-
-        setProfileData(initialData);
-        // @ts-expect-error needed to use this instead of ts-ignore
-        setOriginalData(initialData);
-      } catch (err) {
-        // @ts-expect-error err is of type unkown
-        console.error(err.message);
-        // @ts-expect-error err is of type unkown
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
       }
-    };
+    }
 
-    fetchUserData();
+    fetchUserDataProfile();
   }, [isLoggedIn, userDetails]);
 
   if (isLoading) {
     return <Loading/>;
   }
-  
+
   if (error) {
     return <div>Error: {error}</div>
   }
 
-  // @ts-expect-error e has type of any
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData((prevData) => ({ ...prevData, [name]: value }));
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target;
+    setProfileData((prevData) => ({...prevData, [name]: value}));
 
     if ((name === "username" && value.length < 5)) {
       setIsSaveDisabled(true)
@@ -86,44 +77,44 @@ export default function Profile() {
     }
   };
 
-  const toggleEditMode = async () => {
+  async function toggleEditMode() {
     if (isEditing) {
       if (isSaveDisabled) {
-        alert("Please make sure username is 5 or more characters.")
+        alert("Please make sure username is 5 or more characters.");
         return;
       }
 
-      try {
-        const response = await fetch(`http://localhost:8080/api/v1/users/${userDetails?.userId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
+      if (userDetails != null) {
+        try {
+          const tokens = await updateUser(userDetails.userId, {
             username: profileData.username,
             email: profileData.email,
-            profilePicture: profileData.profilePictureURL, // Renamed to match backend
-          }),
-        });
+            profilePicture: profileData.profilePictureURL
+          });
 
-        if (!response.ok) {
-          throw new Error(`Failed to update profile data. Status: ${response.status}`);
+          if (tokens) {
+            Cookies.set("jwt", tokens.accessToken, {expires: 1, secure: JWT_COOKIE_SECURE,
+              sameSite: "Strict"});
+            Cookies.set("refresh_token", tokens.refreshToken,
+              {expires: 3, secure: JWT_COOKIE_SECURE, sameSite: "strict"});
+            await login();
+            router.push("/");
+          }
+
+          setOriginalData(profileData);
+        } catch (error) {
+          if (error instanceof Error) {
+            console.error("Error updating profile: ", error.message);
+            alert("Failed to update profile. Please try again.");
+          }
         }
-        alert("Profile updated succesfully!");
-        // @ts-expect-error to leave the red lines
-        setOriginalData(profileData);
-      } catch (err) {
-        // @ts-expect-error err is of type unkown
-        console.error("Error updating profile: ", err.message);
-        alert("Failed to update profile. Please try again.");
       }
     }
+
     setIsEditing(!isEditing);
-  };
+  }
 
   const cancelEdit = () => {
-    // @ts-expect-error argument of type null is not assignable, still everything works
     setProfileData(originalData);
     setIsEditing(false);
   }
