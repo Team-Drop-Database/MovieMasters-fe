@@ -8,6 +8,7 @@ import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import {fetchUserData, updateUser} from "@/services/UserService";
+import Image from "next/image";
 
 export default function Profile() {
   const profile = {
@@ -129,7 +130,7 @@ export default function Profile() {
 
   return (
     <div className="flex justify-center mb-5">
-      <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-background_secondary">
+      <div className="w-full max-w-sm p-6 rounded-lg mt-6 m-2 bg-background_secondary">
         <div className="flex justify-center items-center">
           <img
             src={profileData.profilePictureURL}
@@ -239,6 +240,23 @@ export default function Profile() {
               onClick={cancelEdit}/>
           </div>
         )}
+      </div>
+      <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-background_secondary m-2">
+        <h1 className="mb-2">Friend requests</h1>
+        <div className="flex items-center">
+          <div className="flex items-center space-x-4">
+            <img
+              src={profileData.profilePictureURL}
+              alt="Profile picture"
+              className="w-14 h-14 object-cover rounded-full"
+            />
+            <label className="block text-m font-medium">Username</label>
+          </div>
+          <div className="flex space-x-2 ml-auto">
+            <Image src={'/checkmark.svg'} width={30} height={30} alt="checkmark"/>
+            <Image src={'/red-cross.svg'} width={35} height={35} alt="redcross"/>
+          </div>
+        </div>
       </div>
     </div>
   );
