@@ -11,7 +11,7 @@ export default function LoggedOut() {
   return (
     <>
     {/* Title */}
-      <section className="flex w-full justify-evenly p-24 pt-20 min-h-screen">
+      <section className="flex w-full justify-evenly p-24 pt-32 min-h-screen">
         <ElementTransition startYState={-50}>
           <div className="flex flex-col gap-3 max-w-[550px] items-center">
             <h1 className="text-white text-5xl font-inter font-bold text-center">Movies made <span className="text-blue-500">social</span>.</h1>
