@@ -6,10 +6,9 @@ import {Button} from "@/components/generic/Button";
 import {loginUser} from "@/services/AuthService";
 import {useRouter} from "next/navigation";
 import {useAuthContext} from "@/contexts/AuthContext";
+import {registerUser} from "@/services/UserService";
 
 export default function Page() {
-  const STATUS_CREATED = 201;
-
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const [formErrors, setFormErrors] = useState({
@@ -43,39 +42,28 @@ export default function Page() {
     try {
       setErrorMessage(null);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_API_VERSION}/users`, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "POST",
-        body: JSON.stringify(user),
-      });
+      const response = await registerUser(user);
 
-      if (response.status === STATUS_CREATED) {
-        setFormErrors({email: "", password: "", username: ""});
-        setSuccessMessage("Your account has been created");
-        await loginUser(user.username, user.password);
-        await login();
-        router.push("/");
-        return;
-      }
+      setFormErrors({email: "", password: "", username: ""});
+      setSuccessMessage(response!);
+      await loginUser(user.username, user.password);
+      await login();
+      router.push("/");
 
-      const userErrorMessage = await response.text();
-
-      if (userErrorMessage.startsWith("Email")) {
-        console.error(userErrorMessage);
-        setFormErrors({email: userErrorMessage, username: "", password: ""});
-        return;
-      }
-
-      if (userErrorMessage.startsWith("Username")) {
-        console.error(userErrorMessage);
-        setFormErrors({email: "", username: userErrorMessage, password: ""});
-        return;
-      }
     } catch (error) {
-      console.error(error);
-      setErrorMessage((error as Error).message);
+      const errorMessage = (error as Error).message;
+
+      if (errorMessage.startsWith("Email")) {
+        console.error(errorMessage);
+        setFormErrors({email: errorMessage, username: "", password: ""});
+      }
+      else if (errorMessage.startsWith("Username")) {
+        console.error(errorMessage);
+        setFormErrors({email: "", username: errorMessage, password: ""});
+      }
+      else {
+        setErrorMessage((error as Error).message);
+      }
     }
   }
 
@@ -90,7 +78,7 @@ export default function Page() {
                 id="email"
                 type="email"
                 name="email"
-                placeholder="Enter Email"
+                placeholder="name@example.com"
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
@@ -100,7 +88,7 @@ export default function Page() {
             <input
                 id="username"
                 name="username"
-                placeholder="Enter Username"
+                placeholder="example"
                 minLength={5}
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
@@ -112,7 +100,7 @@ export default function Page() {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="Create Password"
+                placeholder="12345678"
                 minLength={8}
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
@@ -123,14 +111,16 @@ export default function Page() {
                 id="confirmPassword"
                 type="password"
                 name="confirmPassword"
-                placeholder="Confirm Password"
+                placeholder="12345678"
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
-            {formErrors.password !== "" && <p className="text-base text-red-600">{formErrors.password}</p>}
-            {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
-            {successMessage && <p className="text-base text-green-600">{successMessage}</p>}
+            <div className="h-1">
+              {formErrors.password !== "" && <p className="text-base text-red-600">{formErrors.password}</p>}
+              {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
+              {successMessage && <p className="text-base text-green-600">{successMessage}</p>}
+            </div>
             <div className="text-center mt-4 mb-1">
               <p className="text-sm">
                 Already have an account?{" "}
