@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+
+  nextjs:
+    container_name: nextjs
+    build: .
+    ports:
+    - "3001:3001"
+    networks:
+      - movie_master_frontend
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx_server
+    ports:
+      - "3000:3000"
+      - "443:443"
+    depends_on:
+      - nextjs
+    networks:
+      - movie_master_frontend
+
+networks:
+    movie_master_frontend: {}
