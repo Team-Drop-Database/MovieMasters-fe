@@ -1,30 +1,65 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import logo from "@/assets/images/moviemaster1.png"
+import logo from "@/assets/images/logo_nobg.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
+import searchIcon from "@/assets/images/search_icon_black.svg"
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
 
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const [isSticky, setIsSticky] = useState(false);
+
+  // Adds the 'sticky' effect to the header/navbar.
+  useEffect(() => {
+    const navBar = headerRef
+      .current as HTMLDivElement;
+
+    // initial offset position of the header
+    const sticky = navBar?.offsetTop as number;
+
+    const handleScroll = () => {
+      if (window.scrollY >= sticky + navBar?.clientHeight) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    // Make sure to have the sticky effect apply initially, if necessary
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Makes sure to clean up the event listener aftwards
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="p-5 w-full flex items-center bg-primary shadow-lg font-[family-name:var(--font-alatsi)]">
-      <div className="flex grow items-center gap-[15rem]">
-        <BasicTransitionLink href={"/"}>
-          <Image 
-            src={logo}
-            width={69}
-            height={69}
-            alt="logo"
-            className="rounded-md shadow-md cursor-pointer"
-            onClick={console.log}
-          />
-        </BasicTransitionLink>
-        <SearchBar className="w-1/2" />
-      </div>
-      {isLoggedIn ? (
-        <div className="flex gap-5 items-center">
+    <header ref={headerRef} className={`px-5 py-2 w-full flex items-center bg-background_primary shadow-md font-[family-name:var(--font-alatsi)] z-50 transition-transform ${isSticky ? 'sticky -top-10 translate-y-10' : 'translate-y-0'}`}>
+      <div className="flex grow items-center">
+        <div className="basis-[30%]">
+          <BasicTransitionLink href={"/"}>
+            <div className="flex items-center gap-2 group">
+              <Image 
+                  src={logo}
+                  width={69}
+                  height={69}
+                  alt="logo"
+                  className="rounded-md cursor-pointer"
+                  onClick={console.log}
+                />
+                <h1 className="font-opensans font-bold pt-2 text-3xl"><span className="text-blue-600 group-hover:text-indigo-600 transition-all duration-300">Movie</span> Master</h1>
+            </div>
+          </BasicTransitionLink>
+        </div>
+        <SearchBar className="" />
+        {isLoggedIn ? (
+        <div className="flex gap-5 items-center basis-[30%] justify-end">
           <BasicTransitionLink href={"/mywatchlist"}>
             <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">My Watchlist</div>
           </BasicTransitionLink>
@@ -33,15 +68,16 @@ export default function Header() {
           </BasicTransitionLink>
         </div>
       ) : (
-        <div className="flex gap-5">
+        <div className="flex gap-5 basis-[30%] justify-end">
           <BasicTransitionLink href={"/signup"}>
-          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Sign up</div>
+          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign up</div>
           </BasicTransitionLink>
           <BasicTransitionLink href={"/signin"}>
-          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">Log in</div>
+          <div className="py-2 px-3 bg-blue-800 rounded-md text-xl  hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Log in</div>
           </BasicTransitionLink>
         </div>
       )}
+      </div>
     </header>
   );
 }
@@ -54,16 +90,19 @@ function SearchBar(props: SearchBarProps) {
   const [searchInput, setSearchInput] = React.useState("");
 
   return (
-    <input
+    <div className="basis-[40%] mx-auto relative">
+      <input
       value={searchInput}
-      placeholder="Search movies"
+      placeholder="Search for a movie"
       type="text"
       onKeyDown={(e) => {
         if (e.key === "Enter") onConfirmSearch(/*searchInput*/);
       }}
       onChange={(e) => setSearchInput(e.target.value)}
-      className={`${props.className} outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey hover:bg-light_grey_active duration-300 hover:duration-300 font-[family-name:var(--font-jura)]`}
+      className={`${props.className}  w-full outline-none placeholder-black font-md py-2 px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
     />
+    <Image src={searchIcon} alt={"search_icon.svg"} width={35} height={35} className="absolute top-0.5 right-3 origin-center cursor-pointer"></Image>
+    </div>
   );
 }
 
