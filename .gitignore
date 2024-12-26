@@ -52,3 +52,7 @@ TODO.txt
 
 # Vscode
 .vscode
+
+# SSL sensitive files
+/nginx/*.crt
+/nginx/*.key
