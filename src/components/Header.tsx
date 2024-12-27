@@ -3,8 +3,8 @@ import React from "react";
 import Image from "next/image";
 import logo from "@/assets/images/moviemaster1.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
-import { useAuthContext } from "@/contexts/AuthContext";
-import {redirect} from "next/navigation";
+import {useAuthContext} from "@/contexts/AuthContext";
+import {redirect, RedirectType} from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
@@ -69,7 +69,7 @@ function SearchBar(props: SearchBarProps) {
 }
 
 function onConfirmSearch(input: string) {
-  redirect(`/search?title=${input}`)
+  redirect(`/search?title=${input}`, RedirectType.replace)
 }
 
 type ProfileButtonProps = {

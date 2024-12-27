@@ -30,8 +30,22 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
   }
 }
 
-export async function getMovieByTitle(movieTitle: string): Promise<Movie[]> {
-  const endpoint = `/movies?title=${movieTitle}`
+export async function getMovieByTitle(movieTitle: string | null, page: number): Promise<Movie[]> {
+  const endpoint = `/movies?title=${movieTitle}&page=${page}`
+
+  try {
+    return (await apiClient(endpoint)).json();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
+
+export async function getNumberOfPages(movieTitle: string | null): Promise<number> {
+  movieTitle = movieTitle === null ? '' : movieTitle;
+  const endpoint = `/movies/pages?title=${movieTitle}`
 
   try {
     return (await apiClient(endpoint)).json();

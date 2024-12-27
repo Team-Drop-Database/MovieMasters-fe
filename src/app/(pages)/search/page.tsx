@@ -1,24 +1,41 @@
 ﻿'use client';
 import Movie from "@/models/Movie";
-import {getMovieByTitle} from "@/services/MovieService";
-import {useEffect, useState} from "react";
-import {redirect, useSearchParams} from 'next/navigation'
-
+import {getMovieByTitle, getNumberOfPages} from "@/services/MovieService";
+import {useEffect, useRef, useState} from "react";
+import {useSearchParams} from 'next/navigation'
+import DisplayMovies from "@/components/generic/search/DisplayMovies";
 
 export default function Search() {
+  const searchParams = useSearchParams();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const searchParams = useSearchParams()
+  const [numberOfPages, setNumberOfPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const title: string | null = searchParams.get("title");
+  const prevValues = useRef({ title: title, pageNumber: pageNumber });
 
+  // Fetching new movies when the title or page number changes
   useEffect(() => {
-    async function fetchMovies(){
-      try {
-        if (!title) {
-          return;
+    if (prevValues.current.title != title) {
+      setPageNumber(1);
+    }
+    async function setTotalPages() {
+      if (prevValues.current.title != title) {
+        try {
+          setNumberOfPages(await getNumberOfPages(title));
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            setError(error.message);
+          } else {
+            setError("An unknown error occurred.");
+          }
         }
-        const data = await getMovieByTitle(title);
-        setMovies(data)
+      }
+    }
+
+    async function fetchMovies() {
+      try {
+        setMovies(await getMovieByTitle(title, pageNumber-1));
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
@@ -27,29 +44,92 @@ export default function Search() {
         }
       }
     }
-    fetchMovies();
-  }, [title]);
+    setTotalPages().then();
+    fetchMovies().then();
+
+    prevValues.current = { title, pageNumber };
+  }, [title, pageNumber]);
 
   if (error) {
     return <p>Failed to fetch data. Error: {error}</p>;
   }
 
-  return (
-    <div className="grid grid-cols-2 gap-4">
-      {movies.map(movie => (
-        <div key={movie.id} className="flex flex-row gap-4 cursor-pointer"
-             onClick={() => redirect(`/movies/${movie.id}`)}>
-          <img
-            className="max-w-20"
-            src={movie.posterPath}
-            alt={movie.title}
-          />
-          <div>
-            <h1>{movie.title}</h1>
-            <div>{new Date(movie.releaseDate).getFullYear()}</div>
-          </div>
+  /**
+   * Page number buttons for navigation
+   *
+   * @param number Number to display in the button
+   */
+  function PageNumberButton({number} : {number : number}) {
+    return <button className="hover:backdrop-brightness-50 px-3 py-1 rounded-lg"
+    onClick={() => setPageNumber(number)}>{number}</button>
+  }
+
+  /**
+   * Method to determine the amount and type of buttons to display in the navigation
+   */
+  function PaginationButtons() {
+    // Only showing one element if there is one page
+    if (numberOfPages === 1) {
+      return <div className="backdrop-brightness-50 px-3 py-1 rounded-lg">{pageNumber}</div>
+    }
+
+    // Determine the start number of the first button
+    let startNumber: number = 1;
+    if (pageNumber > 1) {
+      // page number - 1 if there is more than one page
+      startNumber = pageNumber - 1;
+    }
+    if (pageNumber === numberOfPages) {
+      // For when the user is at last page
+      startNumber = numberOfPages - 2;
+    }
+
+    const buttonItems = [];
+
+    // 3 iterations if there are more than 2 pages
+    const iterations: number = numberOfPages <= 3 ? numberOfPages : 3;
+    for (let i = startNumber; i < iterations + startNumber; i++) {
+      // Displaying the
+      if (i == pageNumber) {
+        buttonItems.push(<div key={i} className="backdrop-brightness-50 px-3 py-1 rounded-lg">{i}</div>);
+      } else {
+        buttonItems.push(<PageNumberButton key={i} number={i} />);
+      }
+    }
+
+    // Displaying the amount of pages if the user is not at the final page
+    if (numberOfPages - pageNumber > 1) {
+      buttonItems.push(<div key="dots" className="px-3 py-1">...</div>);
+      buttonItems.push(<PageNumberButton key="last-page" number={numberOfPages} />)
+    }
+
+    return buttonItems;
+  }
+
+  if (movies.length > 0) {
+    return (
+      <div className="my-5">
+        <DisplayMovies movies={movies}/>
+        <div className="flex justify-center space-x-2 text-xl">
+          <button disabled={pageNumber <= 1}
+                  className="px-3 py-1 rounded-lg
+                  hover:cursor-pointer disabled:cursor-not-allowed
+                  enabled:hover:backdrop-brightness-50
+                  disabled:brightness-50"
+                  onClick={() => setPageNumber(pageNumber - 1)}>← Previous
+          </button>
+          <PaginationButtons />
+          <button disabled={pageNumber === numberOfPages}
+                  className="px-3 py-1 rounded-lg
+                  hover:cursor-pointer disabled:cursor-not-allowed
+                  enabled:hover:backdrop-brightness-50
+                  disabled:brightness-50"
+                  onClick={() => setPageNumber(pageNumber + 1)}>Next →
+          </button>
         </div>
-      ))}
-    </div>
-  );
+      </div>
+    );
+  } else {
+    return;
+  }
 }
