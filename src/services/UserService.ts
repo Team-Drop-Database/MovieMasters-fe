@@ -1,5 +1,25 @@
 import apiClient from "@/services/ApiClient";
 
+const STATUS_CREATED = 201;
+const BAD_REQUEST = 400;
+
+export async function registerUser(user: object): Promise<string | undefined> {
+  const endpoint = "/users";
+  const response = await apiClient(endpoint,{
+    method: "POST",
+    body: JSON.stringify(user)
+  });
+
+  switch (response.status) {
+    case STATUS_CREATED: {
+      return "Your account has been created";
+    }
+    case BAD_REQUEST: {
+      throw new Error(await response.text());
+    }
+  }
+}
+
 export async function fetchUserData(username: string) {
   const endpoint = `/users/username/${username}`;
   const response = await apiClient(endpoint);
