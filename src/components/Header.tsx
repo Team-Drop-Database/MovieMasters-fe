@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/images/logo_nobg.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
+import neutral from "@/assets/images/no-profile-pic.jpg"
 import searchIcon from "@/assets/images/search_icon_black.svg"
 
 export default function Header() {
@@ -64,7 +65,7 @@ export default function Header() {
             <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">My Watchlist</div>
           </BasicTransitionLink>
           <BasicTransitionLink href={"/profile"}>
-            <ProfileButton username={userDetails?.username} />
+            <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} />
           </BasicTransitionLink>
         </div>
       ) : (
@@ -114,19 +115,21 @@ function onConfirmSearch(/*input: string*/) {
 
 type ProfileButtonProps = {
   username?: string;
+  profileUrl?: string;
 };
 
-function ProfileButton({ username }: ProfileButtonProps) {
+function ProfileButton({ username, profileUrl }: ProfileButtonProps) {
   return (
     <div className="flex items-center gap-5 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300">
       <p className="details">{username || "Username"}</p>
-      <Image
-        src={logo}
-        width={55}
-        height={55}
-        alt="Profile"
-        className="rounded-full shadow-md"
-      />
+      <div className="relative w-[55px] h-[55px]">
+        <Image
+          src={profileUrl || neutral}
+          alt="Profile"
+          fill
+          className="rounded-full object-cover shadow-md"
+        />
+      </div>
     </div>
   );
 }
