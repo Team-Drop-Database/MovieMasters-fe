@@ -25,7 +25,7 @@ export default function Page() {
       router.push("/");
     } catch (error) {
       const errorMessage =
-        (error as Error).message || 'An unexpected error occurred. Please try again.';
+        (error as Error).message || 'An unexpected error has occurred. Please try again.';
       setErrorMessage(errorMessage);
     }
   }
@@ -34,45 +34,51 @@ export default function Page() {
     <div className="flex justify-center mb-[540px]">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6">
         <h1 className="text-4xl font-bold text-center mb-6">Sign in!</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>
-          <input
-            name="username"
-            placeholder="Username"
-            minLength={5}
-            className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                                   hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                                   font-[family-name:var(--font-jura)]"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            minLength={8}
-            className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
+        <div className="bg-background_primary w-auto p-5 rounded shadow-lg">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>
+            <label className="font-bold" htmlFor="username">Username</label>
+            <input
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+                minLength={5}
+                className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
+                                   hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
+                required
+            />
+            <label className="font-bold" htmlFor="password">Password</label>
+            <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                minLength={8}
+                className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black
                                    bg-light_grey hover:bg-light_grey_active hover:duration-300
-                                   hover:cursor-text font-[family-name:var(--font-jura)]"
-            required
-          />
+                                   hover:cursor-text"
+                required
+            />
+            <div className="h-1">
+              {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
+            </div>
+            <div className="text-center mt-4 mb-1">
+              <p className="text-sm">
+                No account yet?{" "}
+                <Link
+                    href="/signup"
+                    className="underline hover:cursor-pointer hover:no-underline"
+                >
+                  Register here!
+                </Link>
+              </p>
+            </div>
 
-          <div className="text-center mt-4 mb-1">
-            <p className="text-sm">
-              No account yet?{" "}
-              <Link
-                href="/signup"
-                className="underline hover:cursor-pointer hover:no-underline"
-              >
-                Register here!
-              </Link>
-            </p>
-          </div>
-
-          <Button
-            text="Login"
-            onClick={() => formRef.current?.requestSubmit()}
-          />
-          {errorMessage && <p className="text-red-600 font-medium mt-4 text-center">{errorMessage}</p>}
-        </form>
+            <Button
+                text="Login"
+                onClick={() => formRef.current?.requestSubmit()}
+            />
+          </form>
+        </div>
       </div>
     </div>
   );
