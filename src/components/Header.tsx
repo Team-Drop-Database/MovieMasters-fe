@@ -64,9 +64,7 @@ export default function Header() {
           <BasicTransitionLink href={"/mywatchlist"}>
             <div className="py-2 px-3 bg-blue-800 rounded-md text-xl">My Watchlist</div>
           </BasicTransitionLink>
-          <BasicTransitionLink href={"/profile"}>
-            <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} />
-          </BasicTransitionLink>
+          <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} />
         </div>
       ) : (
         <div className="flex gap-5 basis-[30%] justify-end">
@@ -119,17 +117,64 @@ type ProfileButtonProps = {
 };
 
 function ProfileButton({ username, profileUrl }: ProfileButtonProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".profile-button-dropdown")) {
+        closeDropdown();
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("click", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isDropdownOpen]);
+
   return (
-    <div className="flex items-center gap-5 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300">
-      <p className="details">{username || "Username"}</p>
-      <div className="relative w-[55px] h-[55px]">
-        <Image
-          src={profileUrl || neutral}
-          alt="Profile"
-          fill
-          className="rounded-full object-cover shadow-md"
-        />
+    <div className="relative profile-button-dropdown">
+      <div
+        onClick={toggleDropdown}
+        className="flex items-center gap-5 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
+      >
+        <p className="details">{username || "Username"}</p>
+        <div className="relative w-[55px] h-[55px]">
+          <Image
+            src={profileUrl || neutral}
+            alt="Profile"
+            fill
+            className="rounded-full object-cover shadow-md"
+          />
+        </div>
       </div>
+      {isDropdownOpen && (
+        <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
+          <BasicTransitionLink href="/profile">
+            <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
+              My Profile
+            </div>
+          </BasicTransitionLink>
+          <BasicTransitionLink href="/friends">
+            <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
+              Friends
+            </div>
+          </BasicTransitionLink>
+        </div>
+      )}
     </div>
   );
 }
