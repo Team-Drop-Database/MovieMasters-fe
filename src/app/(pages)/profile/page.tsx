@@ -7,7 +7,6 @@ import { navigateToLogin } from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import {fetchUserData, updateUser} from "@/services/UserService";
 import Image from "next/image";
 import {fetchUserData, updateUser, uploadImageToImgbb} from "@/services/UserService";
 import neutral from "@/assets/images/no-profile-pic.jpg"
@@ -189,13 +188,6 @@ export default function Profile() {
             accept="image/*"
             className="hidden"
             onChange={handleFileChange}
-    {/*<div className="flex justify-center mb-5">*/}
-    {/*  <div className="w-full max-w-sm p-6 rounded-lg mt-6 m-2 bg-background_secondary">*/}
-    {/*    <div className="flex justify-center items-center">*/}
-    {/*      <img*/}
-    {/*        src={profileData.profilePictureURL}*/}
-    {/*        alt="Profile picture"*/}
-    {/*        className="w-40 h-40 object-cover rounded-full"*/}
           />
         </div>
 
@@ -278,7 +270,7 @@ export default function Profile() {
         <div className="flex items-center">
           <div className="flex items-center space-x-4">
             <img
-              src={profileData.profilePictureURL}
+              src={profileData.profilePictureUrl}
               alt="Profile picture"
               className="w-14 h-14 object-cover rounded-full"
             />
