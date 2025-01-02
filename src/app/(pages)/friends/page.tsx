@@ -40,7 +40,7 @@ export default function Friends() {
   };
 
   const handleAddFriend = () => {
-    if (newFriendUsername.trim()) {
+    if (newFriendUsername) {
       // Add your logic here to add a friend (like an API call)
       alert(`Added ${newFriendUsername} as a friend!`);
       setNewFriendUsername(""); // Reset input
@@ -66,7 +66,10 @@ export default function Friends() {
                          font-[family-name:var(--font-jura)] w-full"
             />
           </div>
-          <Button text="Add Friend" onClick={handleAddFriend} />
+          <div className="mb-2">
+            <Button text="Add Friend" onClick={handleAddFriend} />
+          </div>
+          <Button text="Cancel" onClick={toggleFriendMode} />
         </div>
       ) : (
         <>
