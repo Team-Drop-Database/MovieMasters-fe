@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import { Button } from "@/components/generic/Button";
+import {getFriendsByStatus} from "@/services/FriendService";
 
 export default function Friends() {
-  // Temporary hardcoded data (can be replaced with API data)
+  const [isAddingFriend, setIsAddingFriend] = useState(false);
+  const [newFriendUsername, setNewFriendUsername] = useState("");
+  const [friends, setFriends] = useState([]);
+  //const [friendRequests, setFriendRequests] = useState([]);
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const acceptedFriends = await getFriendsByStatus("ACCEPTED");
+        setFriends(acceptedFriends);
+      } catch (error) {
+        console.error("Error fetching friends: ", error);
+      }
+    };
+
+    fetchFriends();
+  }, []);
+
+  // Temporary hardcoded data (will be replaced with API data)
   const friendRequests = [
     {
       username: "JohnDoe",
@@ -17,23 +36,20 @@ export default function Friends() {
     },
   ];
 
-  const friends = [
-    {
-      username: "Mark",
-      profilePictureUrl: "/profile3.jpg",
-    },
-    {
-      username: "Ervin",
-      profilePictureUrl: "/profile4.jpg",
-    },
-    {
-      username: "Thomas",
-      profilePictureUrl: "/profile5.jpg"
-    }
-  ];
-
-  const [isAddingFriend, setIsAddingFriend] = useState(false); // State to toggle between views
-  const [newFriendUsername, setNewFriendUsername] = useState(""); // State to hold input value
+  // const friends = [
+  //   {
+  //     username: "Mark",
+  //     profilePictureUrl: "/profile3.jpg",
+  //   },
+  //   {
+  //     username: "Ervin",
+  //     profilePictureUrl: "/profile4.jpg",
+  //   },
+  //   {
+  //     username: "Thomas",
+  //     profilePictureUrl: "/profile5.jpg"
+  //   }
+  // ];
 
   const toggleFriendMode = () => {
     setIsAddingFriend(!isAddingFriend);
@@ -41,10 +57,10 @@ export default function Friends() {
 
   const handleAddFriend = () => {
     if (newFriendUsername) {
-      // Add your logic here to add a friend (like an API call)
-      alert(`Added ${newFriendUsername} as a friend!`);
-      setNewFriendUsername(""); // Reset input
-      setIsAddingFriend(false); // Go back to friends list
+      // TODO: add API call
+      alert(`Send friend request to ${newFriendUsername}!`);
+      setNewFriendUsername("");
+      setIsAddingFriend(false);
     } else {
       alert("Please enter a valid username.");
     }
