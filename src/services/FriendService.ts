@@ -1,7 +1,7 @@
 import apiClient from "@/services/ApiClient";
 
 export async function addFriend(username: string) {
-  const endpoint = `/friendships/add`;
+  const endpoint = `/friends/add`;
   const response = await apiClient(endpoint, {
     method: "POST",
     body: JSON.stringify({ username }),
@@ -18,7 +18,7 @@ export async function updateFriendshipStatus(
   username: string,
   status: string
 ) {
-  const endpoint = `/friendships/update`;
+  const endpoint = `/friends/update`;
   const response = await apiClient(endpoint, {
     method: "PUT",
     body: JSON.stringify({ username, status }),
@@ -34,7 +34,7 @@ export async function updateFriendshipStatus(
 }
 
 export async function getFriendsByStatus(status: string) {
-  const endpoint = `/friendships/friends?status=${status}`;
+  const endpoint = `/friends/friends?status=${status}`;
   const response = await apiClient(endpoint);
 
   if (!response.ok) {
@@ -45,7 +45,7 @@ export async function getFriendsByStatus(status: string) {
 }
 
 export async function deleteFriend(username: string) {
-  const endpoint = `/friendships/remove`;
+  const endpoint = `/friends/remove`;
   const response = await apiClient(endpoint, {
     method: "DELETE",
     body: JSON.stringify({ username }),
