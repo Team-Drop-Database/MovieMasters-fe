@@ -6,6 +6,7 @@ import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
 import neutral from "@/assets/images/no-profile-pic.jpg"
 import searchIcon from "@/assets/images/search_icon_black.svg"
+import {redirect} from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn, userDetails } = useAuthContext();
@@ -97,7 +98,7 @@ function SearchBar(props: SearchBarProps) {
       placeholder="Search for a movie"
       type="text"
       onKeyDown={(e) => {
-        if (e.key === "Enter") onConfirmSearch(/*searchInput*/);
+        if (e.key === "Enter") redirect(`/search?title=${searchInput}`);
       }}
       onChange={(e) => setSearchInput(e.target.value)}
       className={`${props.className}  w-full outline-none placeholder-black font-md py-2 px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
@@ -105,12 +106,6 @@ function SearchBar(props: SearchBarProps) {
     <Image src={searchIcon} alt={"search_icon.svg"} width={35} height={35} className="absolute top-0.5 right-3 origin-center cursor-pointer"></Image>
     </div>
   );
-}
-
-// Note: commented out the 'input' argument to 
-// prevent Typescript error
-function onConfirmSearch(/*input: string*/) {
-  //TODO: Make search functional for the header
 }
 
 type ProfileButtonProps = {
