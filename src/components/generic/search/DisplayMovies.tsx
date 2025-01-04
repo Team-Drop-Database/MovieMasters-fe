@@ -12,7 +12,7 @@ export default function DisplayMovies({ movies} : { movies: Movie[]}) {
             src={movie.posterPath}
             alt={movie.title}
           />
-          <div>
+          <div className="hover:brightness-50">
             <h1>{movie.title}</h1>
             <div>{new Date(movie.releaseDate).getFullYear()}</div>
           </div>

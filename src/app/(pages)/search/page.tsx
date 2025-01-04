@@ -20,15 +20,13 @@ export default function Search() {
       setPageNumber(1);
     }
     async function setTotalPages() {
-      if (prevValues.current.title != title) {
-        try {
-          setNumberOfPages(await getNumberOfPages(title));
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            setError(error.message);
-          } else {
-            setError("An unknown error occurred.");
-          }
+      try {
+        setNumberOfPages(await getNumberOfPages(title));
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred.");
         }
       }
     }
@@ -80,10 +78,10 @@ export default function Search() {
       startNumber = pageNumber - 1;
     }
     if (pageNumber === numberOfPages) {
-      // For when the user is at last page
-      startNumber = numberOfPages - 2;
+      // For when the user is at last page, if the outcome is smaller than 1, set it to 1
+      startNumber = (numberOfPages - 2) < 1 ? 1 : (numberOfPages - 2);
     }
-
+    startNumber = startNumber <= 1 ? 1 : startNumber;
     const buttonItems = [];
 
     // 3 iterations if there are more than 2 pages
@@ -108,9 +106,9 @@ export default function Search() {
 
   if (movies.length > 0) {
     return (
-      <div className="my-5">
+      <div className="m-5">
         <DisplayMovies movies={movies}/>
-        <div className="flex justify-center space-x-2 text-xl">
+        <div className="flex justify-center space-x-2 text-xl mt-5">
           <button disabled={pageNumber <= 1}
                   className="px-3 py-1 rounded-lg
                   hover:cursor-pointer disabled:cursor-not-allowed
