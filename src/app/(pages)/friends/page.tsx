@@ -4,8 +4,11 @@ import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import { Button } from "@/components/generic/Button";
 import {addFriend, getFriendsByStatus, updateFriendshipStatus} from "@/services/FriendService";
+import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Friends() {
+  const {isLoggedIn} = useAuthContext();
   const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [newFriendUsername, setNewFriendUsername] = useState("");
   const [friends, setFriends] = useState([]);
@@ -30,9 +33,13 @@ export default function Friends() {
   };
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigateToLogin();
+    }
+
     fetchFriends();
     fetchFriendRequests();
-  }, []);
+  }, [isLoggedIn]);
 
   const toggleFriendMode = () => {
     setIsAddingFriend(!isAddingFriend);
