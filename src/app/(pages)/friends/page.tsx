@@ -3,66 +3,81 @@
 import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import { Button } from "@/components/generic/Button";
-import {getFriendsByStatus} from "@/services/FriendService";
+import {addFriend, getFriendsByStatus, updateFriendshipStatus} from "@/services/FriendService";
 
 export default function Friends() {
   const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [newFriendUsername, setNewFriendUsername] = useState("");
   const [friends, setFriends] = useState([]);
-  //const [friendRequests, setFriendRequests] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+
+  const fetchFriends = async () => {
+    try {
+      const acceptedFriends = await getFriendsByStatus("ACCEPTED");
+      setFriends(acceptedFriends);
+    } catch (error) {
+      console.error("Error fetching friends: ", error);
+    }
+  };
+
+  const fetchFriendRequests = async () => {
+    try {
+      const pendingRequests = await getFriendsByStatus("PENDING");
+      setFriendRequests(pendingRequests);
+    } catch (error) {
+      console.error("Error fetching friend requests: ", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const acceptedFriends = await getFriendsByStatus("ACCEPTED");
-        setFriends(acceptedFriends);
-      } catch (error) {
-        console.error("Error fetching friends: ", error);
-      }
-    };
-
     fetchFriends();
+    fetchFriendRequests();
   }, []);
-
-  // Temporary hardcoded data (will be replaced with API data)
-  const friendRequests = [
-    {
-      username: "JohnDoe",
-      profilePictureUrl: "/profile1.jpg",
-    },
-    {
-      username: "JaneSmith",
-      profilePictureUrl: "/profile2.jpg",
-    },
-  ];
-
-  // const friends = [
-  //   {
-  //     username: "Mark",
-  //     profilePictureUrl: "/profile3.jpg",
-  //   },
-  //   {
-  //     username: "Ervin",
-  //     profilePictureUrl: "/profile4.jpg",
-  //   },
-  //   {
-  //     username: "Thomas",
-  //     profilePictureUrl: "/profile5.jpg"
-  //   }
-  // ];
 
   const toggleFriendMode = () => {
     setIsAddingFriend(!isAddingFriend);
   };
 
-  const handleAddFriend = () => {
+  const handleAddFriend = async () => {
     if (newFriendUsername) {
-      // TODO: add API call
-      alert(`Send friend request to ${newFriendUsername}!`);
-      setNewFriendUsername("");
-      setIsAddingFriend(false);
+      try {
+        const response = await addFriend(newFriendUsername);
+
+        alert(`Friend request sent to ${response.friendUsername}`);
+
+        setNewFriendUsername("");
+        setIsAddingFriend(false);
+      } catch (error) {
+        console.error("Error sending friend request: ", error);
+        alert("Failed to send friend request. Please try again.");
+      }
     } else {
       alert("Please enter a valid username.");
+    }
+  };
+
+  const handleAcceptRequest = async (username: string) => {
+    const status = "ACCEPTED";
+    try {
+      await updateFriendshipStatus(username, status);
+      alert(`Accepted friend request from ${username}`);
+
+      fetchFriends();
+      fetchFriendRequests();
+    } catch (error) {
+      console.error("Failed to accept friend request: ", error);
+    }
+  };
+
+  const handleDenyRequest = async (username: string) => {
+    const status = "REJECTED";
+    try {
+      await updateFriendshipStatus(username, status);
+      alert(`Denied friend request from ${username}`);
+
+      fetchFriendRequests();
+    } catch (error) {
+      console.error("Failed to deny friend request: ", error);
     }
   };
 
@@ -108,19 +123,23 @@ export default function Friends() {
             {friendRequests.length > 0 && (
               <div className="w-2/5 p-8 rounded-lg bg-background_secondary">
                 <h1 className="mb-2">Friend Requests</h1>
-                {friendRequests.map((friend, index) => (
+                {friendRequests.map(({profilePictureUrl, friendUsername}, index) => (
                   <div className="flex items-center" key={index}>
                     <div className="flex items-center space-x-4">
                       <img
-                        src={friend.profilePictureUrl}
-                        alt={`${friend.username}'s profile`}
+                        src={profilePictureUrl}
+                        alt={`${friendUsername}`}
                         className="w-14 h-14 object-cover rounded-full"
                       />
-                      <label className="block text-m font-medium">{friend.username}</label>
+                      <label className="block text-m font-medium">{friendUsername}</label>
                     </div>
                     <div className="flex space-x-2 ml-auto">
-                      <Image src="/checkmark.svg" width={30} height={30} alt="checkmark"/>
-                      <Image src="/red-cross.svg" width={35} height={35} alt="red cross"/>
+                      <Image src="/checkmark.svg" width={30} height={30} alt="checkmark"
+                             className="hover:cursor-pointer"
+                             onClick={() => handleAcceptRequest(friendUsername)}/>
+                      <Image src="/red-cross.svg" width={35} height={35} alt="red cross"
+                             className="hover:cursor-pointer"
+                             onClick={() => handleDenyRequest(friendUsername)}/>
                     </div>
                   </div>
                 ))}
