@@ -92,15 +92,15 @@ export default function Friends() {
           <div className="flex flex-row justify-center space-x-4 mt-6 w-full">
             <div className="w-2/5 p-6 rounded-lg bg-background_secondary">
               <h1 className="mb-2">Friends</h1>
-              {friends.map((friend, index) => (
+              {friends.map(({friendUsername, profilePictureUrl}, index) => (
                 <div className="flex items-center" key={index}>
                   <div className="flex items-center space-x-4">
                     <img
-                      src={friend.profilePictureUrl}
-                      alt={`${friend.username}'s profile`}
+                      src={profilePictureUrl}
+                      alt={`${friendUsername}`}
                       className="w-14 h-14 object-cover rounded-full"
                     />
-                    <label className="block text-m font-medium">{friend.username}</label>
+                    <label className="block text-m font-medium">{friendUsername}</label>
                   </div>
                 </div>
               ))}
