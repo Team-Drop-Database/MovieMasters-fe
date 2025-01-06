@@ -3,11 +3,9 @@
 import { Button } from "@/components/generic/Button";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { navigateToLogin } from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import {fetchUserData, updateUser, uploadImageToImgbb} from "@/services/UserService";
 import neutral from "@/assets/images/no-profile-pic.jpg"
 
@@ -19,7 +17,6 @@ export default function Profile() {
   }
   const {isLoggedIn, userDetails, login} = useAuthContext();
   const [isEditing, setIsEditing] = useState(false);
-  const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState(profile);
   const [originalData, setOriginalData] = useState(profile);
@@ -31,9 +28,6 @@ export default function Profile() {
     process.env.JWT_COOKIE_SECURE?.toLowerCase() === "true";
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigateToLogin();
-    }
 
     async function fetchUserDataProfile() {
       if (userDetails != null) {
@@ -156,13 +150,6 @@ export default function Profile() {
     setSelectedFile(null);
   };
 
-  const toggleFriendMode = () => {
-    if (isAddingFriend) {
-      console.log("Adding friend.")
-    }
-    setIsAddingFriend(!isAddingFriend);
-  };
-
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-background_secondary">
@@ -217,46 +204,12 @@ export default function Profile() {
             <p className="m-2 text-center font-medium">{profileData.email}</p>
           </div>
         )}
-        {isAddingFriend && (
-          <div className="m-2">
-            <label className="block text-m font-medium mt-4">
-              Add friend&#39;s Username
-            </label>
-            <input
-              type="text"
-              name="friendUsername"
-              placeholder="Friend's Username"
-              // onChange={handleInputChange}
-              className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)] w-full"
-            />
-          </div>
-        )}
-        {!isAddingFriend && (
           <div className="m-10">
             <Button
               text={isEditing ? "Save" : "Edit"}
               onClick={toggleEditMode}
             />
           </div>
-        )}
-        {!isEditing && (
-          <div className="m-10">
-            <Button
-              text={isAddingFriend ? "Send  friend request" : "Add friend"}
-              onClick={toggleFriendMode}
-            />
-            {isAddingFriend && (
-              <div className="mt-5">
-                <Button
-                  text="Cancel"
-                  onClick={toggleFriendMode}
-                />
-              </div>
-            )}
-          </div>
-        )}
         {isEditing && (
           <div className="ml-10 mr-10 mt-5">
             <Button
@@ -264,23 +217,6 @@ export default function Profile() {
               onClick={cancelEdit}/>
           </div>
         )}
-      </div>
-      <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-background_secondary m-2">
-        <h1 className="mb-2">Friend requests</h1>
-        <div className="flex items-center">
-          <div className="flex items-center space-x-4">
-            <img
-              src={profileData.profilePictureUrl}
-              alt="Profile picture"
-              className="w-14 h-14 object-cover rounded-full"
-            />
-            <label className="block text-m font-medium">Username</label>
-          </div>
-          <div className="flex space-x-2 ml-auto">
-            <Image src={'/checkmark.svg'} width={30} height={30} alt="checkmark"/>
-            <Image src={'/red-cross.svg'} width={35} height={35} alt="redcross"/>
-          </div>
-        </div>
       </div>
     </div>
   );

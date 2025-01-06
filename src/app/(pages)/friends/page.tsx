@@ -4,8 +4,8 @@ import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import { Button } from "@/components/generic/Button";
 import {addFriend, getFriendsByStatus, updateFriendshipStatus} from "@/services/FriendService";
-import {navigateToLogin} from "@/utils/navigation/HomeNavigation";
 import {useAuthContext} from "@/contexts/AuthContext";
+import neutral from "@/assets/images/no-profile-pic.jpg";
 
 export default function Friends() {
   const {isLoggedIn} = useAuthContext();
@@ -33,9 +33,6 @@ export default function Friends() {
   };
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigateToLogin();
-    }
 
     fetchFriends();
     fetchFriendRequests();
@@ -114,14 +111,18 @@ export default function Friends() {
           <div className="flex flex-row justify-center space-x-4 mt-6 w-full">
             <div className="w-2/5 p-6 rounded-lg bg-background_secondary">
               <h1 className="mb-2">Friends</h1>
-              {friends.map(({friendUsername, profilePictureUrl}, index) => (
+              {friends.map(({friendUsername, friendProfilePicture}, index) => (
                 <div className="flex items-center" key={index}>
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={profilePictureUrl}
-                      alt={`${friendUsername}`}
-                      className="w-14 h-14 object-cover rounded-full"
-                    />
+                  <div className="flex items-center space-x-4 mb-2">
+                    <div className="w-[55px] h-[55px] relative">
+                      <Image
+                        src={friendProfilePicture || neutral}
+                        alt={`${friendUsername}`}
+                        fill
+                        sizes="55px"
+                        className="object-cover rounded-full"
+                      />
+                    </div>
                     <label className="block text-m font-medium">{friendUsername}</label>
                   </div>
                 </div>
@@ -130,14 +131,18 @@ export default function Friends() {
             {friendRequests.length > 0 && (
               <div className="w-2/5 p-8 rounded-lg bg-background_secondary">
                 <h1 className="mb-2">Friend Requests</h1>
-                {friendRequests.map(({profilePictureUrl, friendUsername}, index) => (
+                {friendRequests.map(({friendProfilePicture, friendUsername}, index) => (
                   <div className="flex items-center" key={index}>
                     <div className="flex items-center space-x-4">
-                      <img
-                        src={profilePictureUrl}
-                        alt={`${friendUsername}`}
-                        className="w-14 h-14 object-cover rounded-full"
-                      />
+                      <div className="w-[55px] h-[55px] relative">
+                        <Image
+                          src={friendProfilePicture || neutral}
+                          alt={`${friendUsername}`}
+                          fill
+                          sizes="55px"
+                          className="object-cover rounded-full"
+                        />
+                      </div>
                       <label className="block text-m font-medium">{friendUsername}</label>
                     </div>
                     <div className="flex space-x-2 ml-auto">
