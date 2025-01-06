@@ -51,7 +51,7 @@ export async function updateUser(
   return await response.json();
 }
 
-export async function uploadImageToImgbb(imageFile) {
+export async function uploadImageToImgbb(imageFile: Blob) {
   const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
 
   if (!apiKey) {
