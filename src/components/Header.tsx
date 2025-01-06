@@ -100,7 +100,7 @@ export default function Header() {
           </button>
         </div>
       </div>
-      {isDropdownMenuShown && <DropdownMenu isLoggedIn={isLoggedIn} logout={logout}/>}
+      {isDropdownMenuShown ? <DropdownMenu isLoggedIn={isLoggedIn} logout={logout}/> : ''}
     </header>
   );
 }
