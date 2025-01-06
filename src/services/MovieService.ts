@@ -34,7 +34,16 @@ export async function getMovieByTitle(movieTitle: string | null, page: number): 
   const endpoint = `/movies?title=${movieTitle}&page=${page}`
 
   try {
-    return (await apiClient(endpoint)).json();
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return [];
+      }
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error);
@@ -48,7 +57,16 @@ export async function getNumberOfPages(movieTitle: string | null): Promise<numbe
   const endpoint = `/movies/pages?title=${movieTitle}`
 
   try {
-    return (await apiClient(endpoint)).json();
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return 0;
+      }
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error);
