@@ -127,6 +127,7 @@ function ProfileButton({ username, profileUrl }: ProfileButtonProps) {
           src={profileUrl || neutral}
           alt="Profile"
           fill
+          sizes="55px"
           className="rounded-full object-cover shadow-md"
         />
       </div>
