@@ -96,7 +96,7 @@ export default function Header() {
               </div>
           )}
           <button ref={dropdownMenuButtonRef} onClick={handleIsDropdownMenuShown} className="sm:hidden"><
-            Image src={hamburgerIcon} alt="hamburger icon"></Image>
+            Image src={hamburgerIcon} alt="hamburger icon" width={40} height={40}></Image>
           </button>
         </div>
       </div>
