@@ -3,40 +3,54 @@
 import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import { Button } from "@/components/generic/Button";
-import {addFriend, getFriendsByStatus, updateFriendshipStatus} from "@/services/FriendService";
+import {addFriend, deleteFriend, getFriendsByStatus, updateFriendshipStatus} from "@/services/FriendService";
 import {useAuthContext} from "@/contexts/AuthContext";
 import neutral from "@/assets/images/no-profile-pic.jpg";
 
 export default function Friends() {
-  const {isLoggedIn} = useAuthContext();
+  const {userDetails} = useAuthContext();
   const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [newFriendUsername, setNewFriendUsername] = useState("");
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
+  const [error, setError] = useState<string | null>(null);
+  
+  useEffect(() => {
+    fetchFriends();
+    fetchFriendRequests();
+  }, [userDetails]);
 
   const fetchFriends = async () => {
     try {
       const acceptedFriends = await getFriendsByStatus("ACCEPTED");
       setFriends(acceptedFriends);
-    } catch (error) {
-      console.error("Error fetching friends: ", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     }
   };
 
   const fetchFriendRequests = async () => {
     try {
       const pendingRequests = await getFriendsByStatus("PENDING");
-      setFriendRequests(pendingRequests);
-    } catch (error) {
-      console.error("Error fetching friend requests: ", error);
+
+      if (userDetails) {
+        const filteredRequests = pendingRequests.filter((request: { username: string; }) =>
+          request.username !== userDetails.username!);
+        setFriendRequests(filteredRequests);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     }
   };
-
-  useEffect(() => {
-
-    fetchFriends();
-    fetchFriendRequests();
-  }, [isLoggedIn]);
 
   const toggleFriendMode = () => {
     setIsAddingFriend(!isAddingFriend);
@@ -51,12 +65,16 @@ export default function Friends() {
 
         setNewFriendUsername("");
         setIsAddingFriend(false);
-      } catch (error) {
-        console.error("Error sending friend request: ", error);
-        alert("Failed to send friend request. Please try again.");
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error(error.message);
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred.");
+        }
       }
     } else {
-      alert("Please enter a valid username.");
+      setError("Invalid username");
     }
   };
 
@@ -64,12 +82,15 @@ export default function Friends() {
     const status = "ACCEPTED";
     try {
       await updateFriendshipStatus(username, status);
-      alert(`Accepted friend request from ${username}`);
 
       fetchFriends();
       fetchFriendRequests();
-    } catch (error) {
-      console.error("Failed to accept friend request: ", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     }
   };
 
@@ -77,16 +98,37 @@ export default function Friends() {
     const status = "REJECTED";
     try {
       await updateFriendshipStatus(username, status);
-      alert(`Denied friend request from ${username}`);
 
       fetchFriendRequests();
-    } catch (error) {
-      console.error("Failed to deny friend request: ", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     }
   };
 
+  const handleDeleteFriend = async (username: string) => {
+    try {
+      await deleteFriend(username);
+      alert(`${username} has been succesfully deleted.`);
+
+      fetchFriends();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col items-center">
+      {error && (
+        <div>{error}</div>
+      )}
       {isAddingFriend ? (
         <div className="w-full max-w-sm p-6 rounded-lg bg-background_secondary mt-6">
           <h1 className="mb-2">Add Friend</h1>
@@ -112,8 +154,8 @@ export default function Friends() {
             <div className="w-2/5 p-6 rounded-lg bg-background_secondary">
               <h1 className="mb-2">Friends</h1>
               {friends.map(({friendUsername, friendProfilePicture}, index) => (
-                <div className="flex items-center" key={index}>
-                  <div className="flex items-center space-x-4 mb-2">
+                <div className="flex items-center mb-2" key={index}>
+                  <div className="flex items-center space-x-4">
                     <div className="w-[55px] h-[55px] relative">
                       <Image
                         src={friendProfilePicture || neutral}
@@ -125,6 +167,16 @@ export default function Friends() {
                     </div>
                     <label className="block text-m font-medium">{friendUsername}</label>
                   </div>
+                    <div className="flex space-x-2 ml-auto">
+                      <Image
+                        src="/delete.svg"
+                        alt="Delete"
+                        width={25}
+                        height={25}
+                        className="hover:cursor-pointer"
+                        onClick={() => handleDeleteFriend(friendUsername)}
+                      />
+                    </div>
                 </div>
               ))}
             </div>
@@ -133,7 +185,7 @@ export default function Friends() {
                 <h1 className="mb-2">Friend Requests</h1>
                 {friendRequests.map(({friendProfilePicture, friendUsername}, index) => (
                   <div className="flex items-center" key={index}>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-4 mb-2">
                       <div className="w-[55px] h-[55px] relative">
                         <Image
                           src={friendProfilePicture || neutral}

@@ -45,7 +45,7 @@ export async function getFriendsByStatus(status: string) {
 }
 
 export async function deleteFriend(username: string) {
-  const endpoint = `/friends/remove`;
+  const endpoint = `/friends`;
   const response = await apiClient(endpoint, {
     method: "DELETE",
     body: JSON.stringify({ username }),
