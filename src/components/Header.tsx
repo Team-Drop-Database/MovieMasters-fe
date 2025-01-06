@@ -80,7 +80,7 @@ export default function Header() {
                                 </div>
                             </BasicTransitionLink>
                             <ProfileButton username={userDetails?.username}
-                                           handleIsDropdownMenuShown={handleIsDropdownMenuShown}/>
+                                           handleDropdownMenu={handleIsDropdownMenuShown}/>
                         </div>
                     ) : (
                         <div className="flex sm:gap-5 basis-[30%] justify-end">
@@ -196,15 +196,15 @@ function onConfirmSearch(/*input: string*/) {
 
 type ProfileButtonProps = {
     username?: string;
-    handleIsDropdownMenuShown: () => void;
+    handleDropdownMenu: () => void;
 };
 
-function ProfileButton({username, handleIsDropdownMenuShown}: ProfileButtonProps) {
+function ProfileButton({username, handleDropdownMenu}: ProfileButtonProps) {
     return (
         <div>
             <div
                 className="sm:hidden flex items-center gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
-                onClick={handleIsDropdownMenuShown}>
+                onClick={handleDropdownMenu}>
                 <p className="font-[family-name:var(--font-jura)] max-sm:text-sm max-md:text-md max-lg:text-lg">{username || "Username"}</p>
                 <Image
                     src={caretDownIcon}
