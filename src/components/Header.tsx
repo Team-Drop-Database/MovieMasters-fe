@@ -80,24 +80,26 @@ export default function Header() {
                 </BasicTransitionLink>
               </div>
           ) : (
-              <div className="flex sm:gap-5 basis-[30%] justify-end">
+              <div className="flex max-sm:hidden sm:gap-5 basis-[30%] justify-end">
                 <BasicTransitionLink href={"/signup"}>
                   <div
-                      className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign
+                      className="md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign
                     up
                   </div>
                 </BasicTransitionLink>
                 <BasicTransitionLink href={"/signin"}>
                   <div
-                      className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Log
+                      className="md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Log
                     in
                   </div>
                 </BasicTransitionLink>
               </div>
           )}
-          <button ref={dropdownMenuButtonRef} onClick={handleIsDropdownMenuShown} className="sm:hidden"><
-            Image src={hamburgerIcon} alt="hamburger icon" width={40} height={40}></Image>
-          </button>
+          <div className="flex sm:hidden sm:gap-5 basis-[30%] justify-end">
+            <button ref={dropdownMenuButtonRef} onClick={handleIsDropdownMenuShown}><
+                Image src={hamburgerIcon} alt="hamburger icon" width={40} height={40}></Image>
+            </button>
+          </div>
         </div>
       </div>
       {isDropdownMenuShown ? <DropdownMenu isLoggedIn={isLoggedIn} logout={logout}/> : ''}
@@ -162,7 +164,7 @@ function SearchBar(props: SearchBarProps) {
   const [searchInput, setSearchInput] = React.useState("");
 
   return (
-      <div className="basis-[40%] max-sm:basis-[80%] mx-auto relative">
+      <div className="grow mx-auto relative">
         <div className="flex items-center">
           <input
               value={searchInput}
