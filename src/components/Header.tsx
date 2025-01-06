@@ -50,8 +50,8 @@ export default function Header() {
   }
   
   return (
-    <header ref={headerRef}>
-      <div className={`px-5 max-sm:px-2 py-2 w-full flex items-center bg-background_primary md:shadow-md font-[family-name:var(--font-alatsi)] z-50 transition-transform ${isSticky ? 'sticky -top-10 translate-y-10' : 'translate-y-0'}`}>
+      <header ref={headerRef} className={`z-50 transition-transform ${isSticky ? 'sticky -top-10 translate-y-10' : 'translate-y-0'}`}>
+      <div className="px-5 max-sm:px-2 py-2 w-full flex items-center bg-background_primary md:shadow-md font-[family-name:var(--font-alatsi)]">
         <div className="flex grow items-center">
           <div className="basis-[30%]">
             <BasicTransitionLink href={"/"}>
