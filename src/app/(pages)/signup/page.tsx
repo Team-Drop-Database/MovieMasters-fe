@@ -73,47 +73,47 @@ export default function Page() {
     <div className="flex justify-center mb-[480px]">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6">
         <h1 className="text-4xl font-bold text-center mb-6">Sign up!</h1>
-        <div className="bg-background_primary w-auto p-5 rounded shadow-lg">
+        <div>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>
-            <label className="font-bold" htmlFor="email">Email</label>
+            {/* <label className="font-bold" htmlFor="email">Email</label> */}
             <input
                 id="email"
                 type="email"
                 name="email"
-                placeholder="name@example.com"
+                placeholder="email@example.com"
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
             {formErrors.email !== "" && <p className="text-base text-red-600">{formErrors.email}</p>}
-            <label className="font-bold" htmlFor="username">Username</label>
+            {/* <label className="font-bold" htmlFor="username">Username</label> */}
             <input
                 id="username"
                 name="username"
-                placeholder="example"
+                placeholder="username"
                 minLength={5}
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
             {formErrors.username !== "" && <p className="text-base text-red-600">{formErrors.username}</p>}
-            <label className="font-bold" htmlFor="password">Password</label>
+            {/* <label className="font-bold" htmlFor="password">Password</label> */}
             <input
                 id="password"
                 type="password"
                 name="password"
-                placeholder="12345678"
+                placeholder="password"
                 minLength={8}
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
-            <label className="font-bold" htmlFor="confirmPassword">Confirm Password</label>
+            {/* <label className="font-bold" htmlFor="confirmPassword">Confirm Password</label> */}
             <input
                 id="confirmPassword"
                 type="password"
                 name="confirmPassword"
-                placeholder="12345678"
+                placeholder="confirm password"
                 required
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
@@ -123,7 +123,7 @@ export default function Page() {
               {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
               {successMessage && <p className="text-base text-green-600">{successMessage}</p>}
             </div>
-            <div className="text-center mt-4 mb-1">
+            <div className="text-center mb-1">
               <p className="text-sm">
                 Already have an account?{" "}
                 <Link

@@ -34,9 +34,9 @@ export default function Page() {
     <div className="flex justify-center mb-[540px]">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6">
         <h1 className="text-4xl font-bold text-center mb-6">Sign in!</h1>
-        <div className="bg-background_primary w-auto p-5 rounded shadow-lg">
+        <div className="">
           <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>
-            <label className="font-bold" htmlFor="username">Username</label>
+            {/* <label className="font-bold" htmlFor="username">Username</label> */}
             <input
                 id="username"
                 name="username"
@@ -46,7 +46,7 @@ export default function Page() {
                                    hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
                 required
             />
-            <label className="font-bold" htmlFor="password">Password</label>
+            {/* <label className="font-bold" htmlFor="password">Password</label> */}
             <input
                 id="password"
                 type="password"
@@ -61,7 +61,7 @@ export default function Page() {
             <div className="h-1">
               {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
             </div>
-            <div className="text-center mt-4 mb-1">
+            <div className="text-center mb-1">
               <p className="text-sm">
                 No account yet?{" "}
                 <Link
