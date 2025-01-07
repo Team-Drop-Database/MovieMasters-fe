@@ -2,16 +2,16 @@
 import Movie from "@/models/Movie";
 import {getMovieByTitle, getNumberOfPages} from "@/services/MovieService";
 import {useEffect, useRef, useState} from "react";
-import {useSearchParams} from 'next/navigation'
+//import {useSearchParams} from 'next/navigation'
 import DisplayMovies from "@/components/generic/search/DisplayMovies";
 
 export default function Search() {
-  const searchParams = useSearchParams();
+  //const searchParams = useSearchParams();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [numberOfPages, setNumberOfPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const title: string | null = searchParams.get("title");
+  const title: string | null = '';//searchParams.get("title");
   const prevValues = useRef({ title: title, pageNumber: pageNumber });
 
   // Fetching new movies when the title or page number changes
