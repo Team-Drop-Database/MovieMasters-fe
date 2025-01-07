@@ -14,6 +14,7 @@ export default function WatchListButtonWrapper({ params }: {
     params: {
         userId: number,
         movieId: number
+        onValueChange?: (newValue: WatchedState) => void,
     }
 }) {
     const [watchedStatus, setWatchedStatus] = useState<WatchedState>();
@@ -43,7 +44,8 @@ export default function WatchListButtonWrapper({ params }: {
         params={{
             initialWatchedStatus: watchedStatus as WatchedState,
             userId: params.userId,
-            movieId: params.movieId
+            movieId: params.movieId,
+            onValueChange: params.onValueChange,
         }}
       />
     );

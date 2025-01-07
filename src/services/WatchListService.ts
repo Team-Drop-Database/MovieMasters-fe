@@ -55,7 +55,7 @@ export async function getWatchedStatus(userId: number, movieId: number): Promise
     watchlist = await retrieveWatchlistByUser(userId);
   } catch (error: unknown) {
     if (error instanceof Error)
-      console.error(`Failed to lookup 'getWatchedStatus' data 
+      console.error(`Failed to lookup 'getWatchedStatus' data
         for user userId '${userId}' and movieId '${movieId
       }'.\nError message: ${error.message}.`);
     return WatchedState.ERROR;

@@ -1,4 +1,4 @@
-import { ReviewResponse } from "@/services/ReviewService";
+import { ReviewResponse } from "@/models/Review"
 
 export function mapReviewResponsesToItems(responses: ReviewResponse[]): ReviewItemProps[] {
   return responses.map(mapReviewResponseToItem)
@@ -15,7 +15,7 @@ export function mapReviewResponseToItem(response: ReviewResponse): ReviewItemPro
     reviewerName: response.username,
     profilePicture: response.userProfilePicture,
     movieName: response.movieTitle,
-    starAmount: response.rating,
+    rating: response.rating,
     reviewBody: reviewBody,
   }
 }
@@ -24,6 +24,6 @@ export type ReviewItemProps = {
   reviewerName: string,
   profilePicture: string,
   movieName: string,
-  starAmount: number,
+  rating: number,
   reviewBody: string,
 }

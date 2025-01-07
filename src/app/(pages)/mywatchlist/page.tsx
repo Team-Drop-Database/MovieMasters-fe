@@ -54,7 +54,7 @@ export default function MyWatchList() {
       if (item.watched && item.review) {
         ratingMessage = (
           <h5 className="text-xs opacity-50">
-            You rated it: {item.review.rating} Stars
+            You rated it: {item.review.rating}/10
           </h5>
         );
       } else if (item.watched) {
@@ -132,7 +132,7 @@ export default function MyWatchList() {
 
   return (
     <div
-      className="flex flex-col items-left pb-10 px-10 
+      className="flex flex-col items-left pb-10 px-10
          font-[family-name:var(--font-alatsi)]"
     >
       {pageContent}
