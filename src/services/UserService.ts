@@ -51,6 +51,17 @@ export async function updateUser(
   return await response.json();
 }
 
+export async function deleteUser(userId: number | undefined) {
+  const endpoint = `/users/${userId}`;
+  const response = await apiClient(endpoint, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete user. Status: ${response.status}`);
+  }
+}
+
 export async function uploadImageToImgbb(imageFile: Blob) {
   const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
 
