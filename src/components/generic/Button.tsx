@@ -2,7 +2,7 @@
 
 export type ButtonProps = {
   text: string,
-  onClick: () => void,
+  onClick?: () => void,
 }
 
 export function Button(props: ButtonProps) {
