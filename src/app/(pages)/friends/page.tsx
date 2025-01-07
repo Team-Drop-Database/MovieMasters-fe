@@ -110,9 +110,14 @@ export default function Friends() {
   };
 
   const handleDeleteFriend = async (username: string) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${username} as a friend?`);
+
+    if (!confirmDelete) {
+      return;
+    }
+
     try {
       await deleteFriend(username);
-      alert(`${username} has been succesfully deleted.`);
 
       fetchFriends();
     } catch (error: unknown) {
