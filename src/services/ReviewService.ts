@@ -1,3 +1,5 @@
+"use server"
+
 import { ReviewResponse } from "@/models/Review"
 import apiClient from "./ApiClient"
 

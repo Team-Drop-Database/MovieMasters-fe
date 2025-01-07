@@ -36,3 +36,9 @@ p.details {
   font-family: var(--font-jura);
   font-size: 20px;
 }
+
+.movie-slider {
+  position: relative;
+  transition-property: left;
+  transition-duration: 500ms;
+}
