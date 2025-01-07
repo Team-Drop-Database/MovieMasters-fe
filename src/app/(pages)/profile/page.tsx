@@ -3,7 +3,6 @@
 import { Button } from "@/components/generic/Button";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { navigateToLogin } from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -17,7 +16,7 @@ export default function Profile() {
     email: ""
   }
   const {isLoggedIn, userDetails, login} = useAuthContext();
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState(profile);
   const [originalData, setOriginalData] = useState(profile);
@@ -29,9 +28,6 @@ export default function Profile() {
     process.env.JWT_COOKIE_SECURE?.toLowerCase() === "true";
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigateToLogin();
-    }
 
     async function fetchUserDataProfile() {
       if (userDetails != null) {
@@ -43,7 +39,7 @@ export default function Profile() {
             profilePictureUrl: userData.profile_picture || neutral.src
           };
           setProfileData(initialData);
-          setOriginalData(initialData);
+          setOriginalData(initialData); // This is to make sure that when you cancel editting you get the original data back
         } catch (error) {
           if (error instanceof Error) {
             console.error(error.message);
@@ -208,12 +204,12 @@ export default function Profile() {
             <p className="m-2 text-center font-medium">{profileData.email}</p>
           </div>
         )}
-        <div className="ml-10 mr-10 mt-5">
-          <Button
-            text={isEditing ? "Save" : "Edit"}
-            onClick={toggleEditMode}
-          />
-        </div>
+          <div className="m-10">
+            <Button
+              text={isEditing ? "Save" : "Edit"}
+              onClick={toggleEditMode}
+            />
+          </div>
         {isEditing && (
           <div className="ml-10 mr-10 mt-5">
             <Button
