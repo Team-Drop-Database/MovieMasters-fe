@@ -53,7 +53,7 @@ export default function Header() {
         <header ref={headerRef}
                 className={`z-50 transition-transform ${isSticky ? 'sticky -top-10 translate-y-10' : 'translate-y-0'}`}>
             <div
-                className="px-2 max-sm:px-2 py-2 w-full flex items-center bg-background_primary md:shadow-md font-[family-name:var(--font-alatsi)]">
+                className="sm:min-h-[86px] sm:px-7 px-4 max-sm:px-2 py-2 w-full flex items-center bg-background_primary md:shadow-md font-[family-name:var(--font-alatsi)]">
                 <div className="flex grow items-center">
                     <div className="basis-[30%]">
                         <BasicTransitionLink href={"/"}>
@@ -63,7 +63,7 @@ export default function Header() {
                                     width={55}
                                     height={55}
                                     alt="logo"
-                                    className="rounded-md cursor-pointer"
+                                    className="rounded-md cursor-pointer sm:scale-125 sm:mr-2"
                                 />
                                 <h1 className="max-md:hidden font-opensans font-bold pt-2 text-lg xl:text-3xl"><span
                                     className="text-blue-600 group-hover:text-indigo-600 transition-all duration-300">Movie</span> Master
@@ -76,7 +76,7 @@ export default function Header() {
                         <div className="flex items-center basis-[30%] sm:gap-5 sm:pl-3 justify-end">
                             <BasicTransitionLink href={"/mywatchlist"}>
                                 <div
-                                    className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Watchlist
+                                    className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">My Watchlist
                                 </div>
                             </BasicTransitionLink>
                             <ProfileButton username={userDetails?.username}
@@ -86,13 +86,13 @@ export default function Header() {
                         <div className="flex sm:gap-5 basis-[30%] justify-end">
                             <BasicTransitionLink href={"/signup"}>
                                 <div
-                                    className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign
+                                    className="max-sm:hidden sm:text-xl py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign
                                     up
                                 </div>
                             </BasicTransitionLink>
                             <BasicTransitionLink href={"/signin"}>
                                 <div
-                                    className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Log
+                                    className="max-sm:hidden sm:text-xl py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Log
                                     in
                                 </div>
                             </BasicTransitionLink>
@@ -180,10 +180,10 @@ function SearchBar(props: SearchBarProps) {
                         if (e.key === "Enter") onConfirmSearch(/*searchInput*/);
                     }}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    className={`${props.className} w-full outline-none placeholder-black text-sm py-2 px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
+                    className={`${props.className} w-full sm:text-[1rem] text-sm outline-none placeholder-black py-[0.6rem] px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
                 />
                 <Image src={searchIcon} alt={"search_icon.svg"} width={25} height={25}
-                       className="absolute right-2 cursor-pointer"></Image></div>
+                       className="absolute right-2 cursor-pointer sm:scale-[140%] sm:mr-2"></Image></div>
         </div>
     );
 }
@@ -216,13 +216,13 @@ function ProfileButton({username, handleDropdownMenu}: ProfileButtonProps) {
             <div className="max-sm:hidden">
                 <BasicTransitionLink href={"/profile"}>
                     <div
-                        className="flex items-center gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300">
+                        className="flex items-center sm:gap-5 gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300">
                         <p
                             className="font-[family-name:var(--font-jura)] max-sm:text-sm max-md:text-md max-lg:text-lg">{username || "Username"}</p>
                         <Image
                             src={logo}
                             alt="Profile"
-                            className="max-sm:hidden w-10 max-md:w-6 max-lg:w-8 rounded-full shadow-md"
+                            className="max-sm:hidden sm:w-14 max-lg:w-8 rounded-full shadow-m"
                         />
                     </div>
                 </BasicTransitionLink>
