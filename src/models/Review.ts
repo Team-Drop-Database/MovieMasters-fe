@@ -1,11 +1,15 @@
+export type ReviewResponse = {
+  id: string
+  username: string
+  userProfilePicture: string
+  movieTitle: string
+  rating: number
+  reviewBody: string
+}
 
-export type Review = {
-    reviewId: number;
-    // Might uncomment later (but probably not):
-    //userMovie: WatchListItem;
-    rating: number;
-    comment: string;
-    reviewDate: Date;
-};
-
-export default Review;
+export type WatchListReview = {
+  reviewId: number;
+  rating: number;
+  comment: string;
+  reviewDate: Date;
+}
