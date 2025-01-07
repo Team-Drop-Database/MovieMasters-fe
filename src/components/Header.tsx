@@ -7,7 +7,7 @@ import {useAuthContext} from "@/contexts/AuthContext";
 import searchIcon from "@/assets/images/search_icon_black.svg"
 import caretDownIcon from "@/assets/images/caret-down.svg"
 import hamburgerIcon from "@/assets/images/hamburger.svg"
-import {usePathname} from "next/navigation"
+import {redirect, usePathname} from "next/navigation"
 
 export default function Header() {
     const {isLoggedIn, userDetails, logout} = useAuthContext();
@@ -177,21 +177,24 @@ function SearchBar(props: SearchBarProps) {
                     placeholder="Search for a movie"
                     type="text"
                     onKeyDown={(e) => {
-                        if (e.key === "Enter") onConfirmSearch(/*searchInput*/);
+                        if (e.key === "Enter") onConfirmSearch(searchInput);
                     }}
                     onChange={(e) => setSearchInput(e.target.value)}
                     className={`${props.className} w-full sm:text-[1rem] text-sm outline-none placeholder-black py-[0.6rem] px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
                 />
-                <Image src={searchIcon} alt={"search_icon.svg"} width={25} height={25}
-                       className="absolute right-2 cursor-pointer sm:scale-[140%] sm:mr-2"></Image></div>
+                <Image src={searchIcon}
+                       alt={"search_icon.svg"}
+                       width={25}
+                       height={25}
+                       className="absolute right-2 cursor-pointer sm:scale-[140%] sm:mr-2"
+                       onClick={() => onConfirmSearch(searchInput)}></Image>
+            </div>
         </div>
     );
 }
 
-// Note: commented out the 'input' argument to 
-// prevent Typescript error
-function onConfirmSearch(/*input: string*/) {
-    //TODO: Make search functional for the header
+function onConfirmSearch(input: string) {
+    redirect(`/search?title=${input}`);
 }
 
 type ProfileButtonProps = {
