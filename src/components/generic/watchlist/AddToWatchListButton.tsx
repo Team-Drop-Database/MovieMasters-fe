@@ -1,7 +1,7 @@
 'use client';
 
 import { addToWatchlist, removeFromWatchlist, updateWatchedStatus, WatchedState } from "@/services/WatchListService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function AddToWatchListButton({params}: {
@@ -9,6 +9,7 @@ export default function AddToWatchListButton({params}: {
     initialWatchedStatus: WatchedState,
     userId: number,
     movieId: number,
+    onValueChange?: ((newValue: WatchedState) => void),
   }
 }) {
 
@@ -58,6 +59,12 @@ export default function AddToWatchListButton({params}: {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (params.onValueChange !== undefined) {
+      params.onValueChange(watchStatus)
+    }
+  }, [watchStatus])
 
   if (error) {
     return <p className="mt-4 text-red-500">{error}</p>;

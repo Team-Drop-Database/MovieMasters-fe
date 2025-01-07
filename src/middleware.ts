@@ -1,7 +1,7 @@
 import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
 
-const AUTH_REQUIRED_PATHS = new Set(['/mywatchlist']);
+const AUTH_REQUIRED_PATHS = new Set(['/mywatchlist', '/friends', '/profile']);
 const PUBLIC_ONLY_PATHS = new Set(['/signin', '/signup']);
 const HOME_PATH = '/';
 const SIGNIN_PATH = '/signin';
@@ -31,5 +31,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/signin', '/signup', '/mywatchlist'],
+  matcher: ['/signin', '/signup', '/mywatchlist', '/friends', '/profile'],
 };

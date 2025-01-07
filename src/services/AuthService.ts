@@ -14,12 +14,14 @@ export async function loginUser(username: string, password: string): Promise<{ a
   try {
     const response = await fetch(url, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({username, password}),
     });
 
     if (!response.ok) {
-      throw new Error('Login failed: Incorrect username and/or password');
+      throw new Error('Incorrect username and/or password');
     }
 
     const {accessToken, refreshToken} = await response.json();

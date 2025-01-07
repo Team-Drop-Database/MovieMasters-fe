@@ -29,3 +29,48 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
     return "Something went wrong while trying to get the movie with ID: " + movieId;
   }
 }
+
+export async function getMovieByTitle(movieTitle: string | null, page: number): Promise<Movie[]> {
+  const endpoint = `/movies?title=${movieTitle}&page=${page}`
+
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return [];
+      }
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
+
+export async function getNumberOfPages(movieTitle: string | null): Promise<number> {
+  movieTitle = movieTitle === null ? '' : movieTitle;
+  const endpoint = `/movies/pages?title=${movieTitle}`
+
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return 0;
+      }
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
