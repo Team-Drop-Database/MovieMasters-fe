@@ -19,5 +19,5 @@ export default function ElementTransition({ children, startYState }:
     };
   }, []);
 
-  return <div className="page-content -z-10">{children}</div>;
+  return <div className="page-content">{children}</div>;
 }
