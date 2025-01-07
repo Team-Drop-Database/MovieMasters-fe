@@ -7,7 +7,7 @@ import { navigateToLogin } from "@/utils/navigation/HomeNavigation";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import {fetchUserData, updateUser, uploadImageToImgbb} from "@/services/UserService";
+import {deleteUser, fetchUserData, updateUser, uploadImageToImgbb} from "@/services/UserService";
 import neutral from "@/assets/images/no-profile-pic.jpg"
 
 export default function Profile() {
@@ -16,7 +16,7 @@ export default function Profile() {
     username: "",
     email: ""
   }
-  const {isLoggedIn, userDetails, login} = useAuthContext();
+  const {isLoggedIn, userDetails, login, logout} = useAuthContext();
   const [isEditing, setIsEditing] = useState(false)
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const [profileData, setProfileData] = useState(profile);
@@ -154,6 +154,29 @@ export default function Profile() {
     setSelectedFile(null);
   };
 
+  async function handleDeleteUser(userID: number | undefined) {
+    const confirmDelete = window.confirm("Are you sure you want to delete your account? " +
+      "This action cannot be undone.");
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      await deleteUser(userID);
+      alert("Your account has been succesfully deleted.");
+
+      logout();
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error deleting account: ", error.message);
+        setError(error.message);
+      } else {
+        console.error("An unkown error occured.");
+      }
+    }
+  }
+
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-sm p-6 rounded-lg mt-6 bg-background_secondary">
@@ -214,6 +237,17 @@ export default function Profile() {
             onClick={toggleEditMode}
           />
         </div>
+        {!isEditing && (
+          <div className="ml-10 mr-10 mt-5">
+            <button
+              onClick={() => handleDeleteUser(userDetails?.userId)}
+              className="w-full shadow-md rounded px-3 py-1 bg-red-600 hover:bg-red-700 hover:duration-300
+              duration-300 hover:cursor-pointer font-[family-name:var(--font-alatsi)] text-xl"
+            >
+              Delete Account
+            </button>
+          </div>
+        )}
         {isEditing && (
           <div className="ml-10 mr-10 mt-5">
             <Button

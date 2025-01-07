@@ -51,7 +51,7 @@ export async function updateUser(
   return await response.json();
 }
 
-export async function deleteUser(userId: number) {
+export async function deleteUser(userId: number | undefined) {
   const endpoint = `/users/${userId}`;
   const response = await apiClient(endpoint, {
     method: "DELETE",
