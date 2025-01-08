@@ -14,11 +14,12 @@ services:
     container_name: nginx_server
     ports:
       - "3000:3000"
-      - "443:443"
+      - "442:443"
     depends_on:
       - nextjs
     networks:
       - movie_master_frontend
 
 networks:
-    movie_master_frontend: {}
+    movie_master_frontend:
+      external: true
