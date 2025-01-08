@@ -2,17 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import Movie from "@/models/Movie";
-import getMovieById from "@/services/MovieService";
 import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
 import {useAuthContext} from "@/contexts/AuthContext";
 import ElementTransition from '@/components/generic/transitions/ElementTransition';
 import Loading from '@/components/generic/Loading';
+import {getMovieById} from "@/services/MovieService";
+import ReviewSection from '@/components/review/ReviewSection';
+import { WatchedState } from '@/services/WatchListService';
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [id, setId] = useState<string | null>(null);
   const [isUserReady, setIsUserReady] = useState<boolean>(false);
+  const [watchedState, setWatchedState] = useState<WatchedState>(WatchedState.UNWATCHED)
   const { userDetails } = useAuthContext();
 
   const fetchMovie = (movieId: string) => {
@@ -59,7 +62,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
   if (typeof movie === "string") {
     return <div>{movie}</div>;
   }
-  
+
   const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
 
   return (
@@ -97,13 +100,24 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
           <p className="font-sans">{movie.description}</p>
         </div>
         {isUserReady && (
-          <WatchListButtonWrapper
-            params={{
-              userId: userDetails?.userId as number,
-              movieId: Number(id),
-            }}
-          />
+          <div className="border-b border-slate-400 border-opacity-20 pb-4">
+            <WatchListButtonWrapper
+              params={{
+                userId: userDetails?.userId as number,
+                movieId: Number(id),
+                onValueChange: setWatchedState,
+              }}
+            />
+          </div>
         )}
+        { id !== null &&
+          <ReviewSection
+            movieId={Number(id)}
+            hasWatched={watchedState === WatchedState.WATCHED}
+            onReviewCreated={console.log}
+            className="mt-4"
+          />
+        }
       </div>
     </div>
     </ElementTransition>

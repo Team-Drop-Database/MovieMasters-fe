@@ -1,11 +1,11 @@
 import React from "react"
 import Image from "next/image"
-import { Star } from "@/components/generic/review/Star"
 import { requestReviewsByAmount } from "@/services/ReviewService"
 import { mapReviewResponsesToItems, ReviewItemProps } from "@/utils/mapper/ReviewResponseMaps"
 import neutral from "@/assets/images/no-profile-pic.jpg"
 import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink"
 import ElementTransition from "@/components/generic/transitions/ElementTransition"
+import { ReviewItemStars } from "@/components/generic/review/StarContainer"
 
 export default function LoggedOut() {
   return (
@@ -61,11 +61,11 @@ function ReviewList() {
     <div className="h-72 overflow-hidden mb-[4rem]">
       <div ref={sliderRef} className={`animate-slide w-fit flex gap-16`}>
         { [...reviewList, ...reviewList].map((review, index) => {
-          return <ReviewItem 
+          return <ReviewItem
             reviewerName={review.reviewerName}
             profilePicture={review.profilePicture}
             movieName={review.movieName}
-            starAmount={review.starAmount}
+            rating={review.rating}
             reviewBody={review.reviewBody}
             key={index}
           />
@@ -78,37 +78,23 @@ function ReviewList() {
 function ReviewItem(props: ReviewItemProps) {
   return (
     <div className="h-72 w-72 py-6 px-4 shrink-0 flex flex-col rounded-xl border border-slate-500 border-opacity-10 gap-5 shadow-2xl">
-      <p className="font-inter font-semibold border-b border-b-slate-500 border-opacity-20 text-xl pb-2">{props.movieName}</p>
-      
+      <p className="font-inter font-semibold border-b border-b-slate-500 border-opacity-20 text-xl pb-2">
+        {props.movieName}
+      </p>
+
       <div className="flex items-start gap-2">
-        <Image
-          src={props.profilePicture || neutral}
-          width={45}
-          height={45}
-          alt="Profile picture"
-          className="rounded-full"
-        />
+        <div className="relative w-[45px] h-[45px]">
+          <Image
+            src={props.profilePicture || neutral}
+            alt="Profile picture"
+            fill
+            className="rounded-full object-cover"
+          />
+        </div>
         <p className="grow">{props.reviewerName}</p>
       </div>
-      <ReviewItemStars starAmount={props.starAmount} />
-
+      <ReviewItemStars rating={props.rating} />
       <p className="font-inter font-medium">{props.reviewBody}</p>
     </div>
-  )
-}
-
-type ReviewItemStarsProps = {
-  starAmount: number
-}
-
-function ReviewItemStars({ starAmount }: ReviewItemStarsProps) {
-  return (
-    <div className="flex gap-2">
-      <Star isYellow={starAmount >= 1} />
-      <Star isYellow={starAmount >= 2} />
-      <Star isYellow={starAmount >= 3} />
-      <Star isYellow={starAmount >= 4} />
-      <Star isYellow={starAmount >= 5} />
-    </div>
-  )
+  );
 }
