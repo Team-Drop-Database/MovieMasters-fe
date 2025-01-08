@@ -3,20 +3,21 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import logo from "@/assets/images/logo_nobg.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
-import {useAuthContext} from "@/contexts/AuthContext";
+import { useAuthContext } from "@/contexts/AuthContext";
 import searchIcon from "@/assets/images/search_icon_black.svg"
-import neutral from "@/assets/images/no-profile-pic.jpg"
+import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg"
 import hamburgerIcon from "@/assets/images/hamburger.svg"
+import caretDownIcon from "@/assets/images/caret-down.svg"
 import {redirect, usePathname} from "next/navigation"
 
 export default function Header() {
   const {isLoggedIn, userDetails, logout} = useAuthContext();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
-  const dropdownMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileDropdownMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const [isSticky, setIsSticky] = useState(false);
 
-  const [isDropdownMenuShown, setIsDropdownMenuShown] = useState(false);
+  const [isMobileDropdownMenuShown, setIsMobileDropdownMenuShown] = useState(false);
 
   // Adds the 'sticky' effect to the header/navbar.
   useEffect(() => {
@@ -45,8 +46,8 @@ export default function Header() {
     };
   }, []);
 
-  function handleIsDropdownMenuShown() {
-    setIsDropdownMenuShown(!isDropdownMenuShown);
+  function handleIsMobileDropdownMenuShown() {
+    setIsMobileDropdownMenuShown(!isMobileDropdownMenuShown);
   }
 
   return (
@@ -76,36 +77,36 @@ export default function Header() {
             <div className="flex items-center basis-[30%] sm:gap-5 sm:pl-3 justify-end">
               <BasicTransitionLink href={"/mywatchlist"}>
                 <div
-                  className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">My
+                  className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">
                   Watchlist
                 </div>
               </BasicTransitionLink>
               <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={logout}
-                             handleDropdownMenu={handleIsDropdownMenuShown}/>
+                             handleMobileDropdownMenu={handleIsMobileDropdownMenuShown}/>
             </div>
           ) : (
             <div className="flex sm:gap-5 basis-[30%] justify-end">
               <BasicTransitionLink href={"/signup"}>
                 <div
-                  className="max-sm:hidden sm:text-xl py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign
+                  className="max-sm:hidden md:text-xl py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Sign
                   up
                 </div>
               </BasicTransitionLink>
               <BasicTransitionLink href={"/signin"}>
                 <div
-                  className="max-sm:hidden sm:text-xl py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Log
+                  className="max-sm:hidden md:text-xl py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">Log
                   in
                 </div>
               </BasicTransitionLink>
-              <button className="sm:hidden" ref={dropdownMenuButtonRef}
-                      onClick={handleIsDropdownMenuShown}>
+              <button className="sm:hidden" ref={mobileDropdownMenuButtonRef}
+                      onClick={handleIsMobileDropdownMenuShown}>
                 <Image src={hamburgerIcon} alt="hamburger icon" width={40} height={40}></Image>
               </button>
             </div>
           )}
         </div>
       </div>
-      {isDropdownMenuShown ? <DropdownMenu isLoggedIn={isLoggedIn} logout={logout}/> : ''}
+      {isMobileDropdownMenuShown ? <MobileDropdownMenu isLoggedIn={isLoggedIn} logout={logout}/> : ''}
     </header>
   );
 }
@@ -115,7 +116,7 @@ type DropdownMenuProps = {
   logout: () => void
 }
 
-function DropdownMenu(props: DropdownMenuProps) {
+function MobileDropdownMenu(props: DropdownMenuProps) {
   const currentPath = usePathname();
 
   const renderMenuItems = useCallback(() => {
@@ -142,7 +143,7 @@ function DropdownMenu(props: DropdownMenuProps) {
   }, [currentPath]);
 
   return (
-    <div className="w-full bg-background_primary sm:hidden">
+    <div className="absolute w-full bg-background_primary sm:hidden">
       {props.isLoggedIn
         ?
         (<div>
@@ -152,8 +153,11 @@ function DropdownMenu(props: DropdownMenuProps) {
           <BasicTransitionLink href={"/mywatchlist"}>
             <p className="font-[family-name:var(--font-alatsi)] p-3">Watchlist</p>
           </BasicTransitionLink>
+          <BasicTransitionLink href={"/friends"}>
+            <p className="font-[family-name:var(--font-alatsi)] p-3">Friends</p>
+          </BasicTransitionLink>
           <hr className="w-2/3 mx-2"/>
-          <p className="font-[family-name:var(--font-alatsi)] p-3 cursor-pointer" onClick={props.logout}>Log
+          <p className="text-red-600 font-[family-name:var(--font-alatsi)] p-3 cursor-pointer" onClick={props.logout}>Log
             out</p>
         </div>)
         :
@@ -202,10 +206,10 @@ type ProfileButtonProps = {
   username?: string;
   profileUrl?: string;
   logout: () => void;
-  handleDropdownMenu: void;
+  handleMobileDropdownMenu: () => void;
 };
 
-function ProfileButton({username, profileUrl, logout}: ProfileButtonProps) {
+function ProfileButton({username, profileUrl, logout, handleMobileDropdownMenu}: ProfileButtonProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -235,44 +239,60 @@ function ProfileButton({username, profileUrl, logout}: ProfileButtonProps) {
   }, [isDropdownOpen]);
 
   return (
-    <div className="relative profile-button-dropdown">
-      <div
-        onClick={toggleDropdown}
-        className="flex items-center gap-5 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
-      >
-        <p className="details">{username || "Username"}</p>
-        <div className="relative w-[55px] h-[55px]">
+      <div>
+        <div
+            className="sm:hidden flex items-center gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
+            onClick={handleMobileDropdownMenu}>
           <Image
-            src={profileUrl || neutral}
-            alt="Profile"
-            fill
-            sizes="55px"
-            className="rounded-full object-cover shadow-md"
+              className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md"
+              src={profileUrl || defaultProfilePicture}
+              alt="Profile"
+              width={50}
+              height={50}
+          />
+          <Image
+              src={caretDownIcon}
+              alt="caret down icon"
+              height={10}
+              width={10}
           />
         </div>
-      </div>
-      {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
-          <BasicTransitionLink href="/profile">
-            <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
-              My Profile
-            </div>
-          </BasicTransitionLink>
-          <BasicTransitionLink href="/friends">
-            <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
-              Friends
-            </div>
-          </BasicTransitionLink>
+        <div className="max-sm:hidden relative profile-button-dropdown">
           <div
-            className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg"
-            onClick={() => {
-              logout();
-              closeDropdown();
-            }}
-          >Logout
+              className="flex items-center gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
+              onClick={toggleDropdown}>
+            <p className="font-[family-name:var(--font-jura)] max-sm:text-sm max-md:text-md max-lg:text-lg">{username || "Username"}</p>
+              <Image
+                  className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md"
+                  src={profileUrl || defaultProfilePicture}
+                  alt="Profile"
+                  width={50}
+                  height={50}
+              />
           </div>
+          {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
+                <BasicTransitionLink href="/profile">
+                  <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
+                    Profile
+                  </div>
+                </BasicTransitionLink>
+                <BasicTransitionLink href="/friends">
+                  <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
+                    Friends
+                  </div>
+                </BasicTransitionLink>
+                <div
+                    className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg"
+                    onClick={() => {
+                      logout();
+                      closeDropdown();
+                    }}
+                >Logout
+                </div>
+              </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
   );
 }
