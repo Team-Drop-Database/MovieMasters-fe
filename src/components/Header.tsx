@@ -143,7 +143,7 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
   }, [currentPath]);
 
   return (
-    <div className="w-full bg-background_primary sm:hidden">
+    <div className="absolute w-full bg-background_primary sm:hidden">
       {props.isLoggedIn
         ?
         (<div>
