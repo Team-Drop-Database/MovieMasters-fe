@@ -33,8 +33,8 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
   const [showNextButton, setShowNextButton] = React.useState(false)
 
   React.useEffect(() => {
-    let sliderWidth = movieItems.length * (MOVIE_ITEM_WIDTH + MOVIE_ITEM_GAP)
-    let containerWidth = window.innerWidth - LEFT_MARGIN
+    const sliderWidth = movieItems.length * (MOVIE_ITEM_WIDTH + MOVIE_ITEM_GAP)
+    const containerWidth = window.innerWidth - LEFT_MARGIN
     if (sliderWidth >= containerWidth) {
       setMovies([...movieItems, ...movieItems])
       setShowNextButton(true)
@@ -44,10 +44,10 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
   }, [movieItems])
 
   function scrollMovies(direction: ScrollDirection) {
-    let visibleSliderWidth = window.innerWidth - LEFT_MARGIN
-    let widthPerItem = MOVIE_ITEM_WIDTH + MOVIE_ITEM_GAP
-    let itemsInView = Math.floor(visibleSliderWidth / widthPerItem)
-    let completeSliderWidth = movieItems.length * widthPerItem
+    const visibleSliderWidth = window.innerWidth - LEFT_MARGIN
+    const widthPerItem = MOVIE_ITEM_WIDTH + MOVIE_ITEM_GAP
+    const itemsInView = Math.floor(visibleSliderWidth / widthPerItem)
+    const completeSliderWidth = movieItems.length * widthPerItem
 
     let deltaOffset = itemsInView * widthPerItem
     if (direction === ScrollDirection.Forward) {
@@ -55,7 +55,7 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
     }
 
     let newOffset = pagerOffset + deltaOffset
-    let reachedEnd = Math.abs(newOffset) >= completeSliderWidth
+    const reachedEnd = Math.abs(newOffset) >= completeSliderWidth
     if (reachedEnd) {
       newOffset = completeSliderWidth * -1
     }
