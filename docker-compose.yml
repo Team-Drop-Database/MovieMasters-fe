@@ -21,4 +21,5 @@ services:
       - movie_master_frontend
 
 networks:
-    movie_master_frontend: {}
+    movie_master_frontend:
+      external: true
