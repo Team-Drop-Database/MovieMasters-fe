@@ -5,6 +5,7 @@ import {useEffect, useRef, useState} from "react";
 import DisplayMovies from "@/components/generic/search/DisplayMovies";
 import {useSearchParams} from "next/navigation";
 import {Suspense} from 'react';
+import ElementTransition from "@/components/generic/transitions/ElementTransition";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -116,8 +117,9 @@ function SearchContent() {
 
   if (movies.length > 0) {
     return (
-      <div className="mx-5">
-        <h1 className="mb-5">Results for movies with title: '{title}'</h1>
+      <ElementTransition startYState={50}>
+<div className="mx-5">
+        <h1 className="mb-5">Results for movies with title: {title}</h1>
         <DisplayMovies movies={movies}/>
         <div className="flex justify-center space-x-2 text-xl mt-5">
           <button disabled={pageNumber <= 1}
@@ -138,6 +140,7 @@ function SearchContent() {
           </button>
         </div>
       </div>
+      </ElementTransition>
     );
   } else {
     return (
