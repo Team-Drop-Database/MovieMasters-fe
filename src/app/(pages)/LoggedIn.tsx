@@ -21,7 +21,7 @@ export default function LoggedIn({ userDetails }: LoggedInProps) {
 
   return (
     <div className="flex flex-col py-2">
-      <h1 className="mx-[4rem]">Welcome back {userDetails?.username}</h1>
+      <h1 className="mx-[4rem]">Welcome {userDetails?.username}!</h1>
       <TitledHorizontalMoviePager title="Trending Movies" movieItems={trendingMovies} />
     </div>
   )

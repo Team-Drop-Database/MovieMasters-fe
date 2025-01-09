@@ -88,6 +88,7 @@ function ReviewItem(props: ReviewItemProps) {
             src={props.profilePicture || neutral}
             alt="Profile picture"
             fill
+            sizes="45"
             className="rounded-full object-cover"
           />
         </div>

@@ -20,6 +20,7 @@ export default function PostReviewContainer({ movieId, userId, onReviewPosted }:
     try {
       const createdReview = await postReview(userId, movieId, rating, reviewBody)
       onReviewPosted(createdReview)
+      setReviewBody("");
     } catch(error: unknown) {
       if (error instanceof Error) {
         setErrorMessage(error.message)
