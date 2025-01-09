@@ -1,0 +1,13 @@
+stages:
+  - build
+
+build_job:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+      when: always
+  only:
+    - merge_requests
