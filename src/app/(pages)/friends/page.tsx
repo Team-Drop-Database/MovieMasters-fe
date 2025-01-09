@@ -6,16 +6,26 @@ import { Button } from "@/components/generic/Button";
 import {addFriend, deleteFriend, getFriendsByStatus, updateFriendshipStatus} from "@/services/FriendService";
 import {useAuthContext} from "@/contexts/AuthContext";
 import neutral from "@/assets/images/no-profile-pic.jpg";
+import SuccessAlert from "@/components/generic/alert/SuccessAlert";
+import ConfirmDialog from "@/components/generic/alert/ConfirmDialog";
 
 export default function Friends() {
   const {userDetails} = useAuthContext();
   const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [newFriendUsername, setNewFriendUsername] = useState("");
   const [friends, setFriends] = useState([]);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
+  const [selectedUsername, setSelectedUsername] = useState<string | null>(null);
   const [friendRequests, setFriendRequests] = useState([]);
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
+    if (userDetails === null) {
+      return;
+    }
+
     fetchFriends();
     fetchFriendRequests();
   }, [userDetails]);
@@ -61,7 +71,9 @@ export default function Friends() {
       try {
         const response = await addFriend(newFriendUsername);
 
-        alert(`Friend request sent to ${response.friendUsername}`);
+        // alert(`Friend request sent to ${response.friendUsername}`);
+        setSuccessMessage(`Friend request sent to ${response.friendUsername}`);
+        setShowSuccessAlert(true);
 
         setNewFriendUsername("");
         setIsAddingFriend(false);
@@ -110,15 +122,16 @@ export default function Friends() {
   };
 
   const handleDeleteFriend = async (username: string) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete ${username} as a friend?`);
+    // Show the confirmation dialog
+    setSelectedUsername(username);
+    setIsConfirmDialogVisible(true);
+  };
 
-    if (!confirmDelete) {
-      return;
-    }
+  const confirmDeleteFriend = async () => {
+    if (!selectedUsername) return;
 
     try {
-      await deleteFriend(username);
-
+      await deleteFriend(selectedUsername);
       fetchFriends();
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -126,13 +139,28 @@ export default function Friends() {
       } else {
         setError("An unknown error occurred.");
       }
+    } finally {
+      setIsConfirmDialogVisible(false);
+      setSelectedUsername(null);
     }
-  }
+  };
+
+  const cancelDeleteFriend = () => {
+    setIsConfirmDialogVisible(false);
+    setSelectedUsername(null);
+  };
 
   return (
     <div className="flex flex-col items-center">
-      {error && (
-        <div>{error}</div>
+      {showSuccessAlert && (
+        <SuccessAlert message={successMessage} onClose={() => setShowSuccessAlert(false)}/>
+      )}
+      {isConfirmDialogVisible && (
+        <ConfirmDialog
+          message={`Are you sure want to delete ${selectedUsername} as a friend?`}
+          onConfirm={confirmDeleteFriend}
+          onCancel={cancelDeleteFriend}
+        />
       )}
       {isAddingFriend ? (
         <div className="w-full max-w-sm p-6 rounded-lg bg-background_secondary mt-6">
@@ -219,6 +247,9 @@ export default function Friends() {
             <Button text="Add Friend" onClick={toggleFriendMode} />
           </div>
         </>
+      )}
+      {error && (
+        <div className="text-red-500">{error}</div>
       )}
     </div>
   );
