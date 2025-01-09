@@ -1,6 +1,6 @@
 'use client';
 import ElementTransition from "@/components/generic/transitions/ElementTransition";
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import WatchlistItem from "@/models/WatchListItem";
 import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
@@ -105,7 +105,7 @@ export default function MyWatchList() {
   if (watchlist.length === 0) {
     pageContent = (
       <div>
-        <h2 className="text-3xl mb-[900px]">Still empty here...</h2>
+        <h2 className="text-2xl">Still empty here...</h2>
         <p>Add some movies to make them show up here!</p>
       </div>
     );
@@ -135,6 +135,7 @@ export default function MyWatchList() {
       className="flex flex-col items-left pb-10 px-10
          font-[family-name:var(--font-alatsi)]"
     >
+        <h1 className="mb-3">Watchlist</h1>
       {pageContent}
     </div>
   );

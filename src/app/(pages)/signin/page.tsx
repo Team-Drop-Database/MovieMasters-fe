@@ -58,7 +58,7 @@ export default function Page() {
                                    hover:cursor-text"
                 required
             />
-            <div className="h-1">
+            <div className="h-3">
               {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
             </div>
             <div className="text-center mb-1">

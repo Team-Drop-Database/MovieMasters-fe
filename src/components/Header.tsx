@@ -1,7 +1,7 @@
 "use client";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import Image from "next/image";
-import logo from "@/assets/images/logo_nobg.png"
+import logo from "@/assets/images/logo_nobg2.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
 import searchIcon from "@/assets/images/search_icon_black.svg"

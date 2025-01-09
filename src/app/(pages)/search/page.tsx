@@ -117,7 +117,7 @@ function SearchContent() {
   if (movies.length > 0) {
     return (
       <div className="mx-5">
-        <h1 className="mb-5">Results for movies with title: {title}</h1>
+        <h1 className="mb-5">Results for movies with title: '{title}'</h1>
         <DisplayMovies movies={movies}/>
         <div className="flex justify-center space-x-2 text-xl mt-5">
           <button disabled={pageNumber <= 1}
@@ -143,7 +143,7 @@ function SearchContent() {
     return (
       <div className="flex flex-col items-center">
         <h1>No movies are found.</h1>
-        <div>No movies found with title: {title}</div>
+        <div>No movies found with title: '{title}'</div>
       </div>
     );
   }
