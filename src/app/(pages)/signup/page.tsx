@@ -118,7 +118,7 @@ export default function Page() {
                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                          hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
             />
-            <div className="h-1">
+            <div className="h-3">
               {formErrors.password !== "" && <p className="text-base text-red-600">{formErrors.password}</p>}
               {errorMessage && <p className="text-base text-red-600">{errorMessage}</p>}
               {successMessage && <p className="text-base text-green-600">{successMessage}</p>}

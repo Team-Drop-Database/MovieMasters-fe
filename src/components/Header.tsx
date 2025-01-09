@@ -1,7 +1,7 @@
 "use client";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import Image from "next/image";
-import logo from "@/assets/images/logo_nobg.png"
+import logo from "@/assets/images/clapperboard.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
 import searchIcon from "@/assets/images/search_icon_black.svg"
@@ -9,6 +9,7 @@ import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg"
 import hamburgerIcon from "@/assets/images/hamburger.svg"
 import caretDownIcon from "@/assets/images/caret-down.svg"
 import {redirect, usePathname} from "next/navigation"
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const {isLoggedIn, userDetails, logout} = useAuthContext();
@@ -16,8 +17,14 @@ export default function Header() {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const mobileDropdownMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const [isSticky, setIsSticky] = useState(false);
+  const router = useRouter();
 
   const [isMobileDropdownMenuShown, setIsMobileDropdownMenuShown] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
 
   // Adds the 'sticky' effect to the header/navbar.
   useEffect(() => {
@@ -61,8 +68,8 @@ export default function Header() {
               <div className="flex items-center md:gap-2 group">
                 <Image
                   src={logo}
-                  width={55}
-                  height={55}
+                  width={50}
+                  height={50}
                   alt="logo"
                   className="rounded-md cursor-pointer sm:scale-125 sm:mr-2"
                 />
@@ -81,7 +88,7 @@ export default function Header() {
                   Watchlist
                 </div>
               </BasicTransitionLink>
-              <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={logout}
+              <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={handleLogout}
                              handleMobileDropdownMenu={handleIsMobileDropdownMenuShown}/>
             </div>
           ) : (
@@ -106,7 +113,7 @@ export default function Header() {
           )}
         </div>
       </div>
-      {isMobileDropdownMenuShown ? <MobileDropdownMenu isLoggedIn={isLoggedIn} logout={logout}/> : ''}
+      {isMobileDropdownMenuShown ? <MobileDropdownMenu isLoggedIn={isLoggedIn} logout={handleLogout}/> : ''}
     </header>
   );
 }

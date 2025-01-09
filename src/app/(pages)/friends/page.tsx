@@ -22,6 +22,10 @@ export default function Friends() {
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
+    if (userDetails === null) {
+      return;
+    }
+
     fetchFriends();
     fetchFriendRequests();
   }, [userDetails]);
