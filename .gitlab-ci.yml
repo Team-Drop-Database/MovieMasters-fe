@@ -6,6 +6,8 @@ build_job:
   script:
     - npm install
     - npm run build
+  tags:
+    - hva
   rules:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
       when: always
