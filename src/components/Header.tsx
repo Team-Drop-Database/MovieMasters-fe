@@ -1,7 +1,7 @@
 "use client";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import Image from "next/image";
-import logo from "@/assets/images/logo_nobg2.png"
+import logo from "@/assets/images/clapperboard.png"
 import BasicTransitionLink from "./generic/transitions/BasicTransitionLink";
 import { useAuthContext } from "@/contexts/AuthContext";
 import searchIcon from "@/assets/images/search_icon_black.svg"
@@ -61,8 +61,8 @@ export default function Header() {
               <div className="flex items-center md:gap-2 group">
                 <Image
                   src={logo}
-                  width={55}
-                  height={55}
+                  width={50}
+                  height={50}
                   alt="logo"
                   className="rounded-md cursor-pointer sm:scale-125 sm:mr-2"
                 />
