@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/generic/Button";
-import { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/AuthContext";
 import Loading from "@/components/generic/Loading";
 import Cookies from "js-cookie";
@@ -58,16 +58,12 @@ export default function Profile() {
     return <Loading/>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>
-  }
-
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       // Check file size limit
       if (file.size > 1.4 * 1024 * 1024) { // 1.4MB limit
-        alert("File size must be less than 1.4MB.");
+        setError("File size must be less than 1.4MB.")
         return;
       }
       setSelectedFile(file);
@@ -94,7 +90,7 @@ export default function Profile() {
   async function toggleEditMode() {
     if (isEditing) {
       if (isSaveDisabled) {
-        alert("Please make sure username is 5 or more characters.");
+        setError("Please make sure username is 5 or more characters.")
         return;
       }
 
@@ -135,7 +131,7 @@ export default function Profile() {
         } catch (error) {
           if (error instanceof Error) {
             console.error("Error updating profile: ", error.message);
-            alert("Failed to update profile. Please try again.");
+            setError("Failed to update profile. Please try again.")
           }
         }
       }
@@ -250,6 +246,9 @@ export default function Profile() {
               text="Cancel"
               onClick={cancelEdit}/>
           </div>
+        )}
+        {error && (
+          <div className="text-red-500 mt-1">{error}</div>
         )}
       </div>
     </div>
