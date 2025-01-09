@@ -22,7 +22,7 @@ const SLIDE_TIME = 500
 
 export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizontalMoviePagerProps) {
   const [movies, setMovies] = React.useState<MovieListItemProps[]>([])
-  const [pagerOffset, setPagerOffset] = React.useState(0)
+  const [pagerOffset, setPagerOffset] = React.useState(-250)
   const [pagerProperties, setPagerProperties] = React.useState<React.CSSProperties>({
     left: `${pagerOffset + LEFT_MARGIN}px`,
     position: "relative",
@@ -91,7 +91,7 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
           className={showBackButton ? "" : "opacity-0"}
           enabled={showBackButton}
         />
-        <h1>{title}</h1>
+        <h1 className="font-inter font-semibold mb-6 sm:text-4xl">{title}<span className="text-yellow-500"> trending</span>.</h1>
         <Button 
           text="Next" 
           onClick={() => scrollMovies(ScrollDirection.Forward)} 
@@ -123,18 +123,9 @@ function HorizontalMoviePager({ movieItems, cssProperties }: HorizontalMoviePage
 
 function MovieListItem({ title, posterUrl }: MovieListItemProps) {
   return (
-    <div className="w-min flex flex-col items-center grow-0 shrink-0">
-      <div className="relative w-[250px] h-[250px]">
-        <Image
-          src={posterUrl}
-          alt={`Poster for ${title}`}
-          fill
-          priority
-          sizes="(width: 250px), (height: 250px)"
-          className="shadow-2xl rounded-2xl object-cover"
-        />
-      </div>
-      <p className="w-fill text-center">{title}</p>
+    <div className=" flex flex-col items-center grow-0 shrink-0">
+      <img src={posterUrl} width={250} className="shadow-2xl" alt={`Poster for ${title}`}></img>
+      <p className="font-inter font-semibold mt-2 w-fill text-center max-w-[250px]">{title}</p>
     </div>
   )
 }
