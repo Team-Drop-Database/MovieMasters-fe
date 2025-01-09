@@ -1,6 +1,5 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import TransitionLink from "./TransitionLink";
-import Image from "next/image";
 
 /**
  * Uses the TransitionLink component to construct a standard 
