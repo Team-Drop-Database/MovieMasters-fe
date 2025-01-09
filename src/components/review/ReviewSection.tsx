@@ -69,13 +69,14 @@ function ReviewListItem({ review }: ReviewListItemProps) {
   return (
     <div className="p-2 shrink-0 flex flex-col rounded-xl shadow-lg border-background_secondary border-4 gap-2">
       <div className="flex items-start gap-2">
-        <Image
-          src={review.userProfilePicture || Anonymous}
-          width={45}
-          height={45}
-          alt="Profile picture"
-          className="rounded-full"
-        />
+        <div className="relative w-12 h-12">  {/* 45px x 45px size */}
+          <Image
+            src={review.userProfilePicture || Anonymous}
+            alt="Profile picture"
+            fill
+            className="rounded-full object-cover"
+          />
+        </div>
         <p className="details grow">{review.username}</p>
       </div>
       <ReviewItemStars rating={review.rating} />
