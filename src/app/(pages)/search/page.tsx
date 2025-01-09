@@ -146,7 +146,7 @@ function SearchContent() {
     return (
       <div className="flex flex-col items-center">
         <h1>No movies are found.</h1>
-        <div>No movies found with title: '{title}'</div>
+        <div>{`No movies found with title: '${title}'`}</div>
       </div>
     );
   }

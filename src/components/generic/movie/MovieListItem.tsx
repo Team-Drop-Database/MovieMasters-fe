@@ -1,7 +1,6 @@
 "use client"
 import React from "react";
 import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
-import Image from "next/image";
 import { Button } from "@/components/generic/Button";
 import { setTimeout } from "timers";
 
