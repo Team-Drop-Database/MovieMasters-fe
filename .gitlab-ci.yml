@@ -3,7 +3,7 @@ stages:
 
 build_job:
   stage: build
-  image: node:18-alpine
+  image: node:18-slim
   script:
     - npm install
     - npm run build
