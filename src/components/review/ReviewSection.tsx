@@ -19,26 +19,29 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
   const [reviews, setReviews] = React.useState<ReviewResponse[]>([])
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
 
-  React.useEffect(() => {
-    async function retrieveReviews() {
-      try {
-        const foundReviews = await getReviewsByMovie(movieId)
-        setReviews(foundReviews)
-        setErrorMessage(null)
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setErrorMessage(error.message)
-        }
+  const retrieveReviews = async () => {
+    try {
+      const foundReviews = await getReviewsByMovie(movieId);
+      setReviews(foundReviews);
+      setErrorMessage(null);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
       }
     }
+  };
 
-    retrieveReviews()
-  }, [])
+  React.useEffect(() => {
+    retrieveReviews();
+  }, []);
 
   return (
     <div className={`${className} flex flex-col gap-2`}>
       { isLoggedIn && userDetails?.userId !== undefined && hasWatched &&
-        <PostReviewContainer movieId={movieId} userId={userDetails?.userId} onReviewPosted={onReviewCreated} />
+        <PostReviewContainer movieId={movieId} userId={userDetails?.userId} onReviewPosted={(newReview) => {
+          onReviewCreated(newReview);
+          retrieveReviews();
+        }} />
       }
       { errorMessage && <div className="text-red-800">{errorMessage}</div> }
       <ReviewList reviews={reviews} />
