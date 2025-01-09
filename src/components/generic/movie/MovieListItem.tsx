@@ -22,7 +22,7 @@ const SLIDE_TIME = 500
 
 export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizontalMoviePagerProps) {
   const [movies, setMovies] = React.useState<MovieListItemProps[]>([])
-  const [pagerOffset, setPagerOffset] = React.useState(0)
+  const [pagerOffset, setPagerOffset] = React.useState(-250)
   const [pagerProperties, setPagerProperties] = React.useState<React.CSSProperties>({
     left: `${pagerOffset + LEFT_MARGIN}px`,
     position: "relative",
