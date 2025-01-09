@@ -9,6 +9,7 @@ import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg"
 import hamburgerIcon from "@/assets/images/hamburger.svg"
 import caretDownIcon from "@/assets/images/caret-down.svg"
 import {redirect, usePathname} from "next/navigation"
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const {isLoggedIn, userDetails, logout} = useAuthContext();
@@ -16,8 +17,14 @@ export default function Header() {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const mobileDropdownMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const [isSticky, setIsSticky] = useState(false);
+  const router = useRouter();
 
   const [isMobileDropdownMenuShown, setIsMobileDropdownMenuShown] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
 
   // Adds the 'sticky' effect to the header/navbar.
   useEffect(() => {
@@ -81,7 +88,7 @@ export default function Header() {
                   Watchlist
                 </div>
               </BasicTransitionLink>
-              <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={logout}
+              <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={handleLogout}
                              handleMobileDropdownMenu={handleIsMobileDropdownMenuShown}/>
             </div>
           ) : (
@@ -106,7 +113,7 @@ export default function Header() {
           )}
         </div>
       </div>
-      {isMobileDropdownMenuShown ? <MobileDropdownMenu isLoggedIn={isLoggedIn} logout={logout}/> : ''}
+      {isMobileDropdownMenuShown ? <MobileDropdownMenu isLoggedIn={isLoggedIn} logout={handleLogout}/> : ''}
     </header>
   );
 }
