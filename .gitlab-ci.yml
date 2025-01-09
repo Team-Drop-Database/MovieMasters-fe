@@ -1,7 +1,7 @@
 stages:
   - build
 
-build_job:
+build_check:
   stage: build
   image: node:18-slim
   script:
