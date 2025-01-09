@@ -91,7 +91,7 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
           className={showBackButton ? "" : "opacity-0"}
           enabled={showBackButton}
         />
-        <h1>{title}</h1>
+        <h1 className="font-inter font-semibold mb-6 sm:text-4xl">{title}<span className="text-yellow-500"> trending</span>.</h1>
         <Button 
           text="Next" 
           onClick={() => scrollMovies(ScrollDirection.Forward)} 
