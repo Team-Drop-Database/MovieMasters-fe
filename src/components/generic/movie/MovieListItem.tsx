@@ -122,7 +122,7 @@ function HorizontalMoviePager({ movieItems, cssProperties }: HorizontalMoviePage
 
 function MovieListItem({ title, posterUrl }: MovieListItemProps) {
   return (
-    <div className=" flex flex-col items-center grow-0 shrink-0">
+    <div className=" flex flex-col items-center grow-0 shrink-0 hover:scale-105 transition-transform cursor-pointer">
       <img src={posterUrl} width={250} className="shadow-2xl" alt={`Poster for ${title}`}></img>
       <p className="font-inter font-semibold mt-2 w-fill text-center max-w-[250px]">{title}</p>
     </div>
