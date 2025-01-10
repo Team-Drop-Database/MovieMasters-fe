@@ -82,21 +82,25 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       <div className="flex items-center justify-between px-[4rem] w-full">
+      <div className="flex-col justify-end">
         <Button
-          text="Previous" 
-          onClick={() => scrollMovies(ScrollDirection.Backward)}
-          className={showBackButton ? "" : "opacity-0"}
-          enabled={showBackButton}
-        />
-        <h1 className="font-inter font-semibold mb-6 sm:text-4xl">{title}<span className="text-yellow-500"> trending</span>.</h1>
-        <Button 
-          text="Next" 
-          onClick={() => scrollMovies(ScrollDirection.Forward)} 
-          className={showNextButton ? "" : "opacity-0"}
-          enabled={showNextButton}
-        />
+            text="Previous" 
+            onClick={() => scrollMovies(ScrollDirection.Backward)}
+            className={showBackButton ? "" : "opacity-0"}
+            enabled={showBackButton}
+          />
+      </div>
+        <h1 className="font-inter font-semibold mb-3 sm:text-4xl">{title}<span className="text-yellow-500"> trending</span>.</h1>
+        <div className="flex-col justify-end">
+          <Button 
+            text="Next" 
+            onClick={() => scrollMovies(ScrollDirection.Forward)} 
+            className={showNextButton ? "" : "opacity-0"}
+            enabled={showNextButton}
+          />
+        </div>
       </div>
       <HorizontalMoviePager movieItems={movies} cssProperties={pagerProperties} />
     </div>
@@ -110,7 +114,7 @@ type HorizontalMoviePagerProps = {
 
 function HorizontalMoviePager({ movieItems, cssProperties }: HorizontalMoviePagerProps) {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-x-hidden pt-5">
       <div style={cssProperties} className="w-fit flex gap-5">
         { [...movieItems, ...movieItems].map((item, index) => (
           <MovieListItem key={index} title={item.title} posterUrl={item.posterUrl} />
