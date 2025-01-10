@@ -1,0 +1,14 @@
+stages:
+  - build
+
+build_check:
+  stage: build
+  image: node:18-slim
+  script:
+    - npm install
+    - npm run build
+  tags:
+    - hva
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+      when: always
