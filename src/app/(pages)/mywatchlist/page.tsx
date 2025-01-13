@@ -33,7 +33,6 @@ export default function MyWatchList() {
           const userId = (queryUserid ? queryUserid : userDetails?.userId) as number;
 
           setUsername(searchParams.get('name'));
-          console.log(username);
           const data = await retrieveWatchlistByUser(userId);
           setWatchlist(data);
         }
