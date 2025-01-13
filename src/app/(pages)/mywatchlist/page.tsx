@@ -147,7 +147,7 @@ export default function MyWatchList() {
       className="flex flex-col items-left pb-10 px-10
          font-[family-name:var(--font-alatsi)]"
     >
-        <h1 className="mb-3">Watchlist</h1>
+        <h1 className="mb-3">Watchlist{username ? ' of ' + username : ''}</h1>
       {pageContent}
     </div>
   );
