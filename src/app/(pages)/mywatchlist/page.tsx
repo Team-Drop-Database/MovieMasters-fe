@@ -141,6 +141,8 @@ export default function MyWatchList() {
     );
   }
 
+  // Determines the header based on whether this is your own page 
+  // or that of another user such as a friend
   let pageheader;
   if(username){
     pageheader = <h1 className="mb-3">Watchlist of {username}</h1>
