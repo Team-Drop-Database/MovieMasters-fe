@@ -141,12 +141,19 @@ export default function MyWatchList() {
     );
   }
 
+  let pageheader;
+  if(username){
+    pageheader = <h1 className="mb-3">Watchlist of {username}</h1>
+  }else{
+    pageheader = <h1 className="mb-3">My Watchlist</h1>
+  }
+
   return (
     <div
       className="flex flex-col items-left pb-10 px-10
          font-[family-name:var(--font-alatsi)]"
     >
-        <h1 className="mb-3">Watchlist{username ? ' of ' + username : ''}</h1>
+      {pageheader}
       {pageContent}
     </div>
   );
