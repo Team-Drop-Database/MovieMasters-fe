@@ -6,6 +6,8 @@ import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
 import {useAuthContext} from "@/contexts/AuthContext";
 
+import { useSearchParams } from 'next/navigation';
+
 /**
  * Displays an overview of the movies that a specific user has
  * added on his watchlist, divided into 'Plan to watch' and
