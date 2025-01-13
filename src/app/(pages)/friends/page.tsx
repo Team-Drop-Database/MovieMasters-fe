@@ -8,6 +8,7 @@ import {useAuthContext} from "@/contexts/AuthContext";
 import neutral from "@/assets/images/no-profile-pic.jpg";
 import SuccessAlert from "@/components/generic/alert/SuccessAlert";
 import ConfirmDialog from "@/components/generic/alert/ConfirmDialog";
+import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink";
 
 export default function Friends() {
   const {userDetails} = useAuthContext();
