@@ -39,6 +39,30 @@ export async function retrieveWatchlistByUser(userId: number): Promise<Watchlist
 }
 
 /**
+ * Get a specific watchlist item from a user by the user and movie id
+ * @param userId id of the user
+ * @param movieId id of the movie
+ * @returns Promise containing the watchlist item or null
+ */
+export async function getWatchlistItemFromUser(userId: number, movieId: number): Promise<WatchlistItem | null> {
+  const endpoint = `/users/${userId}/watchlist/movie/${movieId}`
+
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return null;
+  } catch (error: unknown) {
+    if (error instanceof Error)
+      console.error(`Failed to fetch data using query: ${
+        endpoint}.\nError message: ${error.message}`)
+    throw error;
+  }
+}
+
+/**
  * Retrieve the state of a users relation with a movie.
  * This is in 'WatchedState' form.
  *
@@ -50,9 +74,9 @@ export async function retrieveWatchlistByUser(userId: number): Promise<Watchlist
 export async function getWatchedStatus(userId: number, movieId: number): Promise<WatchedState> {
 
   // Fetch the watchlist first
-  let watchlist: WatchlistItem[];
+  let watchlistItem: WatchlistItem | null;
   try {
-    watchlist = await retrieveWatchlistByUser(userId);
+    watchlistItem = await getWatchlistItemFromUser(userId, movieId);
   } catch (error: unknown) {
     if (error instanceof Error)
       console.error(`Failed to lookup 'getWatchedStatus' data
@@ -61,22 +85,12 @@ export async function getWatchedStatus(userId: number, movieId: number): Promise
     return WatchedState.ERROR;
   }
 
-  // Filter on the movieId, check whether its in the list of movies
-  const includesMovie = watchlist
-    .filter((item) => item.movie.id == movieId);
-
-  // Is it on his watchlist? If not, return that
-  const watchListed = includesMovie.length > 0;
-  if (!watchListed)
+  if (!watchlistItem)
     return WatchedState.NOT_WATCHLISTED;
 
-  // Otherwise, take the data and check his watched status
-  const movieAssociation = includesMovie[0];
-  const hasWatched = movieAssociation.watched ?
-    WatchedState.WATCHED : WatchedState.UNWATCHED;
-
   // Return the result
-  return hasWatched;
+  return watchlistItem.watched ?
+    WatchedState.WATCHED : WatchedState.UNWATCHED;
 }
 
 /**
@@ -96,28 +110,6 @@ export async function addToWatchlist(userId: number, movieId: number): Promise<W
     // When adding an item to the watchlist, default
     // behaviour is to set it to unwatched
     return WatchedState.UNWATCHED;
-  } catch (error: unknown) {
-    if (error instanceof Error)
-      console.error(`Failed to update data using query: ${
-        endpoint}.\nError message: ${error.message}`)
-    return WatchedState.ERROR;
-  }
-}
-
-/**
- * Removes a movie from a users' watchlist.
- *
- * @param userId id of the user
- * @param movieId id of the movie
- * @returns enum representing the new watched-state
- * of the user and the movie
- */
-export async function removeFromWatchlist(userId: number, movieId: number): Promise<WatchedState> {
-  const endpoint = `/users/${userId}/watchlist/remove/${movieId}`;
-
-  try {
-    await apiClient(endpoint, {method: 'PUT'});
-    return WatchedState.NOT_WATCHLISTED;
   } catch (error: unknown) {
     if (error instanceof Error)
       console.error(`Failed to update data using query: ${
