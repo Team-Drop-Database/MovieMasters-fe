@@ -34,7 +34,6 @@ export default function Friends() {
   const fetchFriends = async () => {
     try {
       const acceptedFriends = await getFriendsByStatus("ACCEPTED");
-      console.log(acceptedFriends);
       setFriends(acceptedFriends);
     } catch (error: unknown) {
       if (error instanceof Error) {
