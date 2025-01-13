@@ -60,7 +60,7 @@ export async function getReviewsByMovie(movieId: number): Promise<ReviewResponse
   return await response.json()
 }
 
-export async function deleteReview(reviewId: number) {
+export async function deleteReview(reviewId: string) {
   const url = `/reviews?reviewId=${reviewId}`;
   const response = await apiClient(url, {
     method: "DELETE",
@@ -70,5 +70,5 @@ export async function deleteReview(reviewId: number) {
     throw Error(`Failed to delete review. Status: ${response.status}`);
   }
 
-  return await response.json();
+  return response.status;
 }
