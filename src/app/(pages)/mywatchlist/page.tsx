@@ -20,11 +20,16 @@ export default function MyWatchList() {
   const [error, setError] = useState<string | null>(null);
   const { userDetails } = useAuthContext();
 
+  const searchParams = useSearchParams();
+
   useEffect(() => {
+
     async function fetchWatchlist() {
       try {
         if (userDetails) {
-          const data = await retrieveWatchlistByUser(userDetails.userId);
+          const queryUserid = searchParams.get('user');
+          const userId = (queryUserid ? queryUserid : userDetails?.userId) as number;
+          const data = await retrieveWatchlistByUser(userId);
           setWatchlist(data);
         }
       } catch (err: unknown) {
