@@ -22,13 +22,18 @@ export default function MyWatchList() {
 
   const searchParams = useSearchParams();
 
+  const [username, setUsername] = useState<string | null>('');
+
   useEffect(() => {
 
     async function fetchWatchlist() {
       try {
         if (userDetails) {
-          const queryUserid = searchParams.get('user');
+          const queryUserid = searchParams.get('userid');
           const userId = (queryUserid ? queryUserid : userDetails?.userId) as number;
+
+          setUsername(searchParams.get('name'));
+          console.log(username);
           const data = await retrieveWatchlistByUser(userId);
           setWatchlist(data);
         }

@@ -202,7 +202,7 @@ export default function Friends() {
                     <label className="block text-m font-medium">{friendUsername}</label>
                   </div>
                     <div className="flex space-x-2 ml-auto ">
-                    <BasicTransitionLink href={`/mywatchlist?user=${userDetails?.userId == userId ? friendId : userId}`}>
+                    <BasicTransitionLink href={`/mywatchlist?name=${friendUsername}&userid=${userDetails?.userId == userId ? friendId : userId}`}>
                     <div className="px-2 bg-blue-500 hover:bg-indigo-500 transition-all hover:scale-105 rounded-md">Watchlist</div>
                   </BasicTransitionLink>
                       <Image
