@@ -42,7 +42,7 @@ export default function MyWatchList() {
     }
 
     fetchWatchlist();
-  }, [userDetails]);
+  }, [userDetails, searchParams]);
 
   // Divide the list of movies into watched and unwatched
   const watchedMovies = watchlist.filter((item) => item.watched);
