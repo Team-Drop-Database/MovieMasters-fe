@@ -88,6 +88,12 @@ export default function Header() {
                   Watchlist
                 </div>
               </BasicTransitionLink>
+              <BasicTransitionLink href={"/forum"}>
+                <div
+                  className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">
+                  Forum
+                </div>
+              </BasicTransitionLink>
               <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={handleLogout}
                              handleMobileDropdownMenu={handleIsMobileDropdownMenuShown}/>
             </div>
