@@ -34,6 +34,7 @@ export default function Friends() {
   const fetchFriends = async () => {
     try {
       const acceptedFriends = await getFriendsByStatus("ACCEPTED");
+      console.log(acceptedFriends);
       setFriends(acceptedFriends);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -187,7 +188,7 @@ export default function Friends() {
           <div className="flex flex-row justify-center space-x-4 mt-6 w-full">
             <div className="w-2/5 p-6 rounded-lg bg-background_secondary">
               <h1 className="mb-2">Friends</h1>
-              {friends.map(({friendUsername, friendProfilePicture}, index) => (
+              {friends.map(({friendUsername, friendProfilePicture, userId, friendId}, index) => (
                 <div className="flex items-center mb-2" key={index}>
                   <div className="flex items-center space-x-4">
                     <div className="w-[55px] h-[55px] relative">
