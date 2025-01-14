@@ -23,8 +23,8 @@ export async function loginUser(username: string, password: string): Promise<{ a
 
 
     if (!response.ok) {
-      const text = await response.text();
-      const errorMessage = text || 'Incorrect username and/or password';
+      const bodyText = await response.text();
+      const errorMessage = bodyText || 'Failed to login. Please try again later.';
       throw new Error(errorMessage);
     }
 
