@@ -126,13 +126,14 @@ function ReviewListItem({ review, userDetails, onDelete }: ReviewListItemProps) 
         </div>
         <p className="details grow">{review.username}</p>
         {review.username === userDetails?.username && (
-          <button
-            onClick={() => onDelete(review.id)} // Pass the review ID to the delete handler
-            className="text-red-500 hover:text-red-700 p-1 rounded-full focus:outline-none"
-            title="Delete Review"
-          >
-            Delete
-          </button>
+          <Image
+            src="/delete.svg"
+            alt="Delete"
+            width={25}
+            height={25}
+            className="hover:cursor-pointer"
+            onClick={() => onDelete(review.id)}
+          />
         )}
       </div>
       <ReviewItemStars rating={review.rating}/>
