@@ -20,8 +20,12 @@ export async function loginUser(username: string, password: string): Promise<{ a
       body: JSON.stringify({username, password}),
     });
 
+
+
     if (!response.ok) {
-      throw new Error('Incorrect username and/or password');
+      const text = await response.text();
+      const errorMessage = text || 'Incorrect username and/or password';
+      throw new Error(errorMessage);
     }
 
     const {accessToken, refreshToken} = await response.json();
