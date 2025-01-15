@@ -25,6 +25,7 @@ export default function Forum() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const {userDetails} = useAuthContext();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   useEffect(() => {
     fetchTopics().then();
@@ -134,7 +135,7 @@ export default function Forum() {
               value={title}
               onValueChange={setTitle}
               placeholder="Give your topic a title"
-              className="h-10 w-full mb-5"
+              className="h-8 w-full mb-5"
               maxLength={100}
             />
             <label className="text-md block mb-2">Description</label>
@@ -142,7 +143,7 @@ export default function Forum() {
               value={description}
               onValueChange={setDescription}
               placeholder="Explain your topic or share your thoughts"
-              className="h-[7rem] w-full mb-5"
+              className="h-[6.5rem] w-full mb-5"
             />
             <Button
               text="Create Topic"
@@ -155,6 +156,31 @@ export default function Forum() {
 
         <div className="flex justify-between items-center mt-6 mb-4">
           <h2 className="text-3xl">Topics</h2>
+
+          <div className="ml-auto mr-5">
+            <label className="inline-flex items-center cursor-pointer">
+              <span className="mr-2">Show my threads</span>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={isSwitchOn}
+                  onChange={() => setIsSwitchOn(!isSwitchOn)}
+                  className="sr-only"
+                />
+                <div
+                  className={`block w-14 h-8 rounded-full shadow-md transition-colors ${
+                    isSwitchOn ? "bg-blue-800" : "bg-gray-500"
+                  }`}
+                ></div>
+                <div
+                  className={`dot absolute left-1 top-1.5 bg-white w-5 h-5 rounded-full transition-transform ${
+                    isSwitchOn ? "transform translate-x-6 bg-white" : ""
+                  }`}
+                ></div>
+              </div>
+            </label>
+          </div>
+
 
           <div className="relative inline-block" ref={dropdownRef}>
             <Button
