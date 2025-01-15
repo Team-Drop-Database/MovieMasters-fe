@@ -35,6 +35,37 @@ export async function getTopics(): Promise<Topic[]> {
 }
 
 /**
+ * Fetch a topic by its ID from the backend.
+ *
+ * @param topicId The ID of the topic to retrieve.
+ * @returns A promise resolving to the requested topic.
+ */
+export async function getTopicById(topicId: string): Promise<Topic | null> {
+  const endpoint = `/forum/topics/${topicId}`;
+
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    if (response.status === 200) {
+      const topic = await response.json();
+
+      topic.creationDate = new Date(topic.creationDate);
+      topic.formattedCreationDate = formatDateAgo(topic.creationDate);
+      return topic;
+    } else {
+      console.warn(`Failed to fetch topic. Status: ${response.status}`);
+      return null;
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+    throw error;
+  }
+}
+
+
+/**
  * Create a new topic in the forum.
  *
  * @param title The title of the topic.

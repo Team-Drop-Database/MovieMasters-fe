@@ -12,6 +12,7 @@ import {Button} from "@/components/generic/Button";
 import ThreadCreator from "@/components/forum/ThreadCreator";
 import OwnedBySwitch from "@/components/forum/OwnedBySwitch";
 import SortDropdown from "@/components/forum/SortDropdown";
+import Loading from "@/components/generic/Loading";
 
 export default function Forum() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -126,7 +127,7 @@ export default function Forum() {
         </div>
 
         {isLoading ? (
-          <p>Loading threads...</p>
+          <Loading/>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : topics.length === 0 ? (
