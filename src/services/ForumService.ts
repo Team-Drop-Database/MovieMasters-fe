@@ -92,3 +92,34 @@ function formatDateAgo(date: Date): string {
     return `${diffInYears}y ago`;
   }
 }
+
+//Helper function to sort topics
+export function sortTopics(topics: Topic[], option: string, limit: number = topics.length): Topic[] {
+  let sortedTopics = [...topics];
+
+  switch (option) {
+    case "A-Z":
+      sortedTopics.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case "Z-A":
+      sortedTopics.sort((a, b) => b.title.localeCompare(a.title));
+      break;
+    case "Most Popular":
+      sortedTopics.sort((a, b) => b.amountComments - a.amountComments);
+      break;
+    case "Least Popular":
+      sortedTopics.sort((a, b) => a.amountComments - b.amountComments);
+      break;
+    case "Newest":
+      sortedTopics.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+      break;
+    case "Oldest":
+      sortedTopics.sort((a, b) => new Date(a.creationDate).getTime() - new Date(b.creationDate).getTime());
+      break;
+    default:
+      break;
+  }
+
+  // Return only the number of topics specified by the limit
+  return sortedTopics.slice(0, limit);
+}

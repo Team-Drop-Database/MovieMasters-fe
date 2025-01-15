@@ -4,7 +4,7 @@ import React, {useState, useEffect, useRef} from "react";
 import {FaChevronDown} from "react-icons/fa";
 import Image from "next/image";
 import {useAuthContext} from "@/contexts/AuthContext";
-import {createTopic, getTopics} from "@/services/ForumService";
+import {createTopic, getTopics, sortTopics} from "@/services/ForumService";
 import {Button} from "@/components/generic/Button";
 import BigTextField from "@/components/generic/BigTextField";
 import WarningAlert from "@/components/generic/alert/WarningAlert";
@@ -153,11 +153,9 @@ export default function Forum() {
           </div>
         )}
 
-        {/* Flex container for Topics heading and Sort dropdown */}
         <div className="flex justify-between items-center mt-6 mb-4">
           <h2 className="text-3xl">Topics</h2>
 
-          {/* Sort Dropdown */}
           <div className="relative inline-block" ref={dropdownRef}>
             <Button
               onClick={() => setIsDropdownOpen((prev) => !prev)}
@@ -209,33 +207,3 @@ export default function Forum() {
     </div>
   );
 }
-
-// Helper function to handle sorting
-const sortTopics = (topics: Topic[], option: string): Topic[] => {
-  let sortedTopics = [...topics];
-
-  switch (option) {
-    case "A-Z":
-      sortedTopics.sort((a, b) => a.title.localeCompare(b.title));
-      break;
-    case "Z-A":
-      sortedTopics.sort((a, b) => b.title.localeCompare(a.title));
-      break;
-    case "Most Popular":
-      sortedTopics.sort((a, b) => b.amountComments - a.amountComments);
-      break;
-    case "Least Popular":
-      sortedTopics.sort((a, b) => a.amountComments - b.amountComments);
-      break;
-    case "Newest":
-      sortedTopics.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
-      break;
-    case "Oldest":
-      sortedTopics.sort((a, b) => new Date(a.creationDate).getTime() - new Date(b.creationDate).getTime());
-      break;
-    default:
-      break;
-  }
-
-  return sortedTopics;
-};
