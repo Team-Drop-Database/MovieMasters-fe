@@ -17,7 +17,7 @@ interface DisplayTopicsProps {
   topics: Topic[];
 }
 
-const DisplayTopics: React.FC<DisplayTopicsProps> = ({topics}) => {
+const DisplayThreads: React.FC<DisplayTopicsProps> = ({topics}) => {
   const router = useRouter();
 
   const handleTopicClick = (id: number) => {
@@ -59,4 +59,4 @@ const DisplayTopics: React.FC<DisplayTopicsProps> = ({topics}) => {
   );
 };
 
-export default DisplayTopics;
+export default DisplayThreads;

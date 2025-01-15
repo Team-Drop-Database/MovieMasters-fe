@@ -1,31 +1,28 @@
 "use client";
 
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import {FaChevronDown} from "react-icons/fa";
 import Image from "next/image";
 import {useAuthContext} from "@/contexts/AuthContext";
-import {createTopic, getTopics, sortTopics} from "@/services/ForumService";
-import {Button} from "@/components/generic/Button";
-import BigTextField from "@/components/generic/BigTextField";
-import WarningAlert from "@/components/generic/alert/WarningAlert";
+import {getTopics, sortTopics} from "@/services/ForumService";
 import {Topic} from "@/models/Topic";
-import DisplayTopics from "@/components/forum/DisplayTopics";
+import DisplayThreads from "@/components/forum/DisplayThreads";
 import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg";
+import {Button} from "@/components/generic/Button";
+import ThreadCreator from "@/components/forum/ThreadCreator";
+import OwnedBySwitch from "@/components/forum/OwnedBySwitch";
+import SortDropdown from "@/components/forum/SortDropdown";
 
 export default function Forum() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [allTopics, setAllTopics] = useState<Topic[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [visibleTopics, setVisibleTopics] = useState(6);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [warning, setWarning] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState("Newest");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [ownedByMe, setOwnedByMe] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const {userDetails} = useAuthContext();
 
   useEffect(() => {
@@ -41,18 +38,6 @@ export default function Forum() {
     }
   }, [ownedByMe, allTopics, sortOption, userDetails]);
 
-  // Close the dropdown when clicked outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const dropDown = dropdownRef.current;
-      if (dropDown && !dropDown.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const fetchTopics = async () => {
     setIsLoading(true);
     setError(null);
@@ -61,8 +46,7 @@ export default function Forum() {
       setAllTopics(fetchedTopics as Topic[]);
       setTopics(sortTopics(fetchedTopics as Topic[], sortOption));
     } catch (err) {
-      console.error("Failed to load topics:", err);
-      setError("Failed to load topics. Please try again later.");
+      setError("Failed to load threads. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +55,6 @@ export default function Forum() {
   const handleSortChange = (option: string) => {
     setSortOption(option);
     setIsDropdownOpen(false);
-
     const sortedTopics = sortTopics(allTopics, option);
     setTopics(sortedTopics);
   };
@@ -88,33 +71,15 @@ export default function Forum() {
     setVisibleTopics((prev) => Math.min(prev + 6, topics.length));
   };
 
-  const handleCreateTopic = async () => {
-    const trimmedTitle = title.trim();
-    const trimmedDescription = description.trim();
-
-    // Check if either title or description is empty or just spaces
-    if (!trimmedTitle || !trimmedDescription) {
-      setWarning("Both title and description are required!");
-      return;
-    }
-
-    try {
-      await createTopic(trimmedTitle, trimmedDescription);
-      setTitle("");
-      setDescription("");
-      setSortOption("Newest")
-      await fetchTopics();
-      setIsExpanded(false);
-    } catch (err) {
-      setError("Failed to create the topic. Please try again.");
-    }
+  const handleTopicCreated = () => {
+    setSortOption("Newest")
+    fetchTopics().then();
+    setIsExpanded(false);
   };
 
   return (
     <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)] text-white">
       <h1 className="mb-5">Forum</h1>
-
-      {warning && <WarningAlert message={warning} onClose={() => setWarning(null)}/>}
 
       <div className="mx-auto w-full sm:w-3/4 my-5">
         <div
@@ -131,7 +96,7 @@ export default function Forum() {
                 sizes="55px"
               />
             </div>
-            <h2 className="text-2xl">{isExpanded ? "Create a Topic" : "Start a Topic!"}</h2>
+            <h2 className="text-2xl">{isExpanded ? "Create a thread" : "Start a thread!"}</h2>
           </div>
 
           <Image
@@ -143,87 +108,31 @@ export default function Forum() {
           />
         </div>
 
-        {isExpanded && (
-          <div className="bg-background_primary p-5 pt-0 rounded-b-md mb-10 flex flex-col">
-            <label className="text-md block mb-2">Title</label>
-            <BigTextField
-              value={title}
-              onValueChange={setTitle}
-              placeholder="Give your topic a title"
-              className="h-8 w-full mb-5"
-              maxLength={100}
-            />
-            <label className="text-md block mb-2">Description</label>
-            <BigTextField
-              value={description}
-              onValueChange={setDescription}
-              placeholder="Explain your topic or share your thoughts"
-              className="h-[6.5rem] w-full mb-5"
-            />
-            <Button
-              text="Create Topic"
-              onClick={handleCreateTopic}
-              className="self-end"
-              enabled={!!title && !!description}
-            />
-          </div>
-        )}
+        {isExpanded && <ThreadCreator onTopicCreated={handleTopicCreated}/>}
 
         <div className="flex justify-between items-center mt-6 mb-4">
-          <h2 className="text-3xl">Topics</h2>
+          <h2 className="text-3xl">Threads</h2>
 
           <div className="ml-auto mr-5">
-            <label className="inline-flex items-center cursor-pointer">
-              <span className="mr-2">Show my threads</span>
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  checked={ownedByMe}
-                  onChange={handleOwnedByMeChange}
-                  className="sr-only"
-                />
-                <div className={`block w-14 h-8 rounded-full shadow-md transition-colors 
-                ${ownedByMe ? "bg-blue-800" : "bg-gray-500"}`}/>
-                <div className={`dot absolute left-1 top-1.5 bg-white w-5 h-5 rounded-full transition-transform 
-                ${ownedByMe ? "transform translate-x-6 bg-white" : ""}`}/>
-              </div>
-            </label>
+            <OwnedBySwitch ownedByMe={ownedByMe} onChange={handleOwnedByMeChange}/>
           </div>
 
-          <div className="relative inline-block" ref={dropdownRef}>
-            <Button
-              onClick={() => setIsDropdownOpen((prev) => !prev)}
-              text="Sort"
-              className="rounded-md"
-            />
-
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-1 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
-                {["Newest", "Oldest", "Most Popular", "Least Popular", "A-Z", "Z-A"].map((option, index, array) => (
-                  <p
-                    key={option}
-                    className={`cursor-pointer px-4 py-2 text-sm ${sortOption === option ? "bg-blue-800 text-white" : "hover:bg-background_primary"} 
-            ${index === 0 ? "rounded-t-lg" : ""} // Rounded top for the first item
-            ${index === array.length - 1 ? "rounded-b-lg" : ""} // Rounded bottom for the last item
-          `}
-                    onClick={() => handleSortChange(option)}
-                  >
-                    {option}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
+          <SortDropdown
+            sortOption={sortOption}
+            onSortChange={handleSortChange}
+            isDropdownOpen={isDropdownOpen}
+            toggleDropdown={() => setIsDropdownOpen((prev) => !prev)}
+          />
         </div>
 
         {isLoading ? (
-          <p>Loading topics...</p>
+          <p>Loading threads...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : topics.length === 0 ? (
           <p>No topics yet, start one!</p>
         ) : (
-          <DisplayTopics topics={topics.slice(0, visibleTopics)}/>
+          <DisplayThreads topics={topics.slice(0, visibleTopics)}/>
         )}
 
         {visibleTopics < topics.length && (
