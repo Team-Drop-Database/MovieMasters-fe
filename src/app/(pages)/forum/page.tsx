@@ -14,6 +14,7 @@ import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg";
 
 export default function Forum() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [allTopics, setAllTopics] = useState<Topic[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [visibleTopics, setVisibleTopics] = useState(6);
   const [title, setTitle] = useState("");
@@ -23,12 +24,33 @@ export default function Forum() {
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState("Newest");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const {userDetails} = useAuthContext();
+  const [ownedByMe, setOwnedByMe] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const {userDetails} = useAuthContext();
 
   useEffect(() => {
     fetchTopics().then();
+  }, []);
+
+  useEffect(() => {
+    if (ownedByMe) {
+      const filteredTopics = allTopics.filter((topic) => topic.createdByUsername === userDetails?.username);
+      setTopics(sortTopics(filteredTopics, sortOption));
+    } else {
+      setTopics(sortTopics(allTopics, sortOption));
+    }
+  }, [ownedByMe, allTopics, sortOption, userDetails]);
+
+  // Close the dropdown when clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropDown = dropdownRef.current;
+      if (dropDown && !dropDown.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchTopics = async () => {
@@ -36,6 +58,7 @@ export default function Forum() {
     setError(null);
     try {
       const fetchedTopics = await getTopics();
+      setAllTopics(fetchedTopics as Topic[]);
       setTopics(sortTopics(fetchedTopics as Topic[], sortOption));
     } catch (err) {
       console.error("Failed to load topics:", err);
@@ -43,6 +66,18 @@ export default function Forum() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSortChange = (option: string) => {
+    setSortOption(option);
+    setIsDropdownOpen(false);
+
+    const sortedTopics = sortTopics(allTopics, option);
+    setTopics(sortedTopics);
+  };
+
+  const handleOwnedByMeChange = () => {
+    setOwnedByMe(!ownedByMe);
   };
 
   const toggleExpand = () => {
@@ -67,33 +102,13 @@ export default function Forum() {
       await createTopic(trimmedTitle, trimmedDescription);
       setTitle("");
       setDescription("");
+      setSortOption("Newest")
       await fetchTopics();
       setIsExpanded(false);
     } catch (err) {
       setError("Failed to create the topic. Please try again.");
     }
   };
-
-  const handleSortChange = (option: string) => {
-    setSortOption(option);
-    setIsDropdownOpen(false);
-
-    const sortedTopics = sortTopics(topics, option);
-    setTopics(sortedTopics);
-  };
-
-  // Close the dropdown when clicked outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const dropDown = dropdownRef.current;
-      if (dropDown && !dropDown.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
 
   return (
     <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)] text-white">
@@ -163,24 +178,17 @@ export default function Forum() {
               <div className="relative">
                 <input
                   type="checkbox"
-                  checked={isSwitchOn}
-                  onChange={() => setIsSwitchOn(!isSwitchOn)}
+                  checked={ownedByMe}
+                  onChange={handleOwnedByMeChange}
                   className="sr-only"
                 />
-                <div
-                  className={`block w-14 h-8 rounded-full shadow-md transition-colors ${
-                    isSwitchOn ? "bg-blue-800" : "bg-gray-500"
-                  }`}
-                ></div>
-                <div
-                  className={`dot absolute left-1 top-1.5 bg-white w-5 h-5 rounded-full transition-transform ${
-                    isSwitchOn ? "transform translate-x-6 bg-white" : ""
-                  }`}
-                ></div>
+                <div className={`block w-14 h-8 rounded-full shadow-md transition-colors 
+                ${ownedByMe ? "bg-blue-800" : "bg-gray-500"}`}/>
+                <div className={`dot absolute left-1 top-1.5 bg-white w-5 h-5 rounded-full transition-transform 
+                ${ownedByMe ? "transform translate-x-6 bg-white" : ""}`}/>
               </div>
             </label>
           </div>
-
 
           <div className="relative inline-block" ref={dropdownRef}>
             <Button
