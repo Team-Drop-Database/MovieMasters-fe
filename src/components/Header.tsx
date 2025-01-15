@@ -69,7 +69,6 @@ export default function Header() {
                 <Image
                   src={logo}
                   width={50}
-                  height={50}
                   alt="logo"
                   className="rounded-md cursor-pointer sm:scale-125 sm:mr-2"
                 />
