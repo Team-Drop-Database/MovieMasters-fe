@@ -18,7 +18,8 @@ export async function getTopics(): Promise<Topic[]> {
       return topics.map((data) => {
         const topic = data as Topic;
 
-        topic.creationDate = formatDateAgo(topic.creationDate);  // Reassign with formatted date
+        topic.creationDate = new Date(topic.creationDate);
+        topic.formattedCreationDate = formatDateAgo(topic.creationDate);
         return topic;
       });
     } else {
@@ -64,13 +65,11 @@ export async function createTopic(title: string, description: string): Promise<T
 }
 
 //Helper function to format date
-function formatDateAgo(date: string): string {
-  const cleanDate = date.split('.')[0];
+function formatDateAgo(date: Date): string {
+  const cleanDate = date.toString().split('.')[0];
 
   const now = new Date();
   const targetDate = new Date(cleanDate);
-
-  console.log(targetDate)
 
   const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000);
   const diffInMinutes = Math.floor(diffInSeconds / 60);

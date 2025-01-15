@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {FaChevronDown} from "react-icons/fa";
 import Image from "next/image";
 import {useAuthContext} from "@/contexts/AuthContext";
@@ -10,7 +10,7 @@ import BigTextField from "@/components/generic/BigTextField";
 import WarningAlert from "@/components/generic/alert/WarningAlert";
 import {Topic} from "@/models/Topic";
 import DisplayTopics from "@/components/forum/DisplayTopics";
-import defaultProfilePicture from '@/assets/images/no-profile-pic.jpg';
+import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg";
 
 export default function Forum() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -21,16 +21,21 @@ export default function Forum() {
   const [isLoading, setIsLoading] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const [sortOption, setSortOption] = useState("Newest");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const {userDetails} = useAuthContext();
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // Fetch topics from the backend
+  useEffect(() => {
+    fetchTopics().then();
+  }, []);
+
   const fetchTopics = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const fetchedTopics = await getTopics();
-      setTopics(fetchedTopics as Topic[]);
+      setTopics(sortTopics(fetchedTopics as Topic[], sortOption));
     } catch (err) {
       console.error("Failed to load topics:", err);
       setError("Failed to load topics. Please try again later.");
@@ -39,13 +44,8 @@ export default function Forum() {
     }
   };
 
-  // Fetch topics on component mount
-  useEffect(() => {
-    fetchTopics().then();
-  }, []);
-
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded((prev) => !prev);
   };
 
   const loadMoreTopics = () => {
@@ -72,6 +72,27 @@ export default function Forum() {
       setError("Failed to create the topic. Please try again.");
     }
   };
+
+  const handleSortChange = (option: string) => {
+    setSortOption(option);
+    setIsDropdownOpen(false);
+
+    const sortedTopics = sortTopics(topics, option);
+    setTopics(sortedTopics);
+  };
+
+  // Close the dropdown when clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropDown = dropdownRef.current;
+      if (dropDown && !dropDown.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
 
   return (
     <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)] text-white">
@@ -132,19 +153,46 @@ export default function Forum() {
           </div>
         )}
 
-        <div>
-          <h2 className="text-3xl mb-3 mt-6">Topics</h2>
+        {/* Flex container for Topics heading and Sort dropdown */}
+        <div className="flex justify-between items-center mt-6 mb-4">
+          <h2 className="text-3xl">Topics</h2>
 
-          {isLoading ? (
-            <p>Loading topics...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : topics.length === 0 ? (
-            <p>No topics yet, start one!</p>
-          ) : (
-            <DisplayTopics topics={topics.slice(0, visibleTopics)}/>
-          )}
+          {/* Sort Dropdown */}
+          <div className="relative inline-block" ref={dropdownRef}>
+            <Button
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              text="Sort"
+              className="rounded-md"
+            />
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-1 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
+                {["Newest", "Oldest", "Most Popular", "Least Popular", "A-Z", "Z-A"].map((option, index, array) => (
+                  <p
+                    key={option}
+                    className={`cursor-pointer px-4 py-2 text-sm ${sortOption === option ? "bg-blue-800 text-white" : "hover:bg-background_primary"} 
+            ${index === 0 ? "rounded-t-lg" : ""} // Rounded top for the first item
+            ${index === array.length - 1 ? "rounded-b-lg" : ""} // Rounded bottom for the last item
+          `}
+                    onClick={() => handleSortChange(option)}
+                  >
+                    {option}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+
+        {isLoading ? (
+          <p>Loading topics...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : topics.length === 0 ? (
+          <p>No topics yet, start one!</p>
+        ) : (
+          <DisplayTopics topics={topics.slice(0, visibleTopics)}/>
+        )}
 
         {visibleTopics < topics.length && (
           <div className="flex justify-center mt-4">
@@ -161,3 +209,33 @@ export default function Forum() {
     </div>
   );
 }
+
+// Helper function to handle sorting
+const sortTopics = (topics: Topic[], option: string): Topic[] => {
+  let sortedTopics = [...topics];
+
+  switch (option) {
+    case "A-Z":
+      sortedTopics.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case "Z-A":
+      sortedTopics.sort((a, b) => b.title.localeCompare(a.title));
+      break;
+    case "Most Popular":
+      sortedTopics.sort((a, b) => b.amountComments - a.amountComments);
+      break;
+    case "Least Popular":
+      sortedTopics.sort((a, b) => a.amountComments - b.amountComments);
+      break;
+    case "Newest":
+      sortedTopics.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+      break;
+    case "Oldest":
+      sortedTopics.sort((a, b) => new Date(a.creationDate).getTime() - new Date(b.creationDate).getTime());
+      break;
+    default:
+      break;
+  }
+
+  return sortedTopics;
+};

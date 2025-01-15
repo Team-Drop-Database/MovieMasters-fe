@@ -18,7 +18,7 @@ interface DisplayTopicsProps {
 
 const DisplayTopics: React.FC<DisplayTopicsProps> = ({topics}) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       {topics.map((topic) => (
         <div key={topic.id} className="bg-background_primary p-4 rounded-md mb-4 flex flex-col shadow-md">
           <div className="flex items-start mb-1">
@@ -31,7 +31,7 @@ const DisplayTopics: React.FC<DisplayTopicsProps> = ({topics}) => {
             />
             <div className="flex-grow">
               <h3 className="text-base mb-2">{truncateText(topic.title, 50)}</h3>
-              <p className="text-sm">{truncateText(topic.description, 75)}</p>
+              <p className="text-sm">{truncateText(topic.description, 65)}</p>
             </div>
           </div>
           <div className="flex justify-between items-center mt-auto text-xs text-gray-400">
@@ -42,7 +42,7 @@ const DisplayTopics: React.FC<DisplayTopicsProps> = ({topics}) => {
                 <span>{topic.amountComments}</span>
                 <FaCommentAlt className="ml-1 text-blue-800"/>
               </div>
-              <span className="min-w-[60px] text-right">{topic.creationDate}</span>
+              <span className="min-w-[60px] text-right">{topic.formattedCreationDate}</span>
             </div>
           </div>
         </div>

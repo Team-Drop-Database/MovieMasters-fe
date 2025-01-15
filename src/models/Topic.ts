@@ -8,7 +8,8 @@ export type Topic = {
   createdByUsername: string;
   createdByProfilePicture: string | null;
   amountComments: number;
-  creationDate: string;
+  creationDate: Date;
+  formattedCreationDate: string;
 }
 
 export default Topic;
