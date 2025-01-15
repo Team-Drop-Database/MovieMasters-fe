@@ -13,7 +13,14 @@ export async function getTopics(): Promise<Topic[]> {
     const response: Response = await apiClient(endpoint);
 
     if (response.status === 200) {
-      return await response.json();
+      const topics = await response.json();
+
+      return topics.map((data) => {
+        const topic = data as Topic;
+
+        topic.creationDate = formatDateAgo(topic.creationDate);  // Reassign with formatted date
+        return topic;
+      });
     } else {
       console.warn(`Failed to fetch topics. Status: ${response.status}`);
       return [];
@@ -53,5 +60,36 @@ export async function createTopic(title: string, description: string): Promise<T
       console.error(error);
     }
     throw error;
+  }
+}
+
+//Helper function to format date
+function formatDateAgo(date: string): string {
+  const cleanDate = date.split('.')[0];
+
+  const now = new Date();
+  const targetDate = new Date(cleanDate);
+
+  console.log(targetDate)
+
+  const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+  const diffInMonths = Math.floor(diffInDays / 30);
+  const diffInYears = Math.floor(diffInMonths / 12);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds}s ago`;
+  } else if (diffInMinutes < 60) {
+    return `${diffInMinutes}min ago`;
+  } else if (diffInHours < 24) {
+    return `${diffInHours}h ago`;
+  } else if (diffInDays < 30) {
+    return `${diffInDays}d ago`;
+  } else if (diffInMonths < 12) {
+    return `${diffInMonths}mth ago`;
+  } else {
+    return `${diffInYears}y ago`;
   }
 }

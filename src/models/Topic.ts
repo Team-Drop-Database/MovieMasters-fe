@@ -5,10 +5,10 @@ export type Topic = {
   id: number;
   title: string;
   description: string;
-  author: string;
-  profilePicture: string | null;
-  comments: number;
-  createdAt: Date;
+  createdByUsername: string;
+  createdByProfilePicture: string | null;
+  amountComments: number;
+  creationDate: string;
 }
 
 export default Topic;
