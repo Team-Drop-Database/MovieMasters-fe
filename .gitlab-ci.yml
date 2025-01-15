@@ -1,14 +1,43 @@
 stages:
   - build
+  - pull_project
+  - deploy
 
-build_check:
+build_job:
   stage: build
   image: node:18-slim
-  script:
-    - npm install
-    - npm run build
   tags:
     - hva
   rules:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
       when: always
+  script:
+    - npm install
+    - npm run build
+
+pull_project_job:
+  stage: pull_project
+  image: ubuntu:latest
+  tags:
+    - hva
+  only:
+    - main
+  before_script:
+    - apt-get update -y && apt-get install openssh-client -y && apt-get install sshpass -y
+  script:
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST -p 2222 "
+      cd ../movieadmin/app/movie-master && git pull
+      "
+deploy_job:
+  stage: deploy
+  image: ubuntu:latest
+  tags:
+    - hva
+  only:
+    - main
+  before_script:
+    - apt-get update -y && apt-get install openssh-client -y && apt-get install sshpass -y
+  script:
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST -p 2222 "
+      cd ../movieadmin/app/movie-master && docker compose down --rmi all -v && docker compose build && docker compose up -d
+      "

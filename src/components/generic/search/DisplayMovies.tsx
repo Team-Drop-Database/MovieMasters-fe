@@ -8,7 +8,7 @@ export default function DisplayMovies({ movies} : { movies: Movie[]}) {
         <div key={movie.id} className="flex flex-row gap-4 cursor-pointer"
              onClick={() => redirect(`/movies/${movie.id}`)}>
           <img
-            className="max-w-20"
+            className="max-w-20 self-start"
             src={movie.posterPath}
             alt={movie.title}
           />

@@ -276,7 +276,7 @@ function ProfileButton({username, profileUrl, logout, handleMobileDropdownMenu}:
               onClick={toggleDropdown}>
             <p className="font-[family-name:var(--font-jura)] max-sm:text-sm max-md:text-md max-lg:text-lg">{username || "Username"}</p>
               <Image
-                  className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md"
+                  className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md aspect-square"
                   src={profileUrl || defaultProfilePicture}
                   alt="Profile"
                   width={50}
