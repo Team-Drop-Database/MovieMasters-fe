@@ -147,7 +147,7 @@ export default function Forum() {
             <Button
               text="Create Topic"
               onClick={handleCreateTopic}
-              className="bg-blue-500 text-white px-5 py-2 rounded-md self-end"
+              className="self-end"
               enabled={!!title && !!description}
             />
           </div>
