@@ -3,6 +3,7 @@ import Image from 'next/image';
 import {FaCommentAlt} from 'react-icons/fa';
 import defaultProfilePicture from '@/assets/images/no-profile-pic.jpg';
 import {Topic} from '@/models/Topic';
+import {useRouter} from "next/navigation";
 
 // Truncate text function
 function truncateText(text: string, maxLength: number): string {
@@ -17,10 +18,17 @@ interface DisplayTopicsProps {
 }
 
 const DisplayTopics: React.FC<DisplayTopicsProps> = ({topics}) => {
+  const router = useRouter();
+
+  const handleTopicClick = (id: number) => {
+    router.push(`/forum/threads/${id}`);
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       {topics.map((topic) => (
-        <div key={topic.id} className="bg-background_primary p-4 rounded-md mb-4 flex flex-col shadow-md">
+        <div key={topic.id} className="bg-background_primary p-4 rounded-md mb-4 flex flex-col shadow-md cursor-pointer"
+             onClick={() => handleTopicClick(topic.id)}>
           <div className="flex items-start mb-1">
             <Image
               className="w-12 h-12 rounded-full object-cover shadow-md mr-4 aspect-square"
