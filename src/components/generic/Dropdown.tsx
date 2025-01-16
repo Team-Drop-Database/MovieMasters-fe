@@ -37,7 +37,7 @@ const Dropdown: React.FC<DropdownProps> = ({ isOpen, onClose, children }) => {
       onClick={handleOutsideClick}
     >
       <div
-        className="bg-white shadow-lg rounded-lg mt-2 p-4"
+        className="bg-background_secondary shadow-lg rounded-lg mt-2 p-4"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

@@ -10,6 +10,7 @@ import hamburgerIcon from "@/assets/images/hamburger.svg"
 import caretDownIcon from "@/assets/images/caret-down.svg"
 import {redirect, usePathname} from "next/navigation"
 import { useRouter } from "next/navigation";
+import Dropdown from "@/components/generic/Dropdown";
 
 export default function Header() {
   const {isLoggedIn, userDetails, logout} = useAuthContext();
@@ -277,28 +278,32 @@ function ProfileButton({username, profileUrl, logout, handleMobileDropdownMenu}:
                   height={50}
               />
           </div>
-          {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
-                <BasicTransitionLink href="/profile">
-                  <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
-                    Profile
-                  </div>
-                </BasicTransitionLink>
-                <BasicTransitionLink href="/friends">
-                  <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
-                    Friends
-                  </div>
-                </BasicTransitionLink>
-                <div
-                    className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg"
-                    onClick={() => {
-                      logout();
-                      closeDropdown();
-                    }}
-                >Logout
+          <Dropdown isOpen={isDropdownOpen} onClose={closeDropdown}>
+            <div className="absolute right-0 mt-14 mr-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
+              <BasicTransitionLink href="/profile">
+                <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg
+                font-[family-name:var(--font-alatsi)]">
+                  Profile
                 </div>
+              </BasicTransitionLink>
+              <BasicTransitionLink href="/friends">
+                <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg
+                font-[family-name:var(--font-alatsi)]">
+                  Friends
+                </div>
+              </BasicTransitionLink>
+              <div
+                className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg
+                font-[family-name:var(--font-alatsi)]"
+                onClick={() => {
+                  logout();
+                  closeDropdown();
+                }}
+              >
+                Logout
               </div>
-          )}
+            </div>
+          </Dropdown>
         </div>
       </div>
   );
