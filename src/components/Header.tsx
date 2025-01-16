@@ -10,7 +10,6 @@ import hamburgerIcon from "@/assets/images/hamburger.svg"
 import caretDownIcon from "@/assets/images/caret-down.svg"
 import {redirect, usePathname} from "next/navigation"
 import { useRouter } from "next/navigation";
-import Dropdown from "@/components/generic/Dropdown";
 
 export default function Header() {
   const {isLoggedIn, userDetails, logout} = useAuthContext();
