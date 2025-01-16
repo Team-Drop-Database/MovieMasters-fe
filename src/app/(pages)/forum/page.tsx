@@ -79,8 +79,8 @@ export default function Forum() {
   };
 
   return (
-    <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)] text-white">
-      <h1 className="mb-5">Forum</h1>
+    <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)]">
+      <h1 className="mb-2">Forum</h1>
 
       <div className="mx-auto w-full sm:w-3/4 my-5">
         <div
@@ -101,7 +101,7 @@ export default function Forum() {
           </div>
 
           <Image
-            className={`opacity-40 hover:opacity-100 transform ${isExpanded ? "rotate-180" : ""}`}
+            className={`opacity-40 hover:opacity-100 hover:duration-300 transform ${isExpanded ? "rotate-180" : ""}`}
             src="/double_arrow.svg"
             alt="Double Arrow"
             width={30}

@@ -39,7 +39,7 @@ const DisplayThreads: React.FC<DisplayTopicsProps> = ({topics}) => {
             />
             <div className="flex-grow">
               <h3 className="text-base mb-2">{truncateText(topic.title, 50)}</h3>
-              <p className="text-sm">{truncateText(topic.description, 65)}</p>
+              <p className="text-sm text-gray-300">{truncateText(topic.description, 65)}</p>
             </div>
           </div>
           <div className="flex justify-between items-center mt-auto text-xs text-gray-400">

@@ -1,25 +1,35 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import {getTopicById} from "@/services/ForumService";
-import {Topic} from "@/models/Topic";
+import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation"; // For routing
+import { getTopicById } from "@/services/ForumService";
+import { Topic } from "@/models/Topic";
 import Loading from "@/components/generic/Loading";
+import { FaPaperPlane } from "react-icons/fa";
+import Image from "next/image";
+import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg";
+import { useAuthContext } from "@/contexts/AuthContext";
 
-export default function Thread({params}: { params: Promise<{ id: string }> }) {
+export default function Thread({ params }: { params: Promise<{ id: string }> }) {
   const [topic, setTopic] = useState<Topic | null>(null);
+  const [comments, setComments] = useState<string[] | null>([]);
+  const [newComment, setNewComment] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const commentsRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter(); // For navigation
+  const { userDetails } = useAuthContext();
 
   useEffect(() => {
     const fetchTopic = async () => {
       try {
-        // Resolve the topic ID from params
         const resolvedParams = await params;
         const topicId = resolvedParams.id;
         const fetchedTopic = await getTopicById(topicId);
 
         if (fetchedTopic) {
           setTopic(fetchedTopic);
+          setComments([]); // Assuming no initial comments for simplicity
         } else {
           setError("Topic not found.");
         }
@@ -34,42 +44,147 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
     fetchTopic().then();
   }, [params]);
 
+  const handleSendComment = () => {
+    if (!newComment.trim()) return;
+    setComments((prevComments) => [...(prevComments || []), newComment]);
+    setNewComment(""); // Clear the input field
+    scrollToBottom(); // Scroll to the bottom after adding a comment
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // Prevents new lines when pressing Enter
+      handleSendComment(); // Sends the comment when Enter is pressed
+    }
+  };
+
+  const scrollToBottom = () => {
+    const commentsSlider = commentsRef.current as HTMLDivElement;
+    if (commentsSlider) {
+      commentsSlider.scrollTop = commentsSlider.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom(); // Scroll to the bottom when comments are loaded
+  }, [comments]);
+
   if (loading) {
-    return <Loading/>
+    return <Loading />;
   }
 
   return (
-    <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)] text-white">
-      <h1 className="mb-5">Thread</h1>
+    <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)]">
+      {/* Header */}
+      <h1>Thread</h1>
 
-      {!topic ? (
-        <p>Topic not found.</p>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : (
-        <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)] text-white">
-          <h1 className="mb-5 text-3xl font-bold">{topic.title}</h1>
-          <p className="mb-3 text-lg">{topic.description}</p>
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="flex items-center">
-              <p className="text-sm text-gray-400">Created by: </p>
-              <span className="ml-2 text-lg font-semibold">{topic.createdByUsername}</span>
-            </div>
-            <div className="flex items-center">
-              <p className="text-sm text-gray-400">Posted on: </p>
-              <span className="ml-2 text-lg">{topic.formattedCreationDate}</span>
-            </div>
-          </div>
-
-          {/* You could render more information related to the topic like comments here */}
-          <div className="mt-10">
-            <h2 className="text-2xl font-semibold">Comments</h2>
-            {/* Example: */}
-            {/* {topic.comments.map(comment => <CommentCard key={comment.id} comment={comment} />)} */}
-          </div>
+      {/* Main Thread Content */}
+      <div className="flex flex-col w-full max-w-4xl mx-auto">
+        {/* Back to Forum */}
+        <div
+          className="text-gray-300 mb-1 cursor-pointer hover:text-gray-200 hover:duration-300"
+          onClick={() => router.push("/forum")} // Replace "/forum" with the actual forum route
+        >
+          <span className="mr-2 text-lg">&lt;&lt; Back to forum</span>
         </div>
-      )}
+
+        {/* Thread Content Div */}
+        <div className="bg-background_primary p-6 rounded-lg shadow-lg">
+          {/* Topic Section */}
+          {!topic ? (
+            <p>Topic not found.</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <>
+              <div className="mb-8">
+                {/* Title */}
+                <h1 className="text-3xl mb-1">{topic.title}</h1>
+
+                {/* Description */}
+                <p className="text-lg mb-3 text-gray-300">{topic.description}</p>
+
+                {/* Profile Section */}
+                <div className="flex items-center space-x-4">
+                  {/* Profile Picture */}
+                  <div className="relative w-14 h-14">
+                    <Image
+                      src={topic.createdByProfilePicture || defaultProfilePicture}
+                      alt="Profile"
+                      className="rounded-full object-cover"
+                      fill
+                      sizes="56px"
+                    />
+                  </div>
+
+                  {/* Name and Date */}
+                  <div>
+                    <p className="text-[1.1rem] text-gray-400">
+                      {topic.createdByUsername}
+                    </p>
+                    <p className="text-[1.1rem] text-gray-400">
+                      {topic.formattedCreationDate}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Comments Section */}
+              <div
+                ref={commentsRef}
+                className="flex flex-col space-y-4 max-h-[14rem] min-h-[14rem] overflow-y-auto scrollbar-hide"
+              >
+                {comments && comments.length > 0 ? (
+                  comments.map((comment, index) => (
+                    <div
+                      key={index}
+                      className="border-t border-gray-300 text-gray-300 p-4 shadow-sm text-sm"
+                    >
+                      {comment}
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-300">
+                    No one commented yet, be the first one!
+                  </p>
+                )}
+              </div>
+
+              {/* Add Comment Section */}
+              <div className="mt-6 flex items-start space-x-4">
+                {/* User Profile Picture */}
+                <div className="relative w-12 h-12">
+                  <Image
+                    src={userDetails?.profileUrl || defaultProfilePicture}
+                    alt="Profile"
+                    className="rounded-full object-cover"
+                    fill
+                    sizes="48px"
+                  />
+                </div>
+
+                {/* Input Field and Send Icon */}
+                <div className="flex-grow flex items-center">
+                  <input
+                    type="text"
+                    placeholder="Leave a comment..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    onKeyDown={handleKeyDown} // Add onKeyDown to handle Enter key
+                    className="w-full bg-gray-700 text-gray-300 p-3 rounded-md outline-none hover:bg-gray-600 transition-colors"
+                  />
+                  {/* Floating Send Icon */}
+                  <FaPaperPlane
+                    onClick={handleSendComment}
+                    className="ml-3 text-gray-300 hover:text-gray-200 hover:duration-300 cursor-pointer"
+                    size={22}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
-
 }
