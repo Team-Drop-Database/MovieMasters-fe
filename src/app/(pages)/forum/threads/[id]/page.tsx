@@ -2,8 +2,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation"; // For routing
-import { getTopicById } from "@/services/ForumService";
+import { getTopicById, getCommentsByTopicId, sendComment } from "@/services/ForumService";
 import { Topic } from "@/models/Topic";
+import { Comment } from "@/models/Comment";
 import Loading from "@/components/generic/Loading";
 import { FaPaperPlane } from "react-icons/fa";
 import Image from "next/image";
@@ -12,7 +13,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function Thread({ params }: { params: Promise<{ id: string }> }) {
   const [topic, setTopic] = useState<Topic | null>(null);
-  const [comments, setComments] = useState<string[] | null>([]);
+  const [comments, setComments] = useState<Comment[] | null>([]);
   const [newComment, setNewComment] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,15 +22,18 @@ export default function Thread({ params }: { params: Promise<{ id: string }> }) 
   const { userDetails } = useAuthContext();
 
   useEffect(() => {
-    const fetchTopic = async () => {
+    const fetchTopicAndComments = async () => {
       try {
         const resolvedParams = await params;
         const topicId = resolvedParams.id;
+
         const fetchedTopic = await getTopicById(topicId);
+        const fetchedComments = await getCommentsByTopicId(topicId);
 
         if (fetchedTopic) {
           setTopic(fetchedTopic);
-          setComments([]); // Assuming no initial comments for simplicity
+          setComments(fetchedComments.sort((a, b) => a.creationDate.getTime() - b.creationDate.getTime())); // Sort oldest to newest
+          console.log(fetchedComments)
         } else {
           setError("Topic not found.");
         }
@@ -41,20 +45,26 @@ export default function Thread({ params }: { params: Promise<{ id: string }> }) 
       }
     };
 
-    fetchTopic().then();
+    fetchTopicAndComments().then();
   }, [params]);
 
-  const handleSendComment = () => {
-    if (!newComment.trim()) return;
-    setComments((prevComments) => [...(prevComments || []), newComment]);
-    setNewComment(""); // Clear the input field
-    scrollToBottom(); // Scroll to the bottom after adding a comment
+  const handleSendComment = async () => {
+    if (!newComment.trim() || !topic) return;
+
+    try {
+      const newCommentObject = await sendComment(topic.id, newComment);
+      setComments((prevComments) => [...(prevComments || []), newCommentObject]);
+      setNewComment(""); // Clear the input field
+      scrollToBottom(); // Scroll to the bottom
+    } catch (err) {
+      console.error("Failed to send comment:", err);
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault(); // Prevents new lines when pressing Enter
-      handleSendComment(); // Sends the comment when Enter is pressed
+      handleSendComment().then(); // Sends the comment when Enter is pressed
     }
   };
 
@@ -66,7 +76,7 @@ export default function Thread({ params }: { params: Promise<{ id: string }> }) 
   };
 
   useEffect(() => {
-    scrollToBottom(); // Scroll to the bottom when comments are loaded
+    scrollToBottom(); // Scroll to the bottom when comments are updated
   }, [comments]);
 
   if (loading) {
@@ -89,7 +99,7 @@ export default function Thread({ params }: { params: Promise<{ id: string }> }) 
         </div>
 
         {/* Thread Content Div */}
-        <div className="bg-background_primary p-6 rounded-lg shadow-lg">
+        <div className="bg-background_primary py-5 p-8 rounded-lg shadow-lg">
           {/* Topic Section */}
           {!topic ? (
             <p>Topic not found.</p>
@@ -97,7 +107,7 @@ export default function Thread({ params }: { params: Promise<{ id: string }> }) 
             <p className="text-red-500">{error}</p>
           ) : (
             <>
-              <div className="mb-8">
+              <div className="mb-3">
                 {/* Title */}
                 <h1 className="text-3xl mb-1">{topic.title}</h1>
 
@@ -132,17 +142,32 @@ export default function Thread({ params }: { params: Promise<{ id: string }> }) 
               {/* Comments Section */}
               <div
                 ref={commentsRef}
-                className="flex flex-col space-y-4 max-h-[14rem] min-h-[14rem] overflow-y-auto scrollbar-hide"
+                className="flex flex-col space-y-4 max-h-[15rem] min-h-[15rem] overflow-y-auto scrollbar-hide"
               >
                 {comments && comments.length > 0 ? (
-                  comments.map((comment, index) => (
-                    <div
-                      key={index}
-                      className="border-t border-gray-300 text-gray-300 p-4 shadow-sm text-sm"
-                    >
-                      {comment}
-                    </div>
-                  ))
+                  comments
+                    .sort((a, b) => a.creationDate.getTime() - b.creationDate.getTime()) // Sort newest to oldest
+                    .map((comment) => (
+                      <div
+                        key={comment.id}
+                        className="border-t border-gray-300 text-gray-300 p-4 shadow-sm text-sm flex space-x-4"
+                      >
+                        <div className="relative w-12 h-12">
+                          <Image
+                            src={comment.profilePicture || defaultProfilePicture}
+                            alt={comment.username}
+                            className="rounded-full object-cover"
+                            fill
+                            sizes="48px"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-bold">{comment.username}</p>
+                          <p>{comment.content}</p>
+                          <p className="text-xs text-gray-500">{comment.formattedCreationDate}</p>
+                        </div>
+                      </div>
+                    ))
                 ) : (
                   <p className="text-center text-gray-300">
                     No one commented yet, be the first one!
@@ -167,7 +192,7 @@ export default function Thread({ params }: { params: Promise<{ id: string }> }) 
                 <div className="flex-grow flex items-center">
                   <input
                     type="text"
-                    placeholder="Leave a comment..."
+                    placeholder="Add a comment..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     onKeyDown={handleKeyDown} // Add onKeyDown to handle Enter key

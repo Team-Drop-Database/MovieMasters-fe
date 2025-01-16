@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import BigTextField from "@/components/generic/BigTextField";
 import {Button} from "@/components/generic/Button";
 import {createTopic} from "@/services/ForumService";
+import WarningAlert from "@/components/generic/alert/WarningAlert";
 
 const ThreadCreator = ({onTopicCreated}: any) => {
   const [title, setTitle] = useState("");
@@ -30,14 +31,20 @@ const ThreadCreator = ({onTopicCreated}: any) => {
 
   return (
     <div className="bg-background_primary p-5 pt-0 rounded-b-md mb-10 flex flex-col">
-      {warning && <p className="text-red-500">{warning}</p>}
+      {warning && (
+        <WarningAlert
+          message={warning}
+          onClose={() => setWarning(null)}
+        />
+      )}
       <label className="text-md block mb-2">Title</label>
-      <BigTextField
+      <input
+        type="text"
         value={title}
-        onValueChange={setTitle}
+        onChange={(e) => setTitle(e.target.value)}
         placeholder="Give your thread a title"
-        className="h-8 w-full mb-5"
         maxLength={100}
+        className="h-8 w-full mb-5 outline-none placeholder-black rounded-md text-black py-1 px-2 bg-light_grey hover:bg-light_grey_active duration-300 hover:duration-300 font-[family-name:var(--font-jura)]"
       />
       <label className="text-md block mb-2">Description</label>
       <BigTextField

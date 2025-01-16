@@ -1,5 +1,6 @@
 import apiClient from "@/services/ApiClient";
 import {Topic} from "@/models/Topic";
+import {Comment} from "@/models/Comment";
 
 /**
  * Fetch all topics from the backend without pagination.
@@ -86,6 +87,73 @@ export async function createTopic(title: string, description: string): Promise<T
     } else {
       console.warn(`Failed to create topic. Status: ${response.status}`);
       new Error('Failed to create topic');
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Fetch comments for a specific topic.
+ *
+ * @param topicId The ID of the topic to retrieve comments for.
+ * @returns A promise resolving to a list of comments.
+ */
+export async function getCommentsByTopicId(topicId: string): Promise<Comment[]> {
+  const endpoint = `/forum/topics/${topicId}/comments`;
+
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    if (response.status === 200) {
+      const comments = await response.json();
+
+      return comments.map((data) => {
+        const comment = data as Comment;
+
+        comment.creationDate = new Date(comment.creationDate);
+        comment.formattedCreationDate = formatDateAgo(comment.creationDate);
+        return comment;
+      });
+    } else {
+      console.warn(`Failed to fetch comments. Status: ${response.status}`);
+      return [];
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Send a new comment to a specific topic.
+ *
+ * @param topicId The ID of the topic to post the comment to.
+ * @param content The content of the comment.
+ * @returns A promise resolving to the created comment.
+ */
+export async function sendComment(topicId: number, content: string): Promise<Comment> {
+  const endpoint = `/forum/topics/${topicId}/comments`;
+
+  try {
+    const response: Response = await apiClient(endpoint, {
+      method: "POST",
+      body: content,
+    });
+
+    if (response.status === 201) {
+      const comment = await response.json();
+      comment.creationDate = new Date(comment.creationDate);
+      comment.formattedCreationDate = formatDateAgo(comment.creationDate);
+      return comment as Comment;
+    } else {
+      console.warn(`Failed to send comment. Status: ${response.status}`);
+      new Error("Failed to send comment");
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
