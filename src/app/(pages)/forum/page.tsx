@@ -127,7 +127,7 @@ export default function Forum() {
         </div>
 
         {isLoading ? (
-          <Loading/>
+          <Loading text={"Loading threads..."}/>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : topics.length === 0 ? (
