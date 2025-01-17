@@ -194,7 +194,7 @@ function formatDateAgo(date: Date): string {
 
 //Helper function to sort topics
 export function sortTopics(topics: Topic[], option: string, limit: number = topics.length): Topic[] {
-  let sortedTopics = [...topics];
+  const sortedTopics = [...topics];
 
   switch (option) {
     case "A-Z":
