@@ -5,6 +5,7 @@ import WatchlistItem from "@/models/WatchListItem";
 import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
 import {useAuthContext} from "@/contexts/AuthContext";
+import Loading from "@/components/generic/Loading";
 
 /**
  * Displays an overview of the movies that a specific user has
@@ -104,10 +105,7 @@ export default function MyWatchList() {
   let pageContent;
   if (watchlist.length === 0) {
     pageContent = (
-      <div>
-        <h2 className="text-2xl">Still empty here...</h2>
-        <p>Add some movies to make them show up here!</p>
-      </div>
+      <Loading/>
     );
   } else {
     pageContent = (
