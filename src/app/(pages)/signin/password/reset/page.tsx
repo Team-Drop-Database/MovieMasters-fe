@@ -1,10 +1,14 @@
 "use client";
 
 import { useSearchParams } from 'next/navigation'
-import {FormEvent, useState} from "react";
+import {FormEvent, Suspense, useState} from "react";
 import {resetPassword} from "@/services/UserService";
 
 export default function Page() {
+    return <Suspense><PageContent /></Suspense>;
+}
+
+function PageContent() {
     const searchParams = useSearchParams();
     const passwordResetToken = searchParams.get('passwordResetToken');
 

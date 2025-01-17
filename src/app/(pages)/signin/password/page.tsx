@@ -3,7 +3,6 @@
 import {FormEvent, useState} from "react";
 import {requestForPasswordReset} from "@/services/UserService";
 import Image from "next/image";
-// import {Button} from "@/components/generic/Button";
 
 export default function Page() {
     const [isLoading, setIsLoading] = useState(false);
