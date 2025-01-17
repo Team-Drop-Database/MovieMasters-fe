@@ -186,6 +186,7 @@ export default function Friends() {
           <div className="flex flex-row justify-center space-x-4 mt-6 w-full">
             <div className="w-2/5 p-6 rounded-lg bg-background_secondary">
               <h1 className="mb-2">Friends</h1>
+              {friends.length == 0 ? <p className="font-inter text-md">You don't have any friends added. Add some friends to see each others watchlist!</p> : ''}
               {friends.map(({friendUsername, friendProfilePicture}, index) => (
                 <div className="flex items-center mb-2" key={index}>
                   <div className="flex items-center space-x-4">
