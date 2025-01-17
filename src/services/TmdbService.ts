@@ -31,7 +31,6 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
         Authorization: `Bearer ${process.env.TMDB_API_KEY}`
       }
     })
-
     if (response.status === 200) {
       const tmdbMovie = await response.json();
 
@@ -45,7 +44,8 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
         posterPath: 'https://image.tmdb.org/t/p/original' + tmdbMovie.poster_path
       };
     } else {
-      return await response.json() as string;
+      const result = await response.json();
+      return result.status_message;
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
