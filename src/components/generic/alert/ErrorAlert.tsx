@@ -1,0 +1,39 @@
+﻿import React, { useState } from "react";
+
+interface ErrorAlertProps {
+  message: string;
+  onClose?: () => void;
+}
+
+const ErrorAlert: React.FC<ErrorAlertProps> = ({ message, onClose }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    if (onClose) onClose();
+  };
+
+  if (!isVisible) return null;
+
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div className="p-6 bg-red-500 text-white rounded shadow-lg">
+        <div className="flex items-center justify-between">
+          <span className="font-bold">Something went wrong:</span>
+          <br/>
+          <span>{message}</span>
+          <button
+            onClick={handleClose}
+            className="ml-4 text-sm font-bold px-2 py-1 bg-white text-green-500 rounded"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ErrorAlert;
