@@ -207,7 +207,7 @@ export default function Friends() {
                         alt="Delete"
                         width={25}
                         height={25}
-                        className="hover:cursor-pointer"
+                        className="hover:cursor-pointer hover:scale-110 transition-transform hover:shadow-xl" title="Remove from friendlist?"
                         onClick={() => handleDeleteFriend(friendUsername)}
                       />
                     </div>
