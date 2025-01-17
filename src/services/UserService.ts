@@ -1,5 +1,6 @@
 import apiClient from "@/services/ApiClient";
 
+const OK = 200;
 const CREATED = 201;
 const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
@@ -99,6 +100,23 @@ export async function requestForPasswordReset(email: string) {
     }
     case NOT_FOUND: {
       return "Instructions for resetting your password have been sent"
+    }
+    case BAD_REQUEST: {
+      throw new Error(await response.text());
+    }
+  }
+}
+
+export async function resetPassword(passwordResetToken: string, newPassword: string) {
+  const endpoint = "/users/password-reset";
+  const response = await apiClient(endpoint,{
+    method: "PUT",
+    body: JSON.stringify({"passwordResetToken": passwordResetToken, "newPassword": newPassword})
+  });
+
+  switch (response.status) {
+    case OK: {
+      return response.text();
     }
     case BAD_REQUEST: {
       throw new Error(await response.text());
