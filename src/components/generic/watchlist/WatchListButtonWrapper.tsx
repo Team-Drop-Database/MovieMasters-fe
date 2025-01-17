@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getWatchedStatus, WatchedState } from "@/services/WatchListService";
+import {getWatchlistItemFromUser, WatchedState} from "@/services/WatchListService";
 import AddToWatchListButton from "./AddToWatchListButton";
+import WatchlistItem from "@/models/WatchListItem";
 
 /**
  * Server-side wrapper-component for the client-side
@@ -17,22 +18,20 @@ export default function WatchListButtonWrapper({ params }: {
         onValueChange?: (newValue: WatchedState) => void,
     }
 }) {
-    const [watchedStatus, setWatchedStatus] = useState<WatchedState>();
+    const [watchlistItem, setWatchlistItem] = useState<WatchlistItem | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchWatchedStatus = async () => {
             try {
-                const status = await getWatchedStatus(params.userId, params.movieId);
-                setWatchedStatus(status);
+                setWatchlistItem(await getWatchlistItemFromUser(params.userId, params.movieId));
             } catch (error) {
                 console.error("Error fetching watched status:", error);
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchWatchedStatus();
+        fetchWatchedStatus().then();
     }, [params.userId, params.movieId]);
 
     if (loading) {
@@ -42,7 +41,7 @@ export default function WatchListButtonWrapper({ params }: {
     return (
       <AddToWatchListButton
         params={{
-            initialWatchedStatus: watchedStatus as WatchedState,
+            initialWatchlistItem: watchlistItem,
             userId: params.userId,
             movieId: params.movieId,
             onValueChange: params.onValueChange,
