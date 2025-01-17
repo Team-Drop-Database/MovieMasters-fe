@@ -60,9 +60,7 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
     if (reachedEnd) {
       newOffset = completeSliderWidth * -1
     }
-
-    console.log('offset: ', newOffset);
-
+    
     newOffset >= PAGER_OFFSET ? setShowBackButton(false) : setShowBackButton(true)
 
     setPagerOffset(newOffset)
