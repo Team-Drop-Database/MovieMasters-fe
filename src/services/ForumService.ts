@@ -77,24 +77,27 @@ export async function createTopic(title: string, description: string): Promise<T
   const endpoint = `/forum/topics`;
 
   try {
-    const response: Response = await apiClient(endpoint, {
+    const response = await fetch(endpoint, {
       method: 'POST',
-      body: JSON.stringify({title, description}),
+      body: JSON.stringify({ title, description }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
-    if (response.status === 201) {
-      return await response.json();
-    } else {
-      console.warn(`Failed to create topic. Status: ${response.status}`);
+    if (!response.ok) {
       new Error('Failed to create topic');
     }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error);
-    }
+
+    const createdTopic = await response.json();
+    return createdTopic as Topic;
+
+  } catch (error) {
+    console.error('Error creating topic:', error);
     throw error;
   }
 }
+
 
 /**
  * Fetch comments for a specific topic.
