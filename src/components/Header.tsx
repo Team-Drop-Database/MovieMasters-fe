@@ -15,11 +15,13 @@ export default function Header() {
   const {isLoggedIn, userDetails, logout} = useAuthContext();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
+  const mobileDropdownMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileDropdownMenuButtonRef = useRef<HTMLButtonElement | null>(null);
-  const [isSticky, setIsSticky] = useState(false);
-  const router = useRouter();
 
+  const [isSticky, setIsSticky] = useState(false);
   const [isMobileDropdownMenuShown, setIsMobileDropdownMenuShown] = useState(false);
+
+  const router = useRouter();
 
   const handleLogout = () => {
     logout();
@@ -53,13 +55,29 @@ export default function Header() {
     };
   }, []);
 
-  function handleIsMobileDropdownMenuShown() {
-    setIsMobileDropdownMenuShown(!isMobileDropdownMenuShown);
-  }
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileDropdownMenuRef.current &&
+        !mobileDropdownMenuRef.current.contains(event.target as Node) &&
+        !mobileDropdownMenuButtonRef.current?.contains(event.target as Node)
+      ) {
+        setIsMobileDropdownMenuShown(false);
+      }
+    };
+
+    if (isMobileDropdownMenuShown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileDropdownMenuShown]);
 
   return (
     <header ref={headerRef}
-            className={`z-50 transition-transform ${isSticky ? 'sticky -top-10 translate-y-10' : 'translate-y-0'}`}>
+            className={`relative z-40 transition-transform ${isSticky ? 'sticky -top-10 translate-y-10' : 'translate-y-0'}`}>
       <div
         className="sm:min-h-[86px] sm:px-7 px-4 max-sm:px-2 py-2 w-full flex items-center bg-background_primary md:shadow-md font-[family-name:var(--font-alatsi)]">
         <div className="flex grow items-center">
@@ -94,7 +112,7 @@ export default function Header() {
                 </div>
               </BasicTransitionLink>
               <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={handleLogout}
-                             handleMobileDropdownMenu={handleIsMobileDropdownMenuShown}/>
+                             handleMobileDropdownMenu={() => setIsMobileDropdownMenuShown(!isMobileDropdownMenuShown)}/>
             </div>
           ) : (
             <div className="flex sm:gap-5 basis-[30%] justify-end">
@@ -111,14 +129,18 @@ export default function Header() {
                 </div>
               </BasicTransitionLink>
               <button className="sm:hidden" ref={mobileDropdownMenuButtonRef}
-                      onClick={handleIsMobileDropdownMenuShown}>
+                      onClick={() => setIsMobileDropdownMenuShown(!isMobileDropdownMenuShown)}>
                 <Image src={hamburgerIcon} alt="hamburger icon" width={40} height={40}></Image>
               </button>
             </div>
           )}
         </div>
       </div>
-      {isMobileDropdownMenuShown ? <MobileDropdownMenu isLoggedIn={isLoggedIn} logout={handleLogout}/> : ''}
+      {isMobileDropdownMenuShown && (
+        <div ref={mobileDropdownMenuRef} className="absolute w-full bg-background_primary sm:hidden z-50">
+          <MobileDropdownMenu isLoggedIn={isLoggedIn} logout={handleLogout} />
+        </div>
+      )}
     </header>
   );
 }
@@ -155,7 +177,7 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
   }, [currentPath]);
 
   return (
-    <div className="absolute w-full bg-background_primary sm:hidden">
+    <div className="absolute w-full bg-background_primary sm:hidden z-50">
       {props.isLoggedIn
         ?
         (<div>
@@ -168,7 +190,7 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
           <BasicTransitionLink href={"/friends"}>
             <p className="font-[family-name:var(--font-alatsi)] p-3">Friends</p>
           </BasicTransitionLink>
-          <hr className="w-2/3 mx-2"/>
+          <hr className="mx-2"/>
           <p className="text-red-600 font-[family-name:var(--font-alatsi)] p-3 cursor-pointer" onClick={props.logout}>Log
             out</p>
         </div>)
@@ -283,26 +305,26 @@ function ProfileButton({username, profileUrl, logout, handleMobileDropdownMenu}:
               />
           </div>
           {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
-                <BasicTransitionLink href="/profile">
-                  <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
-                    Profile
-                  </div>
-                </BasicTransitionLink>
-                <BasicTransitionLink href="/friends">
-                  <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
-                    Friends
-                  </div>
-                </BasicTransitionLink>
-                <div
-                    className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg"
-                    onClick={() => {
-                      logout();
-                      closeDropdown();
-                    }}
-                >Logout
+            <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
+              <BasicTransitionLink href="/profile">
+                <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
+                  Profile
                 </div>
+              </BasicTransitionLink>
+              <BasicTransitionLink href="/friends">
+                <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
+                  Friends
+                </div>
+              </BasicTransitionLink>
+              <div
+                className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg"
+                onClick={() => {
+                  logout();
+                  closeDropdown();
+                }}
+              >Logout
               </div>
+            </div>
           )}
         </div>
       </div>
