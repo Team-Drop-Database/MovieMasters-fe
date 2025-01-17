@@ -1,7 +1,14 @@
 import React from "react";
 import {Button} from "@/components/generic/Button";
 
-const SortDropdown = ({sortOption, onSortChange, isDropdownOpen, toggleDropdown}: any) => {
+interface SortDropdownProps {
+  sortOption: string;
+  onSortChange: (option: string) => void;
+  isDropdownOpen: boolean;
+  toggleDropdown: () => void;
+}
+
+const SortDropdown: React.FC<SortDropdownProps> = ({ sortOption, onSortChange, isDropdownOpen, toggleDropdown }) => {
   return (
     <div className="relative inline-block">
       <Button onClick={toggleDropdown} text="Sort" className="rounded-md"/>

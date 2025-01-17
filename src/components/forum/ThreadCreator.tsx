@@ -4,7 +4,11 @@ import {Button} from "@/components/generic/Button";
 import {createTopic} from "@/services/ForumService";
 import WarningAlert from "@/components/generic/alert/WarningAlert";
 
-const ThreadCreator = ({onTopicCreated}: any) => {
+interface ThreadCreatorProps {
+  onTopicCreated: () => void;
+}
+
+const ThreadCreator: React.FC<ThreadCreatorProps> = ({ onTopicCreated }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [warning, setWarning] = useState<string | null>(null);

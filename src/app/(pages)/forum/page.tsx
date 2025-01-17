@@ -56,8 +56,7 @@ export default function Forum() {
   const handleSortChange = (option: string) => {
     setSortOption(option);
     setIsDropdownOpen(false);
-    const sortedTopics = sortTopics(allTopics, option);
-    setTopics(sortedTopics);
+    setTopics(sortTopics(allTopics, option));
   };
 
   const handleOwnedByMeChange = () => {

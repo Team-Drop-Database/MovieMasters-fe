@@ -1,6 +1,11 @@
 import React from "react";
 
-const OwnedBySwitch = ({ownedByMe, onChange}: any) => {
+interface OwnedBySwitchProps {
+  ownedByMe: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const OwnedBySwitch: React.FC<OwnedBySwitchProps> = ({ ownedByMe, onChange }) => {
   return (
     <label className="inline-flex items-center cursor-pointer">
       <span className="mr-2 text-sm sm:text-base">
