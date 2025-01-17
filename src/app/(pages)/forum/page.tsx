@@ -101,12 +101,15 @@ export default function Forum() {
           </div>
 
           <Image
-            className={`opacity-40 hover:opacity-100 hover:duration-300 transform ${isExpanded ? "rotate-180" : ""}`}
+            className={`opacity-40 hover:opacity-100 hover:duration-300 transform transition-transform duration-300 ${
+              isExpanded ? "rotate-180" : ""
+            }`}
             src="/double_arrow.svg"
             alt="Double Arrow"
             width={30}
             height={30}
           />
+
         </div>
 
         {isExpanded && <ThreadCreator onTopicCreated={handleTopicCreated}/>}

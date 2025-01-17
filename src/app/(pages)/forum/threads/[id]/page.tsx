@@ -84,8 +84,8 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
   }
 
   return (
-    <div className="flex flex-col items-start pb-10 px-10 font-[family-name:var(--font-alatsi)]">
-      <h1>Thread</h1>
+    <div className="flex flex-col items-start pb-10 px-2 sm:px-10 font-[family-name:var(--font-alatsi)]">
+    <h1>Thread</h1>
 
       <div className="flex flex-col w-full max-w-4xl mx-auto">
         <div
@@ -130,7 +130,8 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
 
               <div
                 ref={commentsRef}
-                className="flex flex-col space-y-4 max-h-[15rem] min-h-[15rem] p-8 overflow-y-auto scrollbar-hide shadow-md"
+                className="flex flex-col space-y-4 max-h-[18rem] sm:max-h-[15rem] min-h-[18rem]
+                sm:min-h-[15rem] p-8 overflow-y-auto scrollbar-hide shadow-lg"
               >
                 {comments && comments.length > 0 ? (
                   comments
@@ -138,7 +139,7 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
                     .map((comment) => (
                       <div
                         key={comment.id}
-                        className="border-t border-gray-400 text-gray-300 pt-4 pb-4 px-2 shadow-sm text-sm flex items-start items-center space-x-4"
+                        className="border-t border-gray-400 text-gray-300 p-4 py-3 text-sm flex items-start items-center space-x-4"
                       >
                         <div className="relative w-12 h-12 self-start">
                           <Image
