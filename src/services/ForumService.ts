@@ -16,8 +16,8 @@ export async function getTopics(): Promise<Topic[]> {
     if (response.status === 200) {
       const topics = await response.json();
 
-      return topics.map((data) => {
-        const topic = data as Topic;
+      return topics.map((data: Topic) => {
+        const topic = data;
 
         topic.creationDate = new Date(topic.creationDate);
         topic.formattedCreationDate = formatDateAgo(topic.creationDate);
@@ -111,8 +111,8 @@ export async function getCommentsByTopicId(topicId: string): Promise<Comment[]> 
     if (response.status === 200) {
       const comments = await response.json();
 
-      return comments.map((data) => {
-        const comment = data as Comment;
+      return comments.map((data: Comment) => {
+        const comment = data;
 
         comment.creationDate = new Date(comment.creationDate);
         comment.formattedCreationDate = formatDateAgo(comment.creationDate);
