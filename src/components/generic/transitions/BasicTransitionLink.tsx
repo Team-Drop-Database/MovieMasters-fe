@@ -1,5 +1,6 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import TransitionLink from "./TransitionLink";
+import { usePathname } from "next/navigation";
 
 /**
  * Uses the TransitionLink component to construct a standard 
@@ -15,6 +16,9 @@ export default function BasicTransitionLink({children, href}:
         href: string
     }) {
 
+    const currentPath = usePathname();
+
+
     /**
      * Contains the animation for the standard transition 
      * that this TransitionLink will have.
@@ -25,6 +29,12 @@ export default function BasicTransitionLink({children, href}:
     const handleMainTransition = async (
         timeOut: (ms: number) => Promise<void>, 
             router: AppRouterInstance): Promise<void> => {
+
+        // If the current path matches the path where the
+        // user wants to navigate to, cancel the transition 
+        // (since we're already on that page)
+        if(currentPath == href)
+            return;
 
         // Length of the Transition
         const TRANSITION_LENGTH = 150;
