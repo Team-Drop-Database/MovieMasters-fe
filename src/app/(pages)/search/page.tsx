@@ -9,7 +9,7 @@ import ElementTransition from "@/components/generic/transitions/ElementTransitio
 
 function SearchContent() {
   const searchParams = useSearchParams();
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<Movie[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [numberOfPages, setNumberOfPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -115,7 +115,7 @@ function SearchContent() {
     return buttonItems;
   }
 
-  if (movies.length > 0) {
+  if (movies && movies.length > 0) {
     return (
       <ElementTransition startYState={50}>
 <div className="mx-5">
@@ -142,7 +142,7 @@ function SearchContent() {
       </div>
       </ElementTransition>
     );
-  } else {
+  } else if (movies && movies.length == 0) {
     return (
       <div className="flex flex-col items-center">
         <h1>No movies are found.</h1>
