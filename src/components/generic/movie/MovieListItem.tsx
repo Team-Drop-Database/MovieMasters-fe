@@ -19,9 +19,11 @@ const MOVIE_ITEM_WIDTH = 250
 const MOVIE_ITEM_GAP = 20
 const SLIDE_TIME = 500
 
+const PAGER_OFFSET = -250;
+
 export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizontalMoviePagerProps) {
   const [movies, setMovies] = React.useState<MovieListItemProps[]>([])
-  const [pagerOffset, setPagerOffset] = React.useState(-250)
+  const [pagerOffset, setPagerOffset] = React.useState(PAGER_OFFSET)
   const [pagerProperties, setPagerProperties] = React.useState<React.CSSProperties>({
     left: `${pagerOffset + LEFT_MARGIN}px`,
     position: "relative",
@@ -59,7 +61,9 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
       newOffset = completeSliderWidth * -1
     }
 
-    newOffset === 0 ? setShowBackButton(false) : setShowBackButton(true)
+    console.log('offset: ', newOffset);
+
+    newOffset >= PAGER_OFFSET ? setShowBackButton(false) : setShowBackButton(true)
 
     setPagerOffset(newOffset)
     setPagerProperties({
