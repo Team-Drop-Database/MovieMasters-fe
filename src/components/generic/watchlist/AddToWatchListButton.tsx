@@ -1,12 +1,13 @@
 'use client';
 
-import { addToWatchlist, removeFromWatchlist, updateWatchedStatus, WatchedState } from "@/services/WatchListService";
-import { useEffect, useState } from "react";
+import {addToWatchlist, updateWatchedStatus, WatchedState} from "@/services/WatchListService";
+import {useEffect, useState} from "react";
 import Image from "next/image";
+import WatchlistItem from "@/models/WatchListItem";
 
 export default function AddToWatchListButton({params}: {
   params : {
-    initialWatchedStatus: WatchedState,
+    initialWatchlistItem: WatchlistItem | null,
     userId: number,
     movieId: number,
     onValueChange?: ((newValue: WatchedState) => void),
@@ -16,15 +17,44 @@ export default function AddToWatchListButton({params}: {
   const userId = params.userId;
   const movieId = params.movieId;
 
-  const [watchStatus, setWatchStatus] = useState<WatchedState>(params.initialWatchedStatus);
+  const [watchStatus, setWatchStatus] = useState<WatchedState>(WatchedState.NOT_WATCHLISTED);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [watchlistItem, setWatchlistItem] = useState<WatchlistItem | null>(null);
+
+  useEffect(() => {
+    setWatchlistItem(params.initialWatchlistItem);
+
+    if (params.initialWatchlistItem === null) {
+      setWatchStatus(WatchedState.NOT_WATCHLISTED)
+    } else {
+      setWatchStatus(params.initialWatchlistItem.watched ? WatchedState.WATCHED : WatchedState.UNWATCHED);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (params.onValueChange !== undefined) {
+      params.onValueChange(watchStatus)
+    }
+  }, [watchStatus])
+
+  function getWatchedStatus(): WatchedState{
+    if (watchlistItem === null) {
+      return WatchedState.NOT_WATCHLISTED;
+    }
+
+    return watchlistItem.watched ? WatchedState.WATCHED : WatchedState.UNWATCHED;
+  }
 
   const handleAddMovieToWatchlist = async () => {
     try {
       setLoading(true);
-      const newWatchStatus = await addToWatchlist(userId, movieId);
-      setWatchStatus(newWatchStatus);
+      const newWatchlistItem: WatchlistItem | null = await addToWatchlist(userId, movieId);
+
+      if (newWatchlistItem !== null) {
+        setWatchlistItem(newWatchlistItem);
+        setWatchStatus(WatchedState.UNWATCHED)
+      }
     } catch (error) {
       console.error("Error adding to watchlist", error);
       setError("Something went wrong. Please try again.");
@@ -33,24 +63,24 @@ export default function AddToWatchListButton({params}: {
     }
   };
 
-  const handleRemoveMovieFromWatchlist = async () => {
-    try {
-      setLoading(true);
-      const newWatchStatus = await removeFromWatchlist(userId, movieId);
-      setWatchStatus(newWatchStatus);
-    } catch (error) {
-      console.error("Error removing from watchlist", error);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+  function updateWatchItemWatchedState(status: WatchedState) {
+    if (watchlistItem === null || status === WatchedState.ERROR) {
+      return;
     }
-  };
 
-  const handleChangeWatchedStatus = async (status: WatchedState) => {
+    setWatchlistItem({
+      id: watchlistItem.id,
+      movie: watchlistItem.movie,
+      review: watchlistItem.review,
+      watched: status === WatchedState.WATCHED
+    });
+  }
+
+  const handleChangeWatchedStatus = async (watchedState: WatchedState) => {
     try {
       setLoading(true);
-      setWatchStatus(status);
-      const newWatchStatus = await updateWatchedStatus(userId, movieId, status);
+      const newWatchStatus: WatchedState = await updateWatchedStatus(userId, movieId, watchedState);
+      updateWatchItemWatchedState(newWatchStatus)
       setWatchStatus(newWatchStatus);
     } catch (error) {
       console.error("Error updating watched status", error);
@@ -60,17 +90,11 @@ export default function AddToWatchListButton({params}: {
     }
   };
 
-  useEffect(() => {
-    if (params.onValueChange !== undefined) {
-      params.onValueChange(watchStatus)
-    }
-  }, [watchStatus])
-
   if (error) {
     return <p className="mt-4 text-red-500">{error}</p>;
   }
 
-  if (watchStatus === WatchedState.NOT_WATCHLISTED) {
+  if (getWatchedStatus() === WatchedState.NOT_WATCHLISTED) {
     return (
       <button
         className="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-xl
@@ -91,24 +115,20 @@ export default function AddToWatchListButton({params}: {
           On your watchlist
           <Image src={'/checkmark.svg'} width={16} height={16} alt="checkmark" />
         </p>
-        <a
-          onClick={handleRemoveMovieFromWatchlist}
-          className="text-blue-400 hover:underline cursor-pointer text-xs"
-        >
-          {loading ? "Removing..." : "Remove"}
-        </a>
       </div>
-      <select
-        id="selectWatchedStatus"
-        name="SelectWatchedStatus"
-        className="mt-2 px-4 py-2 bg-blue-500 rounded-md text-white font-semibold"
-        value={watchStatus}
-        onChange={event => handleChangeWatchedStatus(event.target.value as WatchedState)}
-        disabled={loading}
-      >
-        <option value={WatchedState.UNWATCHED}>Plan to watch</option>
-        <option value={WatchedState.WATCHED}>Watched</option>
-      </select>
+      {watchlistItem?.review === null && (
+        <select
+          id="selectWatchedStatus"
+          name="SelectWatchedStatus"
+          className="mt-2 px-4 py-2 bg-blue-500 rounded-md text-white font-semibold"
+          value={watchStatus}
+          onChange={event => handleChangeWatchedStatus(event.target.value as WatchedState)}
+          disabled={loading}
+        >
+          <option value={WatchedState.UNWATCHED}>Plan to watch</option>
+          <option value={WatchedState.WATCHED}>Watched</option>
+        </select>
+      )}
     </div>
   );
 }
