@@ -20,13 +20,12 @@ const ErrorAlert: React.FC<ErrorAlertProps> = ({ message, onClose }) => {
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     >
       <div className="p-6 bg-red-500 text-white rounded shadow-lg">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-col">
           <span className="font-bold">Something went wrong:</span>
-          <br/>
           <span>{message}</span>
           <button
             onClick={handleClose}
-            className="ml-4 text-sm font-bold px-2 py-1 bg-white text-green-500 rounded"
+            className="ml-4 text-sm font-bold px-2 py-1 bg-white text-black rounded self-end mt-4"
           >
             Close
           </button>
