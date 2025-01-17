@@ -162,7 +162,7 @@ export async function sendComment(topicId: number, content: string): Promise<Com
     if (error instanceof Error) {
       console.error(error);
     }
-    throw error;
+    throw new Error("An error occurred while sending the comment");
   }
 }
 
