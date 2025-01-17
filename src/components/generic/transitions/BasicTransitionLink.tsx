@@ -16,8 +16,8 @@ export default function BasicTransitionLink({children, href}:
         href: string
     }) {
 
+    // Retrieve the path of the current page
     const currentPath = usePathname();
-
 
     /**
      * Contains the animation for the standard transition 
