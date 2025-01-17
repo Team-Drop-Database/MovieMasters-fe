@@ -77,23 +77,21 @@ export async function createTopic(title: string, description: string): Promise<T
   const endpoint = `/forum/topics`;
 
   try {
-    const response = await fetch(endpoint, {
+    const response: Response = await apiClient(endpoint, {
       method: 'POST',
-      body: JSON.stringify({ title, description }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: JSON.stringify({title, description}),
     });
 
-    if (!response.ok) {
+    if (response.status === 201) {
+      return await response.json();
+    } else {
+      console.warn(`Failed to create topic. Status: ${response.status}`);
       new Error('Failed to create topic');
     }
-
-    const createdTopic = await response.json();
-    return createdTopic as Topic;
-
-  } catch (error) {
-    console.error('Error creating topic:', error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
     throw error;
   }
 }
@@ -162,7 +160,7 @@ export async function sendComment(topicId: number, content: string): Promise<Com
     if (error instanceof Error) {
       console.error(error);
     }
-    return Promise.reject(new Error("An error occurred while sending the comment"));
+    throw error;
   }
 }
 
