@@ -114,12 +114,14 @@ export default function MyWatchList() {
           <div className="p-4">
             <h1 className="text-2xl">Watched</h1>
             <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {watchedMovies.length == 0 ? <p className="font-inter text-md opacity-50">Still empty here...</p> : ''}
               {mapMoviesToList(watchedMovies)}
             </div>
           </div>
           <div className="p-4">
             <h1 className="text-2xl">Plan to watch</h1>
             <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {planToWatchMovies.length == 0 ? <p className="font-inter text-md opacity-50">Still empty here...</p> : ''}
               {mapMoviesToList(planToWatchMovies)}
             </div>
           </div>
