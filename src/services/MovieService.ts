@@ -75,15 +75,17 @@ export async function getNumberOfPages(movieTitle: string | null): Promise<numbe
   }
 }
 
-export async function postMovie(movie: Movie): Promise<boolean> {
+export async function postMovie(movie: Movie): Promise<boolean | string> {
   try {
     const response = await apiClient('/movies', {
       method: 'POST',
       body: JSON.stringify(movie)
     })
 
-    return response.status === 200;
-
+    if (response.status === 200) {
+      return true;
+    }
+    return await response.text();
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error);

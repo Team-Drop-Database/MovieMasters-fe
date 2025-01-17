@@ -23,12 +23,10 @@ export default function PostMovie() {
 
   async function submitMovie(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
-    const result: boolean = await postMovie(movie);
+    const result: boolean | string = await postMovie(movie);
 
-    if (!result) {
-      setErrorMessage('Something went wrong while saving the movie');
+    if (typeof result !== 'boolean') {
+      setErrorMessage(result);
     } else {
       setMovie(defaultMovie);
       setSuccessMessage('Movie saved');
@@ -43,18 +41,24 @@ export default function PostMovie() {
   async function getTmdbMovie(formData: FormData): Promise<void> {
     const movieId: FormDataEntryValue | null = formData.get('movieId');
     if (movieId === null) {
-      return;
+      return ;
     }
     const tmdbMovie: Movie | string = await getMovieById(+movieId);
     if (typeof tmdbMovie === "object") {
       setMovie(tmdbMovie);
+    } else {
+      setErrorMessage(tmdbMovie);
     }
   }
 
+  function emptyMessage(): void {
+    setErrorMessage(null);
+    setSuccessMessage(null);
+  }
+
   return (
-    <div>
-      <div>
-        <form action={getTmdbMovie}>
+    <div className="flex flex-col">
+        <form action={getTmdbMovie} className="flex flex-col items-center w-max self-center mb-10">
           <div className="flex flex-col mb-5 w-96">
             <label htmlFor="movieId">TMDB movie ID:</label>
             <input type="number"
@@ -64,10 +68,13 @@ export default function PostMovie() {
                hover:bg-light_grey_active hover:duration-300 hover:cursor-text" required/>
           </div>
 
-          <button type="submit" name="button" value="submit">Get movie</button>
+          <button type="submit"
+                  name="button"
+                  value="submit"
+                  className="hover:cursor-pointer px-3 py-1 bg-accent_blue rounded
+                  hover:bg-accent_blue_active font-[family-name:var(--font-alatsi)] self-start">Get movie</button>
         </form>
-      </div>
-      <form onSubmit={submitMovie} className="flex flex-col items-center">
+      <form onSubmit={submitMovie} className="flex flex-col items-center w-max self-center">
         <div className="flex flex-col mb-5 w-96">
           <label htmlFor="title">Title:</label>
           <input type="text"
@@ -122,14 +129,15 @@ export default function PostMovie() {
                  className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                hover:bg-light_grey_active hover:duration-300 hover:cursor-text" required/>
         </div>
-
-        <div className="h-3">
-          {errorMessage && <ErrorAlert message={errorMessage} />}
-          {successMessage && <SuccessAlert message={successMessage} />}
-        </div>
-
-        <button type="submit" name="button" value="submit">Save movie</button>
+        <button type="submit"
+                name="button"
+                value="submit"
+                className="hover:cursor-pointer px-3 py-1 bg-accent_blue rounded
+                  hover:bg-accent_blue_active font-[family-name:var(--font-alatsi)] self-start">Save movie</button>
       </form>
+
+      {errorMessage && <ErrorAlert message={errorMessage} onClose={emptyMessage} />}
+      {successMessage && <SuccessAlert message={successMessage} onClose={emptyMessage} />}
     </div>
   );
 }
