@@ -39,7 +39,7 @@ export default function Forum() {
     }
   }, [ownedByMe, allTopics, sortOption, userDetails]);
 
-  const fetchTopics = async () => {
+  let fetchTopics = async () => {
     setIsLoading(true);
     setError(null);
     try {
