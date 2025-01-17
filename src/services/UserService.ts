@@ -1,7 +1,8 @@
 import apiClient from "@/services/ApiClient";
 
-const STATUS_CREATED = 201;
+const CREATED = 201;
 const BAD_REQUEST = 400;
+const NOT_FOUND = 404;
 
 export async function registerUser(user: object): Promise<string | undefined> {
   const endpoint = "/users";
@@ -11,7 +12,7 @@ export async function registerUser(user: object): Promise<string | undefined> {
   });
 
   switch (response.status) {
-    case STATUS_CREATED: {
+    case CREATED: {
       return "Your account has been created";
     }
     case BAD_REQUEST: {
@@ -83,4 +84,24 @@ export async function uploadImageToImgbb(imageFile: Blob) {
 
   const data = await response.json();
   return data.data.url;
+}
+
+export async function requestForPasswordReset(email: string) {
+  const endpoint = "/users/password-reset";
+  const response = await apiClient(endpoint,{
+    method: "POST",
+    body: JSON.stringify({"email": email})
+  });
+
+  switch (response.status) {
+    case CREATED: {
+      return response.text();
+    }
+    case NOT_FOUND: {
+      return "Instructions for resetting your password have been sent"
+    }
+    case BAD_REQUEST: {
+      throw new Error(await response.text());
+    }
+  }
 }
