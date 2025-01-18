@@ -7,7 +7,7 @@ import {getMovieById} from "@/services/TmdbService";
 import SuccessAlert from "@/components/generic/alert/SuccessAlert";
 import ErrorAlert from "@/components/generic/alert/ErrorAlert";
 
-export default function PostMovie() {
+export default function page() {
   const defaultMovie: Movie = {
     id: 0,
     title: '',
@@ -58,22 +58,22 @@ export default function PostMovie() {
 
   return (
     <div className="flex flex-col">
-        <form action={getTmdbMovie} className="flex flex-col items-center w-max self-center mb-10">
-          <div className="flex flex-col mb-5 w-96">
-            <label htmlFor="movieId">TMDB movie ID:</label>
-            <input type="number"
-                   id="movieId"
-                   name="movieId"
-                   className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
+      <form action={getTmdbMovie} className="flex flex-col items-center w-max self-center mb-10">
+        <div className="flex flex-col mb-5 w-96">
+          <label htmlFor="movieId">TMDB movie ID:</label>
+          <input type="number"
+                 id="movieId"
+                 name="movieId"
+                 className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
                hover:bg-light_grey_active hover:duration-300 hover:cursor-text" required/>
-          </div>
+        </div>
 
-          <button type="submit"
-                  name="button"
-                  value="submit"
-                  className="hover:cursor-pointer px-3 py-1 bg-accent_blue rounded
+        <button type="submit"
+                name="button"
+                value="submit"
+                className="hover:cursor-pointer px-3 py-1 bg-accent_blue rounded
                   hover:bg-accent_blue_active font-[family-name:var(--font-alatsi)] self-start">Get movie</button>
-        </form>
+      </form>
       <form onSubmit={submitMovie} className="flex flex-col items-center w-max self-center">
         <div className="flex flex-col mb-5 w-96">
           <label htmlFor="title">Title:</label>
