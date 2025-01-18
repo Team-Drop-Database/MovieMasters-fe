@@ -1,13 +1,15 @@
-﻿'use client';
+﻿"use client";
 
 import Movie from "@/models/Movie";
-import {ChangeEvent, FormEvent, useState} from "react";
+import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {postMovie} from "@/services/MovieService";
 import {getMovieById} from "@/services/TmdbService";
 import SuccessAlert from "@/components/generic/alert/SuccessAlert";
 import ErrorAlert from "@/components/generic/alert/ErrorAlert";
+import {redirect} from "next/navigation";
+import {useAuthContext} from "@/contexts/AuthContext";
 
-export default function page() {
+export default function AddMovie() {
   const defaultMovie: Movie = {
     id: 0,
     title: '',
@@ -19,7 +21,17 @@ export default function page() {
   }
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [movie, setMovie] = useState<Movie>(defaultMovie)
+  const [movie, setMovie] = useState<Movie>(defaultMovie);
+  const {isModerator, loading} = useAuthContext();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!isModerator) {
+        redirect('/');
+      }
+    }
+
+  }, [loading]);
 
   async function submitMovie(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
