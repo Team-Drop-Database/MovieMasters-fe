@@ -73,7 +73,7 @@ export async function getTopicById(topicId: string): Promise<Topic | null> {
  * @param description The description of the topic.
  * @returns A promise resolving to the created topic.
  */
-export async function createTopic(title: string, description: string): Promise<Topic | string> {
+export async function createTopic(title: string, description: string): Promise<Topic | null> {
   const endpoint = `/forum/topics`;
 
   try {
