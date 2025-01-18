@@ -73,7 +73,7 @@ export async function getTopicById(topicId: string): Promise<Topic | null> {
  * @param description The description of the topic.
  * @returns A promise resolving to the created topic.
  */
-export async function createTopic(title: string, description: string): Promise<Topic> {
+export async function createTopic(title: string, description: string): Promise<Topic | string> {
   const endpoint = `/forum/topics`;
 
   try {
@@ -138,7 +138,7 @@ export async function getCommentsByTopicId(topicId: string): Promise<Comment[]> 
  * @param content The content of the comment.
  * @returns A promise resolving to the created comment.
  */
-export async function sendComment(topicId: number, content: string): Promise<Comment> {
+export async function sendComment(topicId: number, content: string): Promise<Comment | string> {
   const endpoint = `/forum/topics/${topicId}/comments`;
 
   try {
