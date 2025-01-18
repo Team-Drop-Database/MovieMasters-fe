@@ -86,7 +86,7 @@ export async function createTopic(title: string, description: string): Promise<T
       return await response.json();
     } else {
       console.warn(`Failed to create topic. Status: ${response.status}`);
-      new Error('Failed to create topic');
+      return null;
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -154,7 +154,7 @@ export async function sendComment(topicId: number, content: string): Promise<Com
       return comment as Comment;
     } else {
       console.warn(`Failed to send comment. Status: ${response.status}`);
-      new Error("Failed to send comment");
+      return null;
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
