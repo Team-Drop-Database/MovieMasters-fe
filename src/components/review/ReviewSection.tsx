@@ -22,14 +22,11 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, on
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = React.useState(false)
   const [selectedReviewId, setSelectedReviewId] = React.useState<string | null>(null)
-  const [userHasReview, setUserHasReview] = React.useState<boolean>(false);
 
   const retrieveReviews = async () => {
     try {
       const foundReviews = await getReviewsByMovie(movieId);
       setReviews(foundReviews);
-      setUserHasReview(
-        foundReviews.filter(reviews => reviews.username === userDetails?.username).length > 0)
       setErrorMessage(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -56,7 +53,6 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, on
     } finally {
       setIsConfirmDialogVisible(false);
       setSelectedReviewId(null);
-      setUserHasReview(false)
       onReviewDeleted();
     }
   };
@@ -72,7 +68,7 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, on
 
   return (
     <div className={`${className} flex flex-col gap-2`}>
-      { isLoggedIn && userDetails?.userId !== undefined && hasWatched && !userHasReview &&
+      { isLoggedIn && userDetails?.userId !== undefined && hasWatched &&
         <PostReviewContainer movieId={movieId} userId={userDetails?.userId} onReviewPosted={(newReview) => {
           retrieveReviews().then((): void => {
             onReviewCreated(newReview);
