@@ -12,7 +12,7 @@ import {redirect, usePathname} from "next/navigation"
 import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const {isLoggedIn, userDetails, logout} = useAuthContext();
+  const {isLoggedIn, isModerator, userDetails, logout} = useAuthContext();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const mobileDropdownMenuRef = useRef<HTMLDivElement | null>(null);
@@ -108,6 +108,9 @@ export default function Header() {
               </BasicTransitionLink>
               <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={handleLogout}
                              handleMobileDropdownMenu={() => setIsMobileDropdownMenuShown(!isMobileDropdownMenuShown)}/>
+              {isModerator && (
+                <div>Hallo </div>
+              )}
             </div>
           ) : (
             <div className="flex sm:gap-5 basis-[30%] justify-end">

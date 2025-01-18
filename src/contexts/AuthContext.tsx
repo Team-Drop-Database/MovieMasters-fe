@@ -8,6 +8,7 @@ import {Role} from "@/models/Role";
 
 type AuthContextType = {
   isLoggedIn: boolean;
+  isModerator: boolean;
   userDetails: { username: string; userId: number, profileUrl: string, role: Role } | null;
   loading: boolean;
   login: () => Promise<void>;
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModerator, setIsModerator] = useState(false);
   const [userDetails, setUserDetails] = useState<{ username: string; userId: number; profileUrl: string; role: Role } | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -45,14 +47,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const decoded = jwtDecode(token);
         setIsLoggedIn(true);
         // @ts-expect-error: description here to make typescript fuck off
+        setIsModerator(decoded.role === Role.ROLE_MOD)
+        // @ts-expect-error: description here to make typescript fuck off
         setUserDetails({ username: decoded.sub as string, userId: parseInt(decoded.userId, 10), profileUrl: decoded.profileUrl, role: decoded.role});
       } catch (error) {
         console.error("Error decoding JWT:", error);
         setIsLoggedIn(false);
+        setIsModerator(false);
         setUserDetails(null);
       }
     } else {
       setIsLoggedIn(false);
+      setIsModerator(false);
       setUserDetails(null);
     }
     setLoading(false);
@@ -73,11 +79,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     Cookies.remove("jwt");
     Cookies.remove("refresh_token");
     setIsLoggedIn(false);
+    setIsModerator(false);
     setUserDetails(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userDetails, loading, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, isModerator, userDetails, loading, login, logout }}>
   {children}
   </AuthContext.Provider>
 );
