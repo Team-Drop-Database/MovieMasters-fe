@@ -53,7 +53,9 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
 
     try {
       const newCommentObject = await sendComment(topic.id, newComment);
-      setComments((prevComments) => [...(prevComments || []), newCommentObject]);
+      if (newCommentObject != null){
+        setComments((prevComments) => [...(prevComments || []), newCommentObject]);
+      }
       setNewComment("");
       scrollToBottom();
     } catch (err) {

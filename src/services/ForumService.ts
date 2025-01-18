@@ -138,7 +138,7 @@ export async function getCommentsByTopicId(topicId: string): Promise<Comment[]> 
  * @param content The content of the comment.
  * @returns A promise resolving to the created comment.
  */
-export async function sendComment(topicId: number, content: string): Promise<Comment | string> {
+export async function sendComment(topicId: number, content: string): Promise<Comment | null> {
   const endpoint = `/forum/topics/${topicId}/comments`;
 
   try {
