@@ -109,6 +109,7 @@ export async function getMovieGenres(): Promise<Genre[]> {
 export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
   let queryString = `?`;
 
+  // Constructs the querystring
   for(let i = 0; i < genres.length; i++) {
     queryString = queryString + ( i > 0 ? `&` : ``) + `genre=${genres[i]}`;
   }
