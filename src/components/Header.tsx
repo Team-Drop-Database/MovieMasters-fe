@@ -81,7 +81,7 @@ export default function Header() {
       <div
         className="sm:min-h-[86px] sm:px-7 px-4 max-sm:px-2 py-2 w-full flex items-center bg-background_primary md:shadow-md font-[family-name:var(--font-alatsi)]">
         <div className="flex grow items-center">
-          <div className="basis-[30%]">
+          <div className="basis-[30%] flex items-center justify-between pr-8">
             <BasicTransitionLink href={"/"}>
               <div className="flex items-center md:gap-2 group">
                 <Image
@@ -96,6 +96,12 @@ export default function Header() {
                 </h1>
               </div>
             </BasicTransitionLink>
+            <BasicTransitionLink href={"/explore"}>
+                <div
+                  className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">
+                  Browse
+                </div>
+              </BasicTransitionLink>
           </div>
           <SearchBar className=""/>
           {isLoggedIn ? (
