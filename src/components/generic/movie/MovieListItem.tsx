@@ -118,7 +118,7 @@ type HorizontalMoviePagerProps = {
 
 function HorizontalMoviePager({ movieItems, cssProperties }: HorizontalMoviePagerProps) {
   return (
-    <div className="overflow-x-hidden pt-5">
+    <div className="overflow-x-hidden pt-5 overflow-y-hidden">
       <div style={cssProperties} className="w-fit flex gap-5">
         { [...movieItems, ...movieItems].map((item, index) => (
           <MovieListItem key={index} title={item.title} posterUrl={item.posterUrl} />
