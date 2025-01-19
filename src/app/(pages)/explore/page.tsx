@@ -5,6 +5,7 @@ import Genre from "@/models/Genre";
 import Movie from "@/models/Movie";
 import MovieList from "@/models/MovieList";
 import { getMovieGenres, getMovieListByGenres, getMoviesByGenre } from "@/services/MovieService"
+import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
 import { useEffect, useState } from "react";
 
 export default function Explore() {
@@ -94,11 +95,15 @@ export default function Explore() {
     // }
 
     for(let i = 0; i < movieLists.length; i++) {
+
+        const formattedMovieList: MovieListItemProps[] = movieLists[i]
+            .movies.flatMap(movie => {return {title: movie.title, posterUrl: movie.posterPath}});
+
         const content = 
-        <div key={i} className="border border-red-500">
+        <div key={i} className="border border-red-500 mb-12">
             <h3 className="font-inter text-3xl">{movieLists[i].genre}</h3>
-            <div className="border border-purple-500 h-64">
-                {/* <TitledHorizontalMoviePager title="" movieItems={movieLists[i].movies}></TitledHorizontalMoviePager> */}
+            <div className="border border-purple-500">
+                <TitledHorizontalMoviePager title="" movieItems={formattedMovieList}></TitledHorizontalMoviePager>
             </div>
         </div>;
         movieListSections.push(content);
@@ -108,7 +113,7 @@ export default function Explore() {
         return <div>An error occurred.</div>;
     }
 
-    return <div className="px-8">
+    return <div className="">
                 <h1 className="font-inter text-4xl mb-4">Explore</h1>
                 {movieListSections}
            </div>;
