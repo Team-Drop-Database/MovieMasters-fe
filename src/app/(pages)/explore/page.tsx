@@ -28,15 +28,23 @@ export default function Explore() {
     })
 
     const genreSections: JSX.Element[] = [];
-    genres.forEach(genre => {
+    // genres.forEach(genre => {
 
-        // const moviesByGenre: Movie[] = getMoviesByGenre([genre.name]);
+    //     // const moviesByGenre: Movie[] = getMoviesByGenre([genre.name]);
+    //     const content = 
+    //         <div>
+    //             <h3>{genre.name}</h3>
+    //         </div>;
+    //     genreSections.push(content);
+    // });
+
+    for(let i = 0; i < genres.length; i++) {
         const content = 
-            <div>
-                <h3>{genre.name}</h3>
-            </div>;
+        <div key={i}>
+            <h3>{genres[i].name}</h3>
+        </div>;
         genreSections.push(content);
-    });
+    }
 
     if(error) {
         return <div>An error occurred.</div>;
