@@ -1,5 +1,6 @@
 ﻿import Genre from "@/models/Genre";
 import Movie from "@/models/Movie"
+import MovieList from "@/models/MovieList";
 import apiClient from "@/services/ApiClient";
 
 export async function getMovieById(movieId: number): Promise<Movie | string> {
@@ -111,7 +112,7 @@ export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
 
   // Constructs the querystring
   for(let i = 0; i < genres.length; i++) {
-    queryString = queryString + ( i > 0 ? `&` : ``) + `genre=${genres[i]}`;
+    queryString = queryString + ( i > 0 ? `&` : ``) + `genres=${genres[i]}`;
   }
 
   const endpoint = `/movies/genrefilter${queryString}`;
@@ -134,3 +135,30 @@ export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
     throw error;
   }
 }
+
+export async function getMovieListByGenres(genres: string[]): Promise<MovieList[]> {
+  const movieLists: MovieList[] = [];
+  for(let i = 0; i < genres.length; i++) {
+    const movies = await getMoviesByGenre([genres[i]]);
+    const movieList: MovieList = {genre: genres[i], movies};
+    movieLists.push(movieList);
+  }
+  return movieLists;
+}
+
+// deze functie is wss niet meer nodig
+export async function getMovieLists() {
+  // get the genres
+  // for each genre, get the movies
+  // create an array of 'MovieList' objects
+  // fill this array, giving 
+}
+
+// Dus hoe het gaat werken:
+// 1. Haal genres op (dit moet sws om een filter te kunnen toevoegen later)
+// 2. Bij de initiele page load: geef alle genres in 1x mee aan 'getMovieListByGenres'
+// 3. Bij het filteren later: geef alleen de aangevinkte genres mee aan 'GetMovieListByGenres'
+
+// Nog doen later:
+// 1. Voeg meer films toe aan de database (bijv. ook page 2 en 3 van 'top_rated'), voor een grotere explore page
+// 2. Maak responsive
