@@ -100,8 +100,12 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
           onConfirm={() => {
             reportUser(selectedUserId, reportReason)
             setIsReportDialogVisible(false)
+            setReportReason("")
           }}
-          onCancel={() => setIsReportDialogVisible(false)}
+          onCancel={() => {
+            setIsReportDialogVisible(false)
+            setReportReason("")
+          }}
           textFieldProps={{ value: reportReason, onChange: setReportReason }}
         />
       )}
