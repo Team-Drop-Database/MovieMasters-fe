@@ -4,6 +4,7 @@ import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
 import { setTimeout } from "timers";
 import arrow from "@/assets/images/right-arrow.svg";
 import Image from "next/image";
+import BasicTransitionLink from "../transitions/BasicTransitionLink";
 
 type TitledHorizontalMoviePagerProps = {
   title: string
@@ -113,18 +114,20 @@ function HorizontalMoviePager({ movieItems, cssProperties }: HorizontalMoviePage
     <div className="overflow-x-hidden pt-5 overflow-y-hidden">
       <div style={cssProperties} className="w-fit flex gap-5">
         { [...movieItems, ...movieItems].map((item, index) => (
-          <MovieListItem key={index} title={item.title} posterUrl={item.posterUrl} />
+          <MovieListItem key={index} id={item.id} title={item.title} posterUrl={item.posterUrl} />
         ))}
       </div>
     </div>
   )
 }
 
-function MovieListItem({ title, posterUrl }: MovieListItemProps) {
+function MovieListItem({ id, title, posterUrl }: MovieListItemProps) {
   return (
     <div className=" flex flex-col items-center grow-0 shrink-0 hover:scale-105 transition-transform cursor-pointer">
+      <BasicTransitionLink href={`/movies/${id}#top`}>
       <img src={posterUrl} width={250} className="shadow-2xl" alt={`Poster for ${title}`}></img>
       <p className="font-inter font-semibold mt-2 w-fill text-center max-w-[250px]">{title}</p>
+      </BasicTransitionLink>
     </div>
   )
 }
