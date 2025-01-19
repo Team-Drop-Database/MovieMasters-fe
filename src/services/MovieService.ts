@@ -101,3 +101,35 @@ export async function getMovieGenres(): Promise<Genre[]> {
   }
 }
 
+/**
+ * Retrieves all movies based on a list of genres.
+ * 
+ * @param genreName name of the genre
+ */
+export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
+  let queryString = `?`;
+
+  for(let i = 0; i < genres.length; i++) {
+    queryString = queryString + ( i > 0 ? `&` : ``) + `genre=${genres[i]}`;
+  }
+
+  const endpoint = `/movies/genrefilter${queryString}`;
+  
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return [];
+      }
+    }
+  } catch(error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
