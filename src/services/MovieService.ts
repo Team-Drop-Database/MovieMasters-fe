@@ -1,4 +1,5 @@
-﻿import Movie from "@/models/Movie"
+﻿import Genre from "@/models/Genre";
+import Movie from "@/models/Movie"
 import apiClient from "@/services/ApiClient";
 
 export async function getMovieById(movieId: number): Promise<Movie | string> {
@@ -74,3 +75,29 @@ export async function getNumberOfPages(movieTitle: string | null): Promise<numbe
     throw error;
   }
 }
+
+/**
+ * Retrieves all genres.
+ */
+export async function getMovieGenres(): Promise<Genre[]> {
+  const endpoint = `/movies/genres`;
+
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return [];
+      }
+    }
+  } catch(error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
+
