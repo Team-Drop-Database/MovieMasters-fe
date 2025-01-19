@@ -94,7 +94,7 @@ export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieLi
           </button>)}
         </div>
       </div>
-      <HorizontalMoviePager movieItems={movies} cssProperties={pagerProperties} />
+      <HorizontalMoviePager movieItems={movies} cssProperties={pagerProperties}/>
     </div>
   )
 }
@@ -104,7 +104,7 @@ type HorizontalMoviePagerProps = {
   cssProperties: React.CSSProperties,
 }
 
-function HorizontalMoviePager({ movieItems, cssProperties }: HorizontalMoviePagerProps) {
+function HorizontalMoviePager({movieItems, cssProperties}: HorizontalMoviePagerProps) {
   return (
     <div className="overflow-x-hidden pt-5 overflow-y-hidden">
       <div style={cssProperties} className="w-fit flex gap-5">

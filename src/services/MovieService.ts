@@ -1,4 +1,4 @@
-﻿import Genre from "@/models/Genre";
+import Genre from "@/models/Genre";
 import Movie from "@/models/Movie"
 import MovieList from "@/models/MovieList";
 import apiClient from "@/services/ApiClient";
@@ -77,6 +77,25 @@ export async function getNumberOfPages(movieTitle: string | null): Promise<numbe
   }
 }
 
+export async function postMovie(movie: Movie): Promise<boolean | string> {
+  try {
+    const response = await apiClient('/movies', {
+      method: 'POST',
+      body: JSON.stringify(movie)
+    })
+
+    if (response.status === 200) {
+      return true;
+    }
+    return await response.text();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
+
 /**
  * Retrieves all movie genres.
  */
@@ -94,7 +113,7 @@ export async function getMovieGenres(): Promise<Genre[]> {
         return [];
       }
     }
-  } catch(error: unknown) {
+  } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error);
     }

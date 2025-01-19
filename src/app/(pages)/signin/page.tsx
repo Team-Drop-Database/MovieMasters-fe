@@ -36,7 +36,6 @@ export default function Page() {
         <h1 className="text-4xl font-bold text-center mb-6">Sign in!</h1>
         <div className="">
           <form onSubmit={handleSubmit} className="flex flex-col gap-2" ref={formRef}>
-            {/* <label className="font-bold" htmlFor="username">Username</label> */}
             <input
                 id="username"
                 name="username"
@@ -46,7 +45,6 @@ export default function Page() {
                                    hover:bg-light_grey_active hover:duration-300 hover:cursor-text"
                 required
             />
-            {/* <label className="font-bold" htmlFor="password">Password</label> */}
             <input
                 id="password"
                 type="password"
@@ -69,6 +67,11 @@ export default function Page() {
                     className="underline hover:cursor-pointer hover:no-underline"
                 >
                   Register here!
+                </Link>
+              </p>
+              <p className="text-sm gap2">Forgot your password?{" "}
+                <Link href="signin/password" className="underline hover:cursor-pointer hover:no-underline">
+                  Request a new one!
                 </Link>
               </p>
             </div>
