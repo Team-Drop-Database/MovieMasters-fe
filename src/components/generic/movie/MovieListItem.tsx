@@ -84,14 +84,14 @@ export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieLi
     <div className="flex flex-col relative group">
       <div className="flex items-center justify-between px-[4rem] w-full">
       <div className="flex-col justify-end absolute left-4 top-1/2 origin-center -translate-y-1/2 z-10">
-          <button className="" onClick={() => scrollMovies(ScrollDirection.Backward)}>
+          {showBackButton && (<button className="" onClick={() => scrollMovies(ScrollDirection.Backward)}>
             <Image src={arrow} alt="" className="w-14 hover:scale-110 transition-all opacity-0 group-hover:opacity-100 rotate-180"></Image>
-          </button>
+          </button>)}
       </div>
         <div className="flex-col justify-end absolute right-4 top-1/2 origin-center -translate-y-1/2 z-10">
-          <button className="" onClick={() => scrollMovies(ScrollDirection.Forward)}>
+          {showNextButton && (<button className="" onClick={() => scrollMovies(ScrollDirection.Forward)}>
             <Image src={arrow} alt="" className="w-14 hover:scale-110 transition-all opacity-0 group-hover:opacity-100"></Image>
-          </button>
+          </button>)}
         </div>
       </div>
       <HorizontalMoviePager movieItems={movies} cssProperties={pagerProperties} />
