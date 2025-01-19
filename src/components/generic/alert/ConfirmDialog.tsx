@@ -1,16 +1,33 @@
 import React from "react";
+import BigTextField from "../BigTextField";
 
-interface ConfirmDialogProps {
-  message: string;
-  onConfirm: () => void;
-  onCancel: () => void;
+type TextFieldProps = {
+  value: string
+  onChange: (newValue: string) => void
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ message, onConfirm, onCancel }) => {
+interface ConfirmDialogProps {
+  message: string
+  onConfirm: () => void
+  onCancel: () => void
+  textFieldProps?: TextFieldProps
+}
+
+const ConfirmDialog: React.FC<ConfirmDialogProps> = (
+  { message, onConfirm, onCancel, textFieldProps }
+) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="p-6 bg-white rounded shadow-lg w-full max-w-sm">
         <p className="mb-4 text-center text-gray-800">{message}</p>
+        { textFieldProps && (
+          <BigTextField
+            value={textFieldProps.value}
+            onValueChange={textFieldProps.onChange}
+            className="bg-light_grey_active w-full"
+            placeholder="Reason for report"
+          />
+        )}
         <div className="flex justify-center space-x-4">
           <button
             onClick={onConfirm}

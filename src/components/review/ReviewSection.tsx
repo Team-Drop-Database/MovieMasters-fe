@@ -6,7 +6,12 @@ import {deleteReview, getReviewsByMovie} from "@/services/ReviewService"
 import Image from "next/image"
 import { ReviewItemStars } from "@/components/generic/review/StarContainer"
 import Anonymous from "@/assets/images/no-profile-pic.jpg"
-import ConfirmDialog from "@/components/generic/alert/ConfirmDialog";
+import ConfirmDialog from "@/components/generic/alert/ConfirmDialog"
+import DeleteIcon from "@/assets/images/delete/delete.svg"
+import HoveredDeleteIcon from "@/assets/images/delete/delete-hover.svg"
+import ReportIcon from "@/assets/images/flag/flag.svg"
+import HoveredReportIcon from "@/assets/images/flag/flag-hover.svg"
+import { reportUser } from "@/services/ReportService"
 
 type ReviewSectionProps = {
   movieId: number,
@@ -21,6 +26,9 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = React.useState(false)
   const [selectedReviewId, setSelectedReviewId] = React.useState<string | null>(null)
+  const [isReportDialogVisible, setIsReportDialogVisible] = React.useState(false)
+  const [selectedUserId, setSelectedUserId] = React.useState<number | null>(null)
+  const [reportReason, setReportReason] = React.useState("")
 
   const retrieveReviews = async () => {
     try {
@@ -38,6 +46,11 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
     setSelectedReviewId(reviewId);
     setIsConfirmDialogVisible(true);
   };
+
+  const onReport = (userId: number) => {
+    setSelectedUserId(userId)
+    setIsReportDialogVisible(true)
+  }
 
   const confirmDelete = async () => {
     if (!selectedReviewId) return;
@@ -73,7 +86,7 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
         }} />
       }
       { errorMessage && <div className="text-red-800">{errorMessage}</div> }
-      <ReviewList reviews={reviews} userDetails={userDetails} onDelete={handleDeleteReview} />
+      <ReviewList reviews={reviews} userDetails={userDetails} onDelete={handleDeleteReview} onReport={onReport} />
       {isConfirmDialogVisible && (
         <ConfirmDialog
           message="Are you sure you want to delete this review?"
@@ -81,17 +94,29 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
           onCancel={cancelDelete} // Cancel deletion
         />
       )}
+      { isReportDialogVisible && selectedUserId && (
+        <ConfirmDialog
+          message="Please enter reason for report"
+          onConfirm={() => {
+            reportUser(selectedUserId, reportReason)
+            setIsReportDialogVisible(false)
+          }}
+          onCancel={() => setIsReportDialogVisible(false)}
+          textFieldProps={{ value: reportReason, onChange: setReportReason }}
+        />
+      )}
     </div>
   )
 }
 
 type ReviewListProps = {
-  reviews: ReviewResponse[],
-  userDetails: { username: string } | null,
-  onDelete: (id: string) => void;
+  reviews: ReviewResponse[]
+  userDetails: { username: string } | null
+  onDelete: (id: string) => void
+  onReport: (userId: number) => void
 }
 
-function ReviewList({ reviews, userDetails, onDelete }: ReviewListProps) {
+function ReviewList({ reviews, userDetails, onDelete, onReport }: ReviewListProps) {
   return (
     <div className="flex flex-col gap-3">
       { reviews.map((review, index) => (
@@ -100,6 +125,7 @@ function ReviewList({ reviews, userDetails, onDelete }: ReviewListProps) {
           key={index}
           userDetails={userDetails}
           onDelete={onDelete}
+          onReport={onReport}
         />
       ))}
     </div>
@@ -107,37 +133,72 @@ function ReviewList({ reviews, userDetails, onDelete }: ReviewListProps) {
 }
 
 type ReviewListItemProps = {
-  review: ReviewResponse,
-  userDetails: { username: string } | null,
-  onDelete: (id: string) => void;
+  review: ReviewResponse
+  userDetails: { username: string } | null
+  onDelete: (id: string) => void
+  onReport: (userId: number) => void
 }
 
-function ReviewListItem({ review, userDetails, onDelete }: ReviewListItemProps) {
+function ReviewListItem({ review, userDetails, onDelete, onReport }: ReviewListItemProps) {
   return (
-    <div className="p-2 shrink-0 flex flex-col rounded-xl shadow-lg border border-background_secondary gap-2">
-      <div className="flex items-start gap-2">
-        <div className="relative w-12 h-12">  {/* 45px x 45px size */}
-          <Image
-            src={review.userProfilePicture || Anonymous}
-            alt="Profile picture"
-            fill
-            className="rounded-full object-cover"
-          />
+    <div className="p-2 shrink-0 flex rounded-xl shadow-lg border border-background_secondary justify-between items-start">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-start gap-2">
+          <div className="relative w-12 h-12">  {/* 45px x 45px size */}
+            <Image
+              src={review.userProfilePicture || Anonymous}
+              alt="Profile picture"
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
+          <p className="details grow">{review.username}</p>
         </div>
-        <p className="details grow">{review.username}</p>
-        {review.username === userDetails?.username && (
-          <Image
-            src="/delete.svg"
-            alt="Delete"
-            width={25}
-            height={25}
-            className="hover:cursor-pointer"
-            onClick={() => onDelete(review.id)}
-          />
-        )}
+        <ReviewItemStars rating={review.rating}/>
+        <p className="details">{review.reviewBody}</p>
       </div>
-      <ReviewItemStars rating={review.rating}/>
-      <p className="details">{review.reviewBody}</p>
+      <ReviewActionContainer review={review} userDetails={userDetails} onDelete={onDelete} onReport={onReport} />
+    </div>
+  )
+}
+
+type ReviewActionContainerProps = {
+  review: ReviewResponse
+  userDetails: { username: string } | null
+  onDelete: (id: string) => void
+  onReport: (userId: number) => void
+}
+
+function ReviewActionContainer({ review, userDetails, onDelete, onReport }: ReviewActionContainerProps) {
+  const [reportHover, setReportHover] = React.useState(false)
+  const [deleteHover, setDeleteHover] = React.useState(false)
+
+  return (
+    <div className="flex">
+      <Image
+        src={reportHover ? HoveredReportIcon : ReportIcon}
+        alt="Report"
+        title="Report"
+        width={25}
+        height={25}
+        className="hover:cursor-pointer"
+        onClick={() => onReport(review.userId)}
+        onMouseEnter={() => setReportHover(true)}
+        onMouseLeave={() => setReportHover(false)}
+      />
+      {review.username === userDetails?.username && (
+        <Image
+          src={deleteHover ? HoveredDeleteIcon : DeleteIcon}
+          alt="Delete"
+          title="Delete"
+          width={25}
+          height={25}
+          className="hover:cursor-pointer"
+          onClick={() => onDelete(review.id)}
+          onMouseEnter={() => setDeleteHover(true)}
+          onMouseLeave={() => setDeleteHover(false)}
+        />
+      )}
     </div>
   )
 }
