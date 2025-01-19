@@ -78,7 +78,7 @@ export async function getNumberOfPages(movieTitle: string | null): Promise<numbe
 }
 
 /**
- * Retrieves all genres.
+ * Retrieves all movie genres.
  */
 export async function getMovieGenres(): Promise<Genre[]> {
   const endpoint = `/movies/genres`;
@@ -136,8 +136,18 @@ export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
   }
 }
 
+/**
+ * Retrieves a list of lists of movies where each list has its genre 
+ * included in it. This mostly utilizes the 'getMoviesByGenre' 
+ * method and is meant to make it easy to use.
+ * 
+ * @param genres list of genre names
+ * @returns list of MovieList objects
+ */
 export async function getMovieListByGenres(genres: string[]): Promise<MovieList[]> {
   const movieLists: MovieList[] = [];
+
+  // Cycle through the genre and get a MovieList for each of them
   for(let i = 0; i < genres.length; i++) {
     const movies = await getMoviesByGenre([genres[i]]);
     const movieList: MovieList = {genre: genres[i], movies};
@@ -145,20 +155,3 @@ export async function getMovieListByGenres(genres: string[]): Promise<MovieList[
   }
   return movieLists;
 }
-
-// deze functie is wss niet meer nodig
-export async function getMovieLists() {
-  // get the genres
-  // for each genre, get the movies
-  // create an array of 'MovieList' objects
-  // fill this array, giving 
-}
-
-// Dus hoe het gaat werken:
-// 1. Haal genres op (dit moet sws om een filter te kunnen toevoegen later)
-// 2. Bij de initiele page load: geef alle genres in 1x mee aan 'getMovieListByGenres'
-// 3. Bij het filteren later: geef alleen de aangevinkte genres mee aan 'GetMovieListByGenres'
-
-// Nog doen later:
-// 1. Voeg meer films toe aan de database (bijv. ook page 2 en 3 van 'top_rated'), voor een grotere explore page
-// 2. Maak responsive
