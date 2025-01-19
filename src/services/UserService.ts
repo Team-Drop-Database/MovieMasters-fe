@@ -1,7 +1,11 @@
 import apiClient from "@/services/ApiClient";
 
-const STATUS_CREATED = 201;
-const BAD_REQUEST = 400;
+enum STATUS {
+  OK = 200,
+  CREATED = 201,
+  BAD_REQUEST = 400,
+  NOT_FOUND = 404
+}
 
 export async function registerUser(user: object): Promise<string | undefined> {
   const endpoint = "/users";
@@ -11,10 +15,10 @@ export async function registerUser(user: object): Promise<string | undefined> {
   });
 
   switch (response.status) {
-    case STATUS_CREATED: {
+    case STATUS.CREATED: {
       return "Your account has been created";
     }
-    case BAD_REQUEST: {
+    case STATUS.BAD_REQUEST: {
       throw new Error(await response.text());
     }
   }
@@ -83,4 +87,41 @@ export async function uploadImageToImgbb(imageFile: Blob) {
 
   const data = await response.json();
   return data.data.url;
+}
+
+export async function requestForPasswordReset(email: string) {
+  const endpoint = "/users/password-reset";
+  const response = await apiClient(endpoint,{
+    method: "POST",
+    body: JSON.stringify({"email": email})
+  });
+
+  switch (response.status) {
+    case STATUS.CREATED: {
+      return response.text();
+    }
+    case STATUS.NOT_FOUND: {
+      return "Instructions for resetting your password have been sent"
+    }
+    case STATUS.BAD_REQUEST: {
+      throw new Error(await response.text());
+    }
+  }
+}
+
+export async function resetPassword(passwordResetToken: string, newPassword: string) {
+  const endpoint = "/users/password-reset";
+  const response = await apiClient(endpoint,{
+    method: "PUT",
+    body: JSON.stringify({"passwordResetToken": passwordResetToken, "newPassword": newPassword})
+  });
+
+  switch (response.status) {
+    case STATUS.OK: {
+      return response.text();
+    }
+    case STATUS.BAD_REQUEST: {
+      throw new Error(await response.text());
+    }
+  }
 }
