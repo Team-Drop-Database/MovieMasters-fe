@@ -102,7 +102,7 @@ export default function Explore() {
             continue;
 
         const formattedMovieList: MovieListItemProps[] = movieLists[i]
-            .movies.flatMap(movie => {return {title: movie.title, posterUrl: movie.posterPath}});
+            .movies.flatMap(movie => {return {id: movie.id, title: movie.title, posterUrl: movie.posterPath}});
 
         const content = 
         <div key={i} className="mb-12">
