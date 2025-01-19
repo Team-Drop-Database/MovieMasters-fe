@@ -9,12 +9,17 @@ import { getMovieGenres, getMovieListByGenres } from "@/services/MovieService"
 import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
 import { useEffect, useState } from "react";
 
+/**
+ * The 'explore' page, where users can browse 
+ * movies from different genres.
+ */
 export default function Explore() {
 
     const [genres, setGenres] = useState<Genre[]>([]);
     const [movieLists, setMovieLists] = useState<MovieList[]>([]);
     const [error, setError] = useState<string | null>(null);
 
+    // Load the genres first
     useEffect(() => {
         async function fetchGenres() {
             try {
@@ -31,6 +36,7 @@ export default function Explore() {
         fetchGenres();
     }, []);
 
+    // Then, using the genres, fetch lists of movies based on those genres
     useEffect(() => {
         async function fetchMovieLists() {
             try {
@@ -49,60 +55,25 @@ export default function Explore() {
         fetchMovieLists();
     }, [genres])
 
-    // useEffect(() => {
-    //     async function fetchMovies() {
-    //         try {
-
-    //             for(let i = 0; i < genres.length; i++) {
-    //                 const movies: Movie[] = await getMoviesByGenre([genres[i].name]);
-    //                 setMovies(movies);
-    //             }
-    //             setMovies(movies);
-    //         } catch (err: unknown) {
-    //         if (err instanceof Error) {
-    //             setError(err.message);
-    //             } else {
-    //             setError("An unknown error occurred.");
-    //             }
-    //         }
-    //     }
-    //     fetchMovies();
-    // }, [genres]);
-
+    // List of JSX elements, whereby each element is a 'section' containing 
+    // the name of the genre and a list of movies. This will be 
+    // rendered ultimately.
     const movieListSections: JSX.Element[] = [];
 
-    // useEffect(() => {
-    //     if(genres.length > 0) {
-    //         async function fetchByGenre(){
-    //             return await getMoviesByGenre([genres[0].name]);
-    //         }
-    //         fetchByGenre().then(movies => {
-    //             console.log(movies);
-    //         })
-    //     }
-    // }, [genres])
-
-
-
-    // for(let i = 0; i < genres.length; i++) {
-    //     const content = 
-    //     <div key={i} className="border border-red-500">
-    //         <h3 className="font-inter text-3xl">{genres[i].name}</h3>
-    //         <div className="border border-purple-500 h-64">
-    //             {}
-    //         </div>
-    //     </div>;
-    //     genreSections.push(content);
-    // }
-
+    // Circle through the movielists to construct 
+    // the 'movieListSections' JSX elements
     for(let i = 0; i < movieLists.length; i++) {
 
+        // To avoid a strange visual bug, we don't show a
+        //  category if it has less than 8 movies in it.
         if(movieLists[i].movies.length < 8)
             continue;
 
+        // Format the movies to a format that TitledHorizontalMoviePager can understand
         const formattedMovieList: MovieListItemProps[] = movieLists[i]
             .movies.flatMap(movie => {return {id: movie.id, title: movie.title, posterUrl: movie.posterPath}});
 
+        // Actually create the JSX content
         const content = 
         <div key={i} className="mb-12">
             <h3 className="font-inter text-3xl ml-4">{movieLists[i].genre}</h3>
@@ -114,9 +85,10 @@ export default function Explore() {
     }
 
     if(error) {
-        return <div>An error occurred.</div>;
+        return <div>An unexpected error occurred.</div>;
     }
 
+    // Show Loading indicator when the page hasn't loaded
     if(movieListSections.length == 0){
         return <Loading/>
     }
