@@ -11,6 +11,7 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
     switch (response.status) {
       case 200: {
         movie = await response.json();
+        console.log(movie)
         return movie;
       }
       case 404: {

@@ -90,10 +90,13 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
             <div className="text-2xl">TMDB rating</div>
             <p className="text-2xl font-sans font-semibold">{movie.tmdbRating}</p>
           </div>
-          <div>
-            <div className="text-2xl">Movie Master rating</div>
-            <p className="text-2xl font-sans font-semibold">8.2</p>
-          </div>
+          {movie.mmAvgRating !== null && (
+            <div>
+              <div className="text-2xl">Movie Master Rating</div>
+              <p className="text-2xl font-sans font-semibold">{movie.mmAvgRating}</p>
+            </div>
+          )}
+
         </div>
         <div className="border-b border-slate-400 border-opacity-20 pb-4">
           <div className="text-2xl font-semibold">Description</div>

@@ -8,6 +8,7 @@ export type Movie = {
   language: string;
   releaseDate: Date;
   tmdbRating: number;
+  mmAvgRating: number | null;
   posterPath: string;
 }
 
