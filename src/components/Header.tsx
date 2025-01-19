@@ -99,7 +99,7 @@ export default function Header() {
             <BasicTransitionLink href={"/explore"}>
                 <div
                   className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">
-                  Browse
+                  Explore
                 </div>
               </BasicTransitionLink>
           </div>
@@ -184,6 +184,9 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
         (<div>
           <BasicTransitionLink href={"/profile"}>
             <p className="font-[family-name:var(--font-alatsi)] p-3">Profile</p>
+          </BasicTransitionLink>
+          <BasicTransitionLink href={"/explore"}>
+            <p className="font-[family-name:var(--font-alatsi)] p-3">Explore</p>
           </BasicTransitionLink>
           <BasicTransitionLink href={"/mywatchlist"}>
             <p className="font-[family-name:var(--font-alatsi)] p-3">Watchlist</p>
