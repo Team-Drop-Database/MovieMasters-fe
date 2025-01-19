@@ -4,9 +4,8 @@ import Loading from "@/components/generic/Loading";
 import { TitledHorizontalMoviePager } from "@/components/generic/movie/MovieListItem";
 import ElementTransition from "@/components/generic/transitions/ElementTransition";
 import Genre from "@/models/Genre";
-import Movie from "@/models/Movie";
 import MovieList from "@/models/MovieList";
-import { getMovieGenres, getMovieListByGenres, getMoviesByGenre } from "@/services/MovieService"
+import { getMovieGenres, getMovieListByGenres } from "@/services/MovieService"
 import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
 import { useEffect, useState } from "react";
 
@@ -125,7 +124,7 @@ export default function Explore() {
     return <ElementTransition startYState={-50}>
     <div className="">
         <h1 className="font-inter font-lg text-5xl mb-1 ml-4">Explore</h1>
-        <h2 className="font-inter font-light text-2xl mb-8 ml-4 text-gray-400">From today's biggest hits to the classics you love.</h2>
+        <h2 className="font-inter font-light text-2xl mb-8 ml-4 text-gray-400">From today&#39;s biggest hits to the classics you love.</h2>
         {movieListSections}
    </div>;
 </ElementTransition>
