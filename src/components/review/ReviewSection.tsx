@@ -106,7 +106,7 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
             setIsReportDialogVisible(false)
             setReportReason("")
           }}
-          textFieldProps={{ value: reportReason, onChange: setReportReason }}
+          textFieldProps={{ value: reportReason, onChange: setReportReason, placeholder: "Reason for report" }}
         />
       )}
     </div>

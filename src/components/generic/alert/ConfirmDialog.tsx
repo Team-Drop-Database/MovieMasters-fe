@@ -4,6 +4,7 @@ import BigTextField from "../BigTextField";
 type TextFieldProps = {
   value: string
   onChange: (newValue: string) => void
+  placeholder?: string
 }
 
 interface ConfirmDialogProps {
@@ -24,8 +25,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (
           <BigTextField
             value={textFieldProps.value}
             onValueChange={textFieldProps.onChange}
+            placeholder={textFieldProps.placeholder}
             className="bg-light_grey_active w-full"
-            placeholder="Reason for report"
           />
         )}
         <div className="flex justify-center space-x-4">
@@ -33,7 +34,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (
             onClick={onConfirm}
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
           >
-            Delete
+            Confirm
           </button>
           <button
             onClick={onCancel}
