@@ -1,13 +1,16 @@
 'use client';
 
+import { TitledHorizontalMoviePager } from "@/components/generic/movie/MovieListItem";
 import Genre from "@/models/Genre";
 import Movie from "@/models/Movie";
-import { getMovieGenres, getMoviesByGenre } from "@/services/MovieService"
+import MovieList from "@/models/MovieList";
+import { getMovieGenres, getMovieListByGenres, getMoviesByGenre } from "@/services/MovieService"
 import { useEffect, useState } from "react";
 
 export default function Explore() {
 
     const [genres, setGenres] = useState<Genre[]>([]);
+    const [movieLists, setMovieLists] = useState<MovieList[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -23,25 +26,90 @@ export default function Explore() {
                 }
             }
         }
-
         fetchGenres();
-    })
+    }, []);
 
-    const genreSections: JSX.Element[] = [];
+    useEffect(() => {
+        async function fetchMovieLists() {
+            try {
+                // Extract the names
+                const genreNames: string[] = genres.flatMap(genre => genre.name);
+                const movieLists: MovieList[] = await getMovieListByGenres(genreNames);
+                setMovieLists(movieLists);
+            } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+                } else {
+                setError("An unknown error occurred.");
+                }
+            }
+        }
+        fetchMovieLists();
+    }, [genres])
 
-    for(let i = 0; i < genres.length; i++) {
+    // useEffect(() => {
+    //     async function fetchMovies() {
+    //         try {
+
+    //             for(let i = 0; i < genres.length; i++) {
+    //                 const movies: Movie[] = await getMoviesByGenre([genres[i].name]);
+    //                 setMovies(movies);
+    //             }
+    //             setMovies(movies);
+    //         } catch (err: unknown) {
+    //         if (err instanceof Error) {
+    //             setError(err.message);
+    //             } else {
+    //             setError("An unknown error occurred.");
+    //             }
+    //         }
+    //     }
+    //     fetchMovies();
+    // }, [genres]);
+
+    const movieListSections: JSX.Element[] = [];
+
+    // useEffect(() => {
+    //     if(genres.length > 0) {
+    //         async function fetchByGenre(){
+    //             return await getMoviesByGenre([genres[0].name]);
+    //         }
+    //         fetchByGenre().then(movies => {
+    //             console.log(movies);
+    //         })
+    //     }
+    // }, [genres])
+
+
+
+    // for(let i = 0; i < genres.length; i++) {
+    //     const content = 
+    //     <div key={i} className="border border-red-500">
+    //         <h3 className="font-inter text-3xl">{genres[i].name}</h3>
+    //         <div className="border border-purple-500 h-64">
+    //             {}
+    //         </div>
+    //     </div>;
+    //     genreSections.push(content);
+    // }
+
+    for(let i = 0; i < movieLists.length; i++) {
         const content = 
-        <div key={i}>
-            <h3>{genres[i].name}</h3>
+        <div key={i} className="border border-red-500">
+            <h3 className="font-inter text-3xl">{movieLists[i].genre}</h3>
+            <div className="border border-purple-500 h-64">
+                {/* <TitledHorizontalMoviePager title="" movieItems={movieLists[i].movies}></TitledHorizontalMoviePager> */}
+            </div>
         </div>;
-        genreSections.push(content);
+        movieListSections.push(content);
     }
 
     if(error) {
         return <div>An error occurred.</div>;
     }
 
-    return <div>
-                {genreSections}
+    return <div className="px-8">
+                <h1 className="font-inter text-4xl mb-4">Explore</h1>
+                {movieListSections}
            </div>;
 }
