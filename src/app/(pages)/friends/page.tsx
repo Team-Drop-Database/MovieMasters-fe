@@ -183,9 +183,9 @@ export default function Friends() {
         </div>
       ) : (
         <>
-          <div className="flex flex-row justify-center space-x-4 mt-6 w-full">
-            <div className="w-2/5 p-6 rounded-lg bg-background_secondary">
-              <h1 className="mb-2">Friends</h1>
+          <div className="flex flex-col sm:flex-row justify-center sm:space-x-4 space-y-4 sm:space-y-0 mt-6 w-full">
+            <div className="sm:w-2/5 w-full p-4 sm:p-6 rounded-lg bg-background_secondary">
+            <h1 className="mb-2 sm:text-left">Friends</h1>
               {friends.length == 0 ? <p className="font-inter text-md">You don&#39;t have any friends added. Add some friends to see each others watchlist!</p> : ""}
               {friends.map(({friendUsername, friendProfilePicture}, index) => (
                 <div className="flex items-center mb-2" key={index}>
@@ -215,8 +215,8 @@ export default function Friends() {
               ))}
             </div>
             {friendRequests.length > 0 && (
-              <div className="w-2/5 p-8 rounded-lg bg-background_secondary">
-                <h1 className="mb-2">Friend Requests</h1>
+              <div className="sm:w-2/5 w-full p-4 sm:p-6 rounded-lg bg-background_secondary">
+              <h1 className="mb-2">Friend Requests</h1>
                 {friendRequests.map(({friendProfilePicture, friendUsername}, index) => (
                   <div className="flex items-center" key={index}>
                     <div className="flex items-center space-x-4 mb-2">

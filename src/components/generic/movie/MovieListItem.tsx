@@ -85,26 +85,27 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between px-[4rem] w-full">
-      <div className="flex-col justify-end">
-        <Button
-            text="Previous" 
+      <div className="flex flex-col px-4 sm:px-[4rem] w-full space-y-4">
+        <h1 className="font-inter font-semibold text-center text-2xl sm:text-4xl">
+          {title}
+          <span className="text-yellow-500"> trending</span>.
+        </h1>
+        <div className="flex items-center justify-between w-full">
+          <Button
+            text="Previous"
             onClick={() => scrollMovies(ScrollDirection.Backward)}
             className={showBackButton ? "" : "opacity-0"}
             enabled={showBackButton}
           />
-      </div>
-        <h1 className="font-inter font-semibold mb-3 sm:text-4xl">{title}<span className="text-yellow-500"> trending</span>.</h1>
-        <div className="flex-col justify-end">
-          <Button 
-            text="Next" 
-            onClick={() => scrollMovies(ScrollDirection.Forward)} 
+          <Button
+            text="Next"
+            onClick={() => scrollMovies(ScrollDirection.Forward)}
             className={showNextButton ? "" : "opacity-0"}
             enabled={showNextButton}
           />
         </div>
       </div>
-      <HorizontalMoviePager movieItems={movies} cssProperties={pagerProperties} />
+      <HorizontalMoviePager movieItems={movies} cssProperties={pagerProperties}/>
     </div>
   )
 }
@@ -114,19 +115,19 @@ type HorizontalMoviePagerProps = {
   cssProperties: React.CSSProperties,
 }
 
-function HorizontalMoviePager({ movieItems, cssProperties }: HorizontalMoviePagerProps) {
+function HorizontalMoviePager({movieItems, cssProperties}: HorizontalMoviePagerProps) {
   return (
     <div className="overflow-x-hidden pt-5">
       <div style={cssProperties} className="w-fit flex gap-5">
-        { [...movieItems, ...movieItems].map((item, index) => (
-          <MovieListItem key={index} title={item.title} posterUrl={item.posterUrl} />
+        {[...movieItems, ...movieItems].map((item, index) => (
+          <MovieListItem key={index} title={item.title} posterUrl={item.posterUrl}/>
         ))}
       </div>
     </div>
   )
 }
 
-function MovieListItem({ title, posterUrl }: MovieListItemProps) {
+function MovieListItem({title, posterUrl}: MovieListItemProps) {
   return (
     <div className=" flex flex-col items-center grow-0 shrink-0 hover:scale-105 transition-transform cursor-pointer">
       <img src={posterUrl} width={250} className="shadow-2xl" alt={`Poster for ${title}`}></img>
