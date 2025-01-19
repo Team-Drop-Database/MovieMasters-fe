@@ -4,12 +4,7 @@ import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
 import { setTimeout } from "timers";
 import arrow from "@/assets/images/right-arrow.svg";
 import Image from "next/image";
-import BasicTransitionLink from "../transitions/BasicTransitionLink";
-
-type TitledHorizontalMoviePagerProps = {
-  title: string
-  movieItems: MovieListItemProps[]
-}
+import Link from "next/link";
 
 enum ScrollDirection {
   Forward,
@@ -23,7 +18,7 @@ const SLIDE_TIME = 500
 
 const PAGER_OFFSET = -250;
 
-export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizontalMoviePagerProps) {
+export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieListItemProps[]}) {
   const [movies, setMovies] = React.useState<MovieListItemProps[]>([])
   const [pagerOffset, setPagerOffset] = React.useState(PAGER_OFFSET)
   const [pagerProperties, setPagerProperties] = React.useState<React.CSSProperties>({
