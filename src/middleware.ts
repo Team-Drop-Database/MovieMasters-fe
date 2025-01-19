@@ -1,7 +1,7 @@
 import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
 
-const AUTH_REQUIRED_PATHS = new Set(['/mywatchlist', '/friends', '/profile']);
+const AUTH_REQUIRED_PATHS = new Set(['/mywatchlist', '/friends', '/profile', '/forum', '/forum/threads']);
 const PUBLIC_ONLY_PATHS = new Set(['/signin', '/signup']);
 const HOME_PATH = '/';
 const SIGNIN_PATH = '/signin';
@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get('refresh_token');
   const url = request.nextUrl.clone();
 
-  if (AUTH_REQUIRED_PATHS.has(url.pathname)) {
+  if (Array.from(AUTH_REQUIRED_PATHS).some((path) => url.pathname.startsWith(path))) {
     if (!token) {
       if (refreshToken) {
         url.pathname = HOME_PATH;
@@ -31,5 +31,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/signin', '/signup', '/mywatchlist', '/friends', '/profile'],
+  matcher: ['/signin', '/signup', '/mywatchlist', '/friends', '/profile', '/forum/:path*'],
 };
