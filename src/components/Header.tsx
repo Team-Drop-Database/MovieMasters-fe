@@ -12,7 +12,7 @@ import {redirect, usePathname} from "next/navigation"
 import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const {isLoggedIn, userDetails, logout} = useAuthContext();
+  const {isLoggedIn, isModerator, userDetails, logout} = useAuthContext();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const mobileDropdownMenuRef = useRef<HTMLDivElement | null>(null);
@@ -106,6 +106,9 @@ export default function Header() {
                   Watchlist
                 </div>
               </BasicTransitionLink>
+              {isModerator && (
+                <ModeratorButton />
+              )}
               <ProfileButton username={userDetails?.username} profileUrl={userDetails?.profileUrl} logout={handleLogout}
                              handleMobileDropdownMenu={() => setIsMobileDropdownMenuShown(!isMobileDropdownMenuShown)}/>
             </div>
@@ -147,6 +150,7 @@ type DropdownMenuProps = {
 
 function MobileDropdownMenu(props: DropdownMenuProps) {
   const currentPath = usePathname();
+  const {isModerator} = useAuthContext();
 
   const renderMenuItems = useCallback(() => {
     switch (currentPath) {
@@ -185,6 +189,11 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
           <BasicTransitionLink href={"/friends"}>
             <p className="font-[family-name:var(--font-alatsi)] p-3">Friends</p>
           </BasicTransitionLink>
+          {isModerator && (
+            <BasicTransitionLink href={"/moderator/addmovie"}>
+              <p className="font-[family-name:var(--font-alatsi)] p-3">Add movie</p>
+            </BasicTransitionLink>
+          )}
           <hr className="mx-2"/>
           <p className="text-red-600 font-[family-name:var(--font-alatsi)] p-3 cursor-pointer" onClick={props.logout}>Log
             out</p>
@@ -220,7 +229,7 @@ function SearchBar(props: SearchBarProps) {
                alt={"search_icon.svg"}
                width={25}
                height={25}
-               className="absolute right-2 cursor-pointer sm:scale-[140%] sm:mr-2"
+               className="max-md:hidden absolute right-2 cursor-pointer sm:scale-[140%] sm:mr-2"
                onClick={() => onConfirmSearch(searchInput)}></Image>
       </div>
     </div>
@@ -237,6 +246,56 @@ type ProfileButtonProps = {
   logout: () => void;
   handleMobileDropdownMenu: () => void;
 };
+
+function ModeratorButton() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".profile-button-dropdown")) {
+        closeDropdown();
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("click", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isDropdownOpen]);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
+  return (
+    <div className="relative">
+      <div onClick={toggleDropdown}
+           className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md whitespace-nowrap
+           hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1 hover:cursor-pointer">
+        Mod menu
+      </div>
+      {isDropdownOpen && (
+        <div className="absolute right-0 mt-6 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
+          <BasicTransitionLink href={"/moderator/addmovie"}>
+            <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
+              Add movie
+            </div>
+          </BasicTransitionLink>
+        </div>
+      )}
+
+    </div>
+  )
+}
 
 function ProfileButton({username, profileUrl, logout, handleMobileDropdownMenu}: ProfileButtonProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -288,7 +347,7 @@ function ProfileButton({username, profileUrl, logout, handleMobileDropdownMenu}:
         </div>
         <div className="max-sm:hidden relative profile-button-dropdown">
           <div
-              className="flex items-center gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
+              className="flex items-center gap-2 rounded-lg p-2 mr-5 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
               onClick={toggleDropdown}>
             <p className="font-[family-name:var(--font-jura)] max-sm:text-sm max-md:text-md max-lg:text-lg">{username || "Username"}</p>
               <Image
