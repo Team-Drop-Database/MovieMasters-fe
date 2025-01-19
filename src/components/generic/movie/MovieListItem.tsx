@@ -83,6 +83,8 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
     }
   }
 
+  const titleText = title ? <span className="text-yellow-500"> trending</span> : '';
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-[4rem] w-full">
@@ -94,7 +96,7 @@ export function TitledHorizontalMoviePager({ title, movieItems }: TitledHorizont
             enabled={showBackButton}
           />
       </div>
-        <h1 className="font-inter font-semibold mb-3 sm:text-4xl">{title}<span className="text-yellow-500"> trending</span>.</h1>
+        <h1 className="font-inter font-semibold mb-3 sm:text-4xl"> {title}{titleText}{title ? '.' : ''}</h1>
         <div className="flex-col justify-end">
           <Button 
             text="Next" 
