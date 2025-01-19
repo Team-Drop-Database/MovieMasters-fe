@@ -167,12 +167,17 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
         </BasicTransitionLink>;
       }
       default: {
-        return <div><BasicTransitionLink href={"/signup"}>
+        return <div>
+          <BasicTransitionLink href={"/explore"}>
+          <p className="font-[family-name:var(--font-alatsi)] p-3">Explore</p>
+        </BasicTransitionLink>
+          <BasicTransitionLink href={"/signup"}>
           <p className="font-[family-name:var(--font-alatsi)] p-3">Sign up</p>
         </BasicTransitionLink>
           <BasicTransitionLink href={"/signin"}>
             <p className="font-[family-name:var(--font-alatsi)] p-3">Log in</p>
-          </BasicTransitionLink></div>;
+          </BasicTransitionLink></div>
+          ;
       }
     }
   }, [currentPath]);
