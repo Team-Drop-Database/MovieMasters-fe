@@ -8,6 +8,7 @@ import {useAuthContext} from "@/contexts/AuthContext";
 import neutral from "@/assets/images/no-profile-pic.jpg";
 import SuccessAlert from "@/components/generic/alert/SuccessAlert";
 import ConfirmDialog from "@/components/generic/alert/ConfirmDialog";
+import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink";
 
 export default function Friends() {
   const {userDetails} = useAuthContext();
@@ -187,7 +188,7 @@ export default function Friends() {
             <div className="sm:w-2/5 w-full p-4 sm:p-6 rounded-lg bg-background_secondary">
             <h1 className="mb-2 sm:text-left">Friends</h1>
               {friends.length == 0 ? <p className="font-inter text-md">You don&#39;t have any friends added. Add some friends to see each others watchlist!</p> : ""}
-              {friends.map(({friendUsername, friendProfilePicture}, index) => (
+              {friends.map(({friendUsername, friendProfilePicture, userId, friendId}, index) => (
                 <div className="flex items-center mb-2" key={index}>
                   <div className="flex items-center space-x-4">
                     <div className="w-[55px] h-[55px] relative">
@@ -201,7 +202,10 @@ export default function Friends() {
                     </div>
                     <label className="block text-m font-medium">{friendUsername}</label>
                   </div>
-                    <div className="flex space-x-2 ml-auto">
+                    <div className="flex space-x-2 ml-auto ">
+                    <BasicTransitionLink href={`/mywatchlist?name=${friendUsername}&userid=${userDetails?.userId == userId ? friendId : userId}`}>
+                    <div className="px-2 bg-blue-500 hover:bg-indigo-500 transition-all hover:scale-105 rounded-md">Watchlist</div>
+                  </BasicTransitionLink>
                       <Image
                         src="/delete.svg"
                         alt="Delete"
