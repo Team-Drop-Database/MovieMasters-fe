@@ -1,13 +1,13 @@
 type BigTextFieldProps = {
-  value: string,
-  onValueChange: (newValue: string) => void,
-  placeholder?: string;
-  className?: string | null,
-  maxLength?: number,
+  value: string
+  onValueChange: (newValue: string) => void
+  className?: string | null
+  maxLength?: number
+  placeholder?: string
 }
 
 export default function BigTextField({
-  value, onValueChange, className = "", placeholder, maxLength = 1000,
+  value, onValueChange, className = "", maxLength = 1000, placeholder = "Enter text"
 }: BigTextFieldProps) {
   return (
     <textarea

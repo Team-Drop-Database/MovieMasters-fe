@@ -1,5 +1,6 @@
 export type ReviewResponse = {
   id: string
+  userId: number
   username: string
   userProfilePicture: string
   movieTitle: string
