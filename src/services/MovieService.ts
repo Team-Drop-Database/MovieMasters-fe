@@ -164,13 +164,10 @@ export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
  * @returns list of MovieList objects
  */
 export async function getMovieListByGenres(genres: string[]): Promise<MovieList[]> {
-  const movieLists: MovieList[] = [];
-
-  // Cycle through the genre and get a MovieList for each of them
-  for(let i = 0; i < genres.length; i++) {
-    const movies = await getMoviesByGenre([genres[i]]);
-    const movieList: MovieList = {genre: genres[i], movies};
-    movieLists.push(movieList);
-  }
-  return movieLists;
+  return await Promise.all(
+    genres.map(async (genre) => {
+      const movies = await getMoviesByGenre([genre]);
+      return {genre, movies};
+    })
+  );
 }
