@@ -2,7 +2,7 @@
 import React from "react";
 import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
 import { setTimeout } from "timers";
-import arrow from "@/assets/images/right-arrow.svg";
+import arrow from "@/assets/images/right-arrow-2.svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -83,14 +83,14 @@ export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieLi
   return (
     <div className="flex flex-col relative group">
       <div className="flex items-center justify-between px-[4rem] w-full">
-      <div className="flex-col justify-end absolute left-4 top-1/2 origin-center -translate-y-1/2 z-10">
+      <div className="flex-col justify-end absolute -left-14 top-1/2 origin-center -translate-y-1/2 z-10 opacity-70 hover:opacity-100">
           {showBackButton && (<button className="" onClick={() => scrollMovies(ScrollDirection.Backward)}>
-            <Image src={arrow} alt="" className="w-14 hover:scale-110 transition-all opacity-0 group-hover:opacity-100 rotate-180"></Image>
+            <Image src={arrow} alt="" className="w-52 hover:scale-110 transition-all opacity-0 group-hover:opacity-100 rotate-180"></Image>
           </button>)}
       </div>
-        <div className="flex-col justify-end absolute right-4 top-1/2 origin-center -translate-y-1/2 z-10">
+        <div className="flex-col justify-end absolute -right-14 top-1/2 origin-center -translate-y-1/2 z-10 opacity-70 hover:opacity-100">
           {showNextButton && (<button className="" onClick={() => scrollMovies(ScrollDirection.Forward)}>
-            <Image src={arrow} alt="" className="w-14 hover:scale-110 transition-all opacity-0 group-hover:opacity-100"></Image>
+            <Image src={arrow} alt="" className="w-52 hover:scale-110 transition-all opacity-0 group-hover:opacity-100"></Image>
           </button>)}
         </div>
       </div>
