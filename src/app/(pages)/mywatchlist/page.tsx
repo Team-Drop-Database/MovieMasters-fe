@@ -16,6 +16,7 @@ import Loading from "@/components/generic/Loading";
  */
 export default function MyWatchList() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
+  const [watchlistLoaded, setWatchlistLoaded] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { userDetails } = useAuthContext();
 
@@ -25,6 +26,7 @@ export default function MyWatchList() {
         if (userDetails) {
           const data = await retrieveWatchlistByUser(userDetails.userId);
           setWatchlist(data);
+          setWatchlistLoaded(true);
         }
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -103,7 +105,7 @@ export default function MyWatchList() {
   }
 
   let pageContent;
-  if (watchlist.length === 0) {
+  if (!watchlistLoaded) {
     pageContent = (
       <Loading/>
     );
