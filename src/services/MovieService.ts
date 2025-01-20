@@ -124,7 +124,7 @@ export async function getMovieGenres(): Promise<Genre[]> {
 /**
  * Retrieves all movies based on a list of genres.
  * 
- * @param genreName name of the genre
+ * @param genres list of genre names
  */
 export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
   let queryString = `?`;
