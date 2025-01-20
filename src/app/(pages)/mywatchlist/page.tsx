@@ -5,6 +5,7 @@ import WatchlistItem from "@/models/WatchListItem";
 import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
 import {useAuthContext} from "@/contexts/AuthContext";
+import Loading from "@/components/generic/Loading";
 
 import { useSearchParams } from 'next/navigation';
 
@@ -17,6 +18,7 @@ import { useSearchParams } from 'next/navigation';
  */
 export default function MyWatchList() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
+  const [watchlistLoaded, setWatchlistLoaded] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { userDetails } = useAuthContext();
 
@@ -35,6 +37,7 @@ export default function MyWatchList() {
           setUsername(searchParams.get('name'));
           const data = await retrieveWatchlistByUser(userId);
           setWatchlist(data);
+          setWatchlistLoaded(true);
         }
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -113,12 +116,9 @@ export default function MyWatchList() {
   }
 
   let pageContent;
-  if (watchlist.length === 0) {
+  if (!watchlistLoaded) {
     pageContent = (
-      <div>
-        <h2 className="text-2xl">Still empty here...</h2>
-        <p>Add some movies to make them show up here!</p>
-      </div>
+      <Loading/>
     );
   } else {
     pageContent = (
@@ -127,12 +127,14 @@ export default function MyWatchList() {
           <div className="p-4">
             <h1 className="text-2xl">Watched</h1>
             <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {watchedMovies.length == 0 ? <p className="font-inter text-md opacity-50">Still empty here...</p> : ''}
               {mapMoviesToList(watchedMovies)}
             </div>
           </div>
           <div className="p-4">
-            <h1 className="text-2xl">Plan to watch</h1>
+            <h1 className="text-2xl">Planned to watch</h1>
             <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {planToWatchMovies.length == 0 ? <p className="font-inter text-md opacity-50">Still empty here...</p> : ''}
               {mapMoviesToList(planToWatchMovies)}
             </div>
           </div>
