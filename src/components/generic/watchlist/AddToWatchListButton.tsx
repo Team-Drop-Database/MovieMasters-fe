@@ -35,7 +35,8 @@ export default function AddToWatchListButton({ params }: {
         setLoading(false);
       }
     };
-    fetchWatchedStatus().then();
+
+    void fetchWatchedStatus();
   }, [params.userId, params.movieId]);
 
   useEffect((): void => {

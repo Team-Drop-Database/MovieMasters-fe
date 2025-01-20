@@ -46,8 +46,8 @@ function SearchContent() {
       }
     }
 
-    setTotalPages().then();
-    fetchMovies().then();
+    void setTotalPages();
+    void fetchMovies();
 
     prevValues.current = {title, pageNumber};
   }, [title, pageNumber]);
@@ -118,28 +118,28 @@ function SearchContent() {
   if (movies && movies.length > 0) {
     return (
       <ElementTransition startYState={50}>
-<div className="mx-5">
-        <h1 className="mb-5">Results for movies with title: {title}</h1>
-        <DisplayMovies movies={movies}/>
-        <div className="flex justify-center space-x-2 text-xl mt-5">
-          <button disabled={pageNumber <= 1}
-                  className="px-3 py-1 rounded-lg
-                  hover:cursor-pointer disabled:cursor-not-allowed
-                  enabled:hover:backdrop-brightness-50
-                  disabled:brightness-50"
-                  onClick={() => setPageNumber(pageNumber - 1)}>
-                  ← Previous
-          </button>
-          <PaginationButtons/>
-          <button disabled={pageNumber === numberOfPages}
-                  className="px-3 py-1 rounded-lg hover:cursor-pointer disabled:cursor-not-allowed
-                  enabled:hover:backdrop-brightness-50
-                  disabled:brightness-50"
-                  onClick={() => setPageNumber(pageNumber + 1)}>
-                  Next →
-          </button>
+        <div className="mx-5">
+          <h1 className="mb-5">Results for movies with title: {title}</h1>
+          <DisplayMovies movies={movies}/>
+          <div className="flex justify-center space-x-2 text-xl mt-5">
+            <button disabled={pageNumber <= 1}
+                    className="px-3 py-1 rounded-lg
+                    hover:cursor-pointer disabled:cursor-not-allowed
+                    enabled:hover:backdrop-brightness-50
+                    disabled:brightness-50"
+                    onClick={() => setPageNumber(pageNumber - 1)}>
+                    ← Previous
+            </button>
+            <PaginationButtons/>
+            <button disabled={pageNumber === numberOfPages}
+                    className="px-3 py-1 rounded-lg hover:cursor-pointer disabled:cursor-not-allowed
+                    enabled:hover:backdrop-brightness-50
+                    disabled:brightness-50"
+                    onClick={() => setPageNumber(pageNumber + 1)}>
+                    Next →
+            </button>
+          </div>
         </div>
-      </div>
       </ElementTransition>
     );
   } else if (movies && movies.length == 0) {
