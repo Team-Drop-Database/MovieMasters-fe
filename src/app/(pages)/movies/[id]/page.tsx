@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Movie from "@/models/Movie";
-import WatchListButtonWrapper from "@/components/generic/watchlist/WatchListButtonWrapper";
 import {useAuthContext} from "@/contexts/AuthContext";
 import ElementTransition from '@/components/generic/transitions/ElementTransition';
 import Loading from '@/components/generic/Loading';
 import {getMovieById} from "@/services/MovieService";
 import ReviewSection from '@/components/review/ReviewSection';
 import { WatchedState } from '@/services/WatchListService';
+import AddToWatchListButton from "@/components/generic/watchlist/AddToWatchListButton";
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -16,6 +16,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
   const [id, setId] = useState<string | null>(null);
   const [isUserReady, setIsUserReady] = useState<boolean>(false);
   const [watchedState, setWatchedState] = useState<WatchedState>(WatchedState.UNWATCHED)
+  const [userHasReview, setUserHasReview] = useState<boolean>();
   const { userDetails } = useAuthContext();
 
   const fetchMovie = (movieId: string) => {
@@ -101,10 +102,11 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
         </div>
         {isUserReady && (
           <div className="border-b border-slate-400 border-opacity-20 pb-4">
-            <WatchListButtonWrapper
+            <AddToWatchListButton
               params={{
                 userId: userDetails?.userId as number,
                 movieId: Number(id),
+                hasReview: userHasReview,
                 onValueChange: setWatchedState,
               }}
             />
@@ -114,7 +116,8 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
           <ReviewSection
             movieId={Number(id)}
             hasWatched={watchedState === WatchedState.WATCHED}
-            onReviewCreated={console.log}
+            onReviewCreated={() => setUserHasReview(true)}
+            onReviewDeleted={() => setUserHasReview(false)}
             className="mt-4"
           />
         }
