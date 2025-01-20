@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 export default function Explore() {
 
     const [genres, setGenres] = useState<Genre[]>([]);
-    const [movieLists, setMovieLists] = useState<MovieList[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [movieListSections, setMovieListSections] = useState<JSX.Element[]>([]);
@@ -46,12 +45,7 @@ export default function Explore() {
                 const genreNames: string[] = genres.flatMap(genre => genre.name);
                 const movieLists: MovieList[] = await getMovieListByGenres(genreNames);
 
-                // List of JSX elements, whereby each element is a 'section' containing 
-                // the name of the genre and a list of movies. This will be 
-                // rendered ultimately.
-                // const movieListSections: JSX.Element[] = [];
-
-                const newList = [];
+                const pageContent = [];
 
                 // Circle through the movielists to construct 
                 // the 'movieListSections' JSX elements
@@ -74,11 +68,11 @@ export default function Explore() {
                             <TitledHorizontalMoviePager movieItems={formattedMovieList}></TitledHorizontalMoviePager>
                         </div>
                     </div>;
-                    newList.push(content);
-                    setMovieListSections(newList);
+                    pageContent.push(content);
                 }
+
+                setMovieListSections(pageContent);
                 
-                setMovieLists(movieLists);
             } catch (err: unknown) {
             if (err instanceof Error) {
                 setError(err.message);
