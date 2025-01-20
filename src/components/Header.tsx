@@ -198,9 +198,14 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
             <p className="font-[family-name:var(--font-alatsi)] p-3">Forum</p>
           </BasicTransitionLink>
           {isModerator && (
-            <BasicTransitionLink href={"/moderator/addmovie"}>
-              <p className="font-[family-name:var(--font-alatsi)] p-3">Add movie</p>
-            </BasicTransitionLink>
+            <>
+              <BasicTransitionLink href={"/moderator/addmovie"}>
+                <p className="font-[family-name:var(--font-alatsi)] p-3">Add Movie</p>
+              </BasicTransitionLink>
+              <BasicTransitionLink href={"/moderator/reports"}>
+                <p className="font-[family-name:var(--font-alatsi)] p-3">Manage Reports</p>
+              </BasicTransitionLink>
+            </>
           )}
           <hr className="mx-2"/>
           <p className="text-red-600 font-[family-name:var(--font-alatsi)] p-3 cursor-pointer" onClick={props.logout}>Log
@@ -286,13 +291,18 @@ function ModeratorButton() {
       <div onClick={toggleDropdown}
            className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md whitespace-nowrap
            hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1 hover:cursor-pointer">
-        Mod menu
+        Mod Menu
       </div>
       {isDropdownOpen && (
         <div className="absolute right-0 mt-6 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
           <BasicTransitionLink href={"/moderator/addmovie"}>
             <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
-              Add movie
+              Add Movie
+            </div>
+          </BasicTransitionLink>
+          <BasicTransitionLink href={"/moderator/reports"}>
+            <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
+              Manage Reports
             </div>
           </BasicTransitionLink>
         </div>
