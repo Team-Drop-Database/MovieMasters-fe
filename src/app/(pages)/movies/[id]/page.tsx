@@ -9,6 +9,7 @@ import {getMovieById} from "@/services/MovieService";
 import ReviewSection from '@/components/review/ReviewSection';
 import { WatchedState } from '@/services/WatchListService';
 import AddToWatchListButton from "@/components/generic/watchlist/AddToWatchListButton";
+import {ReviewItemStars} from "@/components/generic/review/StarContainer";
 
 export default function Movies({ params }: { params: Promise<{ id: string }> }) {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -94,10 +95,9 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
           {movie.mmAvgRating !== null && (
             <div>
               <div className="text-2xl">Movie Master Rating</div>
-              <p className="text-2xl font-sans font-semibold">{movie.mmAvgRating}</p>
+              <ReviewItemStars rating={movie.mmAvgRating} />
             </div>
           )}
-
         </div>
         <div className="border-b border-slate-400 border-opacity-20 pb-4">
           <div className="text-2xl font-semibold">Description</div>
@@ -119,8 +119,18 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
           <ReviewSection
             movieId={Number(id)}
             hasWatched={watchedState === WatchedState.WATCHED}
-            onReviewCreated={() => setUserHasReview(true)}
-            onReviewDeleted={() => setUserHasReview(false)}
+            onReviewCreated={(newReview) => {
+              setUserHasReview(true);
+              if (id) {
+                fetchMovie(id);
+              }
+            }}
+            onReviewDeleted={(newReview) => {
+              setUserHasReview(false);
+              if (id) {
+                fetchMovie(id);
+              }
+            }}
             className="mt-4"
           />
         }
