@@ -12,10 +12,11 @@ type ReviewSectionProps = {
   movieId: number,
   hasWatched: boolean,
   onReviewCreated: (review: ReviewResponse) => void,
+  onReviewDeleted: () => void,
   className?: string,
 }
 
-export default function ReviewSection({ movieId, hasWatched, onReviewCreated, className = "" }: ReviewSectionProps) {
+export default function ReviewSection({ movieId, hasWatched, onReviewCreated, onReviewDeleted, className = "" }: ReviewSectionProps) {
   const { isLoggedIn, userDetails } = useAuthContext()
   const [reviews, setReviews] = React.useState<ReviewResponse[]>([])
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
@@ -52,6 +53,7 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
     } finally {
       setIsConfirmDialogVisible(false);
       setSelectedReviewId(null);
+      onReviewDeleted();
     }
   };
 
@@ -61,15 +63,16 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, cl
   };
 
   React.useEffect(() => {
-    retrieveReviews();
+    retrieveReviews().then();
   }, []);
 
   return (
     <div className={`${className} flex flex-col gap-2`}>
       { isLoggedIn && userDetails?.userId !== undefined && hasWatched &&
         <PostReviewContainer movieId={movieId} userId={userDetails?.userId} onReviewPosted={(newReview) => {
-          onReviewCreated(newReview);
-          retrieveReviews();
+          retrieveReviews().then((): void => {
+            onReviewCreated(newReview);
+          });
         }} />
       }
       { errorMessage && <div className="text-red-800">{errorMessage}</div> }
