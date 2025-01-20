@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/Header";
 import {AuthProvider} from "@/contexts/AuthContext";
+import { Suspense } from "react";
+import Loading from "@/components/generic/Loading";
 
 const alatsi = localFont({
   src: "../assets/fonts/Alatsi-Regular.ttf",
@@ -44,8 +46,10 @@ export default function RootLayout({
       <Header/>
       <main>
         <div className="absolute inset-0 w-full h-screen bg-gradient-to-b from-background_primary via-slate-600 to-background_primary -z-40"></div>
-        <div className="main-container pt-10 min-h-screen">
+        <div className="main-container pt-12 min-h-screen">
+          <Suspense fallback={<Loading/>}>
           {children}
+          </Suspense>
         </div>
       </main>
       <footer className="bg-background_secondary h-28 w-full flex justify-center items-center">

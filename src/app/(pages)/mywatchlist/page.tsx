@@ -5,6 +5,9 @@ import WatchlistItem from "@/models/WatchListItem";
 import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
 import {useAuthContext} from "@/contexts/AuthContext";
+import Loading from "@/components/generic/Loading";
+
+import { useSearchParams } from 'next/navigation';
 
 /**
  * Displays an overview of the movies that a specific user has
@@ -15,15 +18,26 @@ import {useAuthContext} from "@/contexts/AuthContext";
  */
 export default function MyWatchList() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
+  const [watchlistLoaded, setWatchlistLoaded] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { userDetails } = useAuthContext();
 
+  const searchParams = useSearchParams();
+
+  const [username, setUsername] = useState<string | null>('');
+
   useEffect(() => {
+
     async function fetchWatchlist() {
       try {
         if (userDetails) {
-          const data = await retrieveWatchlistByUser(userDetails.userId);
+          const queryUserid = searchParams.get('userid');
+          const userId = (queryUserid ? queryUserid : userDetails?.userId) as number;
+
+          setUsername(searchParams.get('name'));
+          const data = await retrieveWatchlistByUser(userId);
           setWatchlist(data);
+          setWatchlistLoaded(true);
         }
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -35,7 +49,7 @@ export default function MyWatchList() {
     }
 
     fetchWatchlist();
-  }, [userDetails]);
+  }, [userDetails, searchParams]);
 
   // Divide the list of movies into watched and unwatched
   const watchedMovies = watchlist.filter((item) => item.watched);
@@ -102,12 +116,9 @@ export default function MyWatchList() {
   }
 
   let pageContent;
-  if (watchlist.length === 0) {
+  if (!watchlistLoaded) {
     pageContent = (
-      <div>
-        <h2 className="text-2xl">Still empty here...</h2>
-        <p>Add some movies to make them show up here!</p>
-      </div>
+      <Loading/>
     );
   } else {
     pageContent = (
@@ -116,12 +127,14 @@ export default function MyWatchList() {
           <div className="p-4">
             <h1 className="text-2xl">Watched</h1>
             <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {watchedMovies.length == 0 ? <p className="font-inter text-md opacity-50">Still empty here...</p> : ''}
               {mapMoviesToList(watchedMovies)}
             </div>
           </div>
           <div className="p-4">
-            <h1 className="text-2xl">Plan to watch</h1>
+            <h1 className="text-2xl">Planned to watch</h1>
             <div className="flex gap-5 mt-2 py-4 items-start flex-wrap">
+              {planToWatchMovies.length == 0 ? <p className="font-inter text-md opacity-50">Still empty here...</p> : ''}
               {mapMoviesToList(planToWatchMovies)}
             </div>
           </div>
@@ -130,12 +143,21 @@ export default function MyWatchList() {
     );
   }
 
+  // Determines the header based on whether this is your own page 
+  // or that of another user such as a friend
+  let pageheader;
+  if(username){
+    pageheader = <h1 className="mb-3">Watchlist of {username}</h1>
+  }else{
+    pageheader = <h1 className="mb-3">My Watchlist</h1>
+  }
+
   return (
     <div
       className="flex flex-col items-left pb-10 px-10
          font-[family-name:var(--font-alatsi)]"
     >
-        <h1 className="mb-3">Watchlist</h1>
+      {pageheader}
       {pageContent}
     </div>
   );
