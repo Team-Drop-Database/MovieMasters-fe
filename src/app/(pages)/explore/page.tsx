@@ -34,7 +34,7 @@ export default function Explore() {
                 }
             }
         }
-        fetchGenres();
+        void fetchGenres();
     }, []);
 
     // Then, using the genres, fetch lists of movies based on those genres
