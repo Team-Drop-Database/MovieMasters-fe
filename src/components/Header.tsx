@@ -190,9 +190,14 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
             <p className="font-[family-name:var(--font-alatsi)] p-3">Friends</p>
           </BasicTransitionLink>
           {isModerator && (
-            <BasicTransitionLink href={"/moderator/addmovie"}>
-              <p className="font-[family-name:var(--font-alatsi)] p-3">Add movie</p>
-            </BasicTransitionLink>
+            <>
+              <BasicTransitionLink href={"/moderator/addmovie"}>
+                <p className="font-[family-name:var(--font-alatsi)] p-3">Add Movie</p>
+              </BasicTransitionLink>
+              <BasicTransitionLink href={"/moderator/reports"}>
+                <p className="font-[family-name:var(--font-alatsi)] p-3">Manage Reports</p>
+              </BasicTransitionLink>
+            </>
           )}
           <hr className="mx-2"/>
           <p className="text-red-600 font-[family-name:var(--font-alatsi)] p-3 cursor-pointer" onClick={props.logout}>Log

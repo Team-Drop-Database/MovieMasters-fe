@@ -74,17 +74,17 @@ type ReportListItemProps = {
 function ReportListItem({ report, onDelete }: ReportListItemProps) {
   return (
     <tr>
-      <td className="p-4 rounded-l-lg border-l-4 border-y-4 border-neutral-800">
+      <td className="p-4 rounded-l-lg sm:border-l-4 sm:border-y-4 border-neutral-800">
         <span>
           {report.user.username}
         </span>
       </td>
-      <td className="p-4 border-y-4 border-neutral-800">
+      <td className="p-4 sm:border-y-4 border-neutral-800">
         <span>
           {report.reason}
         </span>
       </td>
-      <td className="p-4 rounded-r-lg border-r-4 border-y-4 border-neutral-800 flex justify-end gap-3">
+      <td className="p-4 rounded-r-lg sm:border-r-4 sm:border-y-4 border-neutral-800 flex justify-end gap-3">
         <Button text="Ban" onClick={() => onDelete(report, true)} className="w-fit" />
         <Button text="Don't Ban" onClick={() => onDelete(report, false)} className="w-fit" />
       </td>
