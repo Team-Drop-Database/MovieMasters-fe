@@ -87,7 +87,6 @@ export default function Header() {
                 <Image
                   src={logo}
                   width={50}
-                  height={50}
                   alt="logo"
                   className="rounded-md cursor-pointer sm:scale-125 sm:mr-2"
                 />
@@ -104,6 +103,12 @@ export default function Header() {
                 <div
                   className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">
                   Watchlist
+                </div>
+              </BasicTransitionLink>
+              <BasicTransitionLink href={"/forum"}>
+                <div
+                  className="max-sm:hidden md:text-md lg:text-lg py-2 px-3 bg-blue-800 rounded-md hover:scale-110 transition-all hover:bg-indigo-700 hover:opacity-100 hover:ring-1">
+                  Forum
                 </div>
               </BasicTransitionLink>
               {isModerator && (
@@ -188,6 +193,9 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
           </BasicTransitionLink>
           <BasicTransitionLink href={"/friends"}>
             <p className="font-[family-name:var(--font-alatsi)] p-3">Friends</p>
+          </BasicTransitionLink>
+          <BasicTransitionLink href={"/forum"}>
+            <p className="font-[family-name:var(--font-alatsi)] p-3">Forum</p>
           </BasicTransitionLink>
           {isModerator && (
             <>
