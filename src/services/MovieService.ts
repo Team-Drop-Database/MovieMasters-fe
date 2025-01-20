@@ -1,4 +1,6 @@
-﻿import Movie from "@/models/Movie"
+import Genre from "@/models/Genre";
+import Movie from "@/models/Movie"
+import MovieList from "@/models/MovieList";
 import apiClient from "@/services/ApiClient";
 
 export async function getMovieById(movieId: number): Promise<Movie | string> {
@@ -92,4 +94,80 @@ export async function postMovie(movie: Movie): Promise<boolean | string> {
     }
     throw error;
   }
+}
+
+/**
+ * Retrieves all movie genres.
+ */
+export async function getMovieGenres(): Promise<Genre[]> {
+  const endpoint = `/movies/genres`;
+
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return [];
+      }
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Retrieves all movies based on a list of genres.
+ * 
+ * @param genres list of genre names
+ */
+export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
+  let queryString = `?`;
+
+  // Constructs the querystring
+  for(let i = 0; i < genres.length; i++) {
+    queryString = queryString + ( i > 0 ? `&` : ``) + `genres=${genres[i]}`;
+  }
+
+  const endpoint = `/movies/genrefilter${queryString}`;
+  
+  try {
+    const response: Response = await apiClient(endpoint);
+
+    switch (response.status) {
+      case 200: {
+        return await response.json();
+      }
+      default: {
+        return [];
+      }
+    }
+  } catch(error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Retrieves a list of lists of movies where each list has its genre 
+ * included in it. This mostly utilizes the 'getMoviesByGenre' 
+ * method and is meant to make it easy to use.
+ * 
+ * @param genres list of genre names
+ * @returns list of MovieList objects
+ */
+export async function getMovieListByGenres(genres: string[]): Promise<MovieList[]> {
+  return await Promise.all(
+    genres.map(async (genre) => {
+      const movies = await getMoviesByGenre([genre]);
+      return {genre, movies};
+    })
+  );
 }
