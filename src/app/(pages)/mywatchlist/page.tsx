@@ -6,6 +6,8 @@ import {retrieveWatchlistByUser} from "@/services/WatchListService";
 import Link from "next/link";
 import {useAuthContext} from "@/contexts/AuthContext";
 
+import { useSearchParams } from 'next/navigation';
+
 /**
  * Displays an overview of the movies that a specific user has
  * added on his watchlist, divided into 'Plan to watch' and
@@ -18,11 +20,20 @@ export default function MyWatchList() {
   const [error, setError] = useState<string | null>(null);
   const { userDetails } = useAuthContext();
 
+  const searchParams = useSearchParams();
+
+  const [username, setUsername] = useState<string | null>('');
+
   useEffect(() => {
+
     async function fetchWatchlist() {
       try {
         if (userDetails) {
-          const data = await retrieveWatchlistByUser(userDetails.userId);
+          const queryUserid = searchParams.get('userid');
+          const userId = (queryUserid ? queryUserid : userDetails?.userId) as number;
+
+          setUsername(searchParams.get('name'));
+          const data = await retrieveWatchlistByUser(userId);
           setWatchlist(data);
         }
       } catch (err: unknown) {
@@ -35,7 +46,7 @@ export default function MyWatchList() {
     }
 
     fetchWatchlist();
-  }, [userDetails]);
+  }, [userDetails, searchParams]);
 
   // Divide the list of movies into watched and unwatched
   const watchedMovies = watchlist.filter((item) => item.watched);
@@ -130,12 +141,21 @@ export default function MyWatchList() {
     );
   }
 
+  // Determines the header based on whether this is your own page 
+  // or that of another user such as a friend
+  let pageheader;
+  if(username){
+    pageheader = <h1 className="mb-3">Watchlist of {username}</h1>
+  }else{
+    pageheader = <h1 className="mb-3">My Watchlist</h1>
+  }
+
   return (
     <div
       className="flex flex-col items-left pb-10 px-10
          font-[family-name:var(--font-alatsi)]"
     >
-        <h1 className="mb-3">Watchlist</h1>
+      {pageheader}
       {pageContent}
     </div>
   );
