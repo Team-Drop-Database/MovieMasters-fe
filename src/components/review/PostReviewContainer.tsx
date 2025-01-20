@@ -31,7 +31,7 @@ export default function PostReviewContainer({ movieId, userId, onReviewPosted }:
   return (
     <div className="flex flex-col items-start gap-2">
       <StarContainer rating={rating} confirmRating={setRating} />
-      <BigTextField value={reviewBody} onValueChange={setReviewBody} className="h-[10rem] w-full" placeholder="Place your review here" />
+      <BigTextField value={reviewBody} onValueChange={setReviewBody} placeholder="Type your review here.." className="h-[10rem] w-full" />
       { errorMessage !== null && <div className="text-red-700">{errorMessage}</div> }
       <Button text="Submit" onClick={submitReview} />
     </div>
