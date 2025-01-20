@@ -18,6 +18,7 @@ export default function Explore() {
     const [genres, setGenres] = useState<Genre[]>([]);
     const [movieLists, setMovieLists] = useState<MovieList[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     // Load the genres first
     useEffect(() => {
@@ -53,6 +54,7 @@ export default function Explore() {
             }
         }
         fetchMovieLists();
+        setLoading(false);
     }, [genres])
 
     // List of JSX elements, whereby each element is a 'section' containing 
@@ -89,7 +91,7 @@ export default function Explore() {
     }
 
     // Show Loading indicator when the page hasn't loaded
-    if(movieListSections.length == 0){
+    if(loading){
         return <Loading/>
     }
 
