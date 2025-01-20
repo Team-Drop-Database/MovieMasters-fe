@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import {deleteUser, fetchUserData, updateUser, uploadImageToImgbb} from "@/services/UserService";
 import neutral from "@/assets/images/no-profile-pic.jpg"
+import ConfirmDialog from "@/components/generic/alert/ConfirmDialog";
 
 export default function Profile() {
   const profile = {
@@ -21,6 +22,7 @@ export default function Profile() {
   const [profileData, setProfileData] = useState(profile);
   const [originalData, setOriginalData] = useState(profile);
   const [isLoading, setIsLoading] = useState(true);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // To hold the file object
   const router = useRouter();
@@ -146,28 +148,21 @@ export default function Profile() {
     setSelectedFile(null);
   };
 
-  async function handleDeleteUser(userID: number | undefined) {
-    const confirmDelete = window.confirm("Are you sure you want to delete your account? " +
-      "This action cannot be undone.");
-
-    if (!confirmDelete) {
-      return;
-    }
-
+  const confirmDeleteUser = async () => {
     try {
-      await deleteUser(userID);
-      alert("Your account has been succesfully deleted.");
-
+      await deleteUser(userDetails?.userId);
       logout();
+      router.push("/");
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error deleting account: ", error.message);
         setError(error.message);
-      } else {
-        console.error("An unkown error occured.");
       }
+    } finally {
+      setShowConfirmDialog(false);
     }
-  }
+  };
+
 
   return (
     <div className="flex justify-center">
@@ -232,7 +227,7 @@ export default function Profile() {
         {!isEditing && (
           <div className="ml-10 mr-10 mt-5">
             <button
-              onClick={() => handleDeleteUser(userDetails?.userId)}
+              onClick={() => setShowConfirmDialog(true)}
               className="w-full shadow-md rounded px-3 py-1 bg-red-600 hover:bg-red-700 hover:duration-300
               duration-300 hover:cursor-pointer font-[family-name:var(--font-alatsi)] text-xl"
             >
@@ -240,6 +235,14 @@ export default function Profile() {
             </button>
           </div>
         )}
+        {showConfirmDialog && (
+          <ConfirmDialog
+            message="Are you sure you want to delete your account? This action cannot be undone."
+            onConfirm={confirmDeleteUser}
+            onCancel={() => setShowConfirmDialog(false)}
+          />
+        )}
+
         {isEditing && (
           <div className="ml-10 mr-10 mt-5">
             <Button
