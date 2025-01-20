@@ -76,7 +76,7 @@ export default function ReviewSection({ movieId, hasWatched, onReviewCreated, on
   };
 
   React.useEffect(() => {
-    retrieveReviews().then();
+    void retrieveReviews();
   }, []);
 
   return (

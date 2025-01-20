@@ -33,7 +33,6 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
         if (fetchedTopic) {
           setTopic(fetchedTopic);
           setComments(fetchedComments.sort((a, b) => a.creationDate.getTime() - b.creationDate.getTime())); // Sort oldest to newest
-          console.log(fetchedComments)
         } else {
           setError("Topic not found.");
         }
@@ -45,7 +44,7 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
       }
     };
 
-    fetchTopicAndComments().then();
+    void fetchTopicAndComments();
   }, [params]);
 
   const handleSendComment = async () => {
@@ -66,7 +65,7 @@ export default function Thread({params}: { params: Promise<{ id: string }> }) {
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      handleSendComment().then(); // Sends the comment when Enter is pressed
+      void handleSendComment(); // Sends the comment when Enter is pressed
     }
   };
 
