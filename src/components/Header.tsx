@@ -205,6 +205,9 @@ function MobileDropdownMenu(props: DropdownMenuProps) {
               <BasicTransitionLink href={"/moderator/reports"}>
                 <p className="font-[family-name:var(--font-alatsi)] p-3">Manage Reports</p>
               </BasicTransitionLink>
+              <BasicTransitionLink href={"/moderator/grant"}>
+                <p className="font-[family-name:var(--font-alatsi)] p-3">Grant Moderator Rights</p>
+              </BasicTransitionLink>
             </>
           )}
           <hr className="mx-2"/>
@@ -305,9 +308,13 @@ function ModeratorButton() {
               Manage Reports
             </div>
           </BasicTransitionLink>
+          <BasicTransitionLink href={"/moderator/grant"}>
+            <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
+              Grant Moderator Rights
+            </div>
+          </BasicTransitionLink>
         </div>
       )}
-
     </div>
   )
 }
