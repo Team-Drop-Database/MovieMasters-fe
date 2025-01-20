@@ -74,3 +74,22 @@ export async function getNumberOfPages(movieTitle: string | null): Promise<numbe
     throw error;
   }
 }
+
+export async function postMovie(movie: Movie): Promise<boolean | string> {
+  try {
+    const response = await apiClient('/movies', {
+      method: 'POST',
+      body: JSON.stringify(movie)
+    })
+
+    if (response.status === 200) {
+      return true;
+    }
+    return await response.text();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+    }
+    throw error;
+  }
+}
