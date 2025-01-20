@@ -115,7 +115,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
           <ReviewSection
             movieId={Number(id)}
             hasWatched={watchedState === WatchedState.WATCHED}
-            onReviewCreated={(newReview) => {
+            onReviewCreated={() => {
               setUserHasReview(true);
               if (id) {fetchMovie(id);}
             }}
