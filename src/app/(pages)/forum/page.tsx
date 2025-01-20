@@ -27,7 +27,7 @@ export default function Forum() {
   const {userDetails} = useAuthContext();
 
   useEffect(() => {
-    fetchTopics().then();
+    void fetchTopics();
   }, []);
 
   useEffect(() => {
