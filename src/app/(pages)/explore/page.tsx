@@ -19,6 +19,7 @@ export default function Explore() {
     const [movieLists, setMovieLists] = useState<MovieList[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [movieListSections, setMovieListSections] = useState<JSX.Element[]>([]);
 
     // Load the genres first
     useEffect(() => {
@@ -44,6 +45,39 @@ export default function Explore() {
                 // Extract the names
                 const genreNames: string[] = genres.flatMap(genre => genre.name);
                 const movieLists: MovieList[] = await getMovieListByGenres(genreNames);
+
+                // List of JSX elements, whereby each element is a 'section' containing 
+                // the name of the genre and a list of movies. This will be 
+                // rendered ultimately.
+                // const movieListSections: JSX.Element[] = [];
+
+                const newList = [];
+
+                // Circle through the movielists to construct 
+                // the 'movieListSections' JSX elements
+                for(let i = 0; i < movieLists.length; i++) {
+
+                    // To avoid a strange visual bug, we don't show a
+                    //  category if it has less than 8 movies in it.
+                    if(movieLists[i].movies.length < 8)
+                        continue;
+
+                    // Format the movies to a format that TitledHorizontalMoviePager can understand
+                    const formattedMovieList: MovieListItemProps[] = movieLists[i]
+                        .movies.flatMap(movie => {return {id: movie.id, title: movie.title, posterUrl: movie.posterPath}});
+
+                    // Actually create the JSX content
+                    const content = 
+                    <div key={i} className="mb-12">
+                        <h3 className="font-inter text-3xl ml-4">{movieLists[i].genre}</h3>
+                        <div className="">
+                            <TitledHorizontalMoviePager movieItems={formattedMovieList}></TitledHorizontalMoviePager>
+                        </div>
+                    </div>;
+                    newList.push(content);
+                    setMovieListSections(newList);
+                }
+                
                 setMovieLists(movieLists);
             } catch (err: unknown) {
             if (err instanceof Error) {
@@ -56,35 +90,6 @@ export default function Explore() {
         fetchMovieLists();
         setLoading(false);
     }, [genres])
-
-    // List of JSX elements, whereby each element is a 'section' containing 
-    // the name of the genre and a list of movies. This will be 
-    // rendered ultimately.
-    const movieListSections: JSX.Element[] = [];
-
-    // Circle through the movielists to construct 
-    // the 'movieListSections' JSX elements
-    for(let i = 0; i < movieLists.length; i++) {
-
-        // To avoid a strange visual bug, we don't show a
-        //  category if it has less than 8 movies in it.
-        if(movieLists[i].movies.length < 8)
-            continue;
-
-        // Format the movies to a format that TitledHorizontalMoviePager can understand
-        const formattedMovieList: MovieListItemProps[] = movieLists[i]
-            .movies.flatMap(movie => {return {id: movie.id, title: movie.title, posterUrl: movie.posterPath}});
-
-        // Actually create the JSX content
-        const content = 
-        <div key={i} className="mb-12">
-            <h3 className="font-inter text-3xl ml-4">{movieLists[i].genre}</h3>
-            <div className="">
-                <TitledHorizontalMoviePager movieItems={formattedMovieList}></TitledHorizontalMoviePager>
-            </div>
-        </div>;
-        movieListSections.push(content);
-    }
 
     if(error) {
         return <div>An unexpected error occurred.</div>;
