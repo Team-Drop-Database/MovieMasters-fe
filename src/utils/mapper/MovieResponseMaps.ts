@@ -14,6 +14,7 @@ export type MovieListItemResponse = {
 }
 
 export type MovieListItemProps = {
+  id: number,
   title: string
   posterUrl: string
 }
@@ -24,6 +25,7 @@ export function mapMovieListToProps(response: MovieListResponse): MovieListItemP
 
 export function mapToMovieListItemProps(response: MovieListItemResponse): MovieListItemProps {
   return {
+    id: response.id,
     title: response.original_title,
     posterUrl: `${Constants.TMDB_POSTER_PATH_BASE}${response.poster_path}`,
   }

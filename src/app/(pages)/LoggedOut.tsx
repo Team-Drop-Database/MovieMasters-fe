@@ -16,7 +16,7 @@ export default function LoggedOut() {
           <div className="flex flex-col gap-3 max-w-[550px] items-center">
             <h1 className="text-white text-5xl font-inter font-bold text-center">Movies made <span className="text-blue-500">social</span>.</h1>
             <p className="font-inter text-white text-2xl opacity-70 text-center mb-5">Explore the latest blockbusters, share reviews, and connect with fellow film lovers.</p>
-            <Link href="/search?title=">
+            <Link href="/explore">
               <button className="opacity-60 hover:opacity-100 px-4 py-2 rounded-2xl bg-indigo-500 hover:ring-1 hover:scale-105 shadow-md font-inter text-2xl font-semibold transition-all">Start Browsing</button>
             </Link>
             <a className="hover:scale-110 transition-all origin-bottom" href="#review-section">
