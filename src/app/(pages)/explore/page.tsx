@@ -81,7 +81,7 @@ export default function Explore() {
                 }
             }
         }
-        fetchMovieLists();
+        void fetchMovieLists();
         setLoading(false);
     }, [genres])
 
