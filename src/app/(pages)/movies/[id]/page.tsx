@@ -61,23 +61,19 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
     return <Loading/>
   }
 
-  if (typeof movie === "string") {
-    return <div>{movie}</div>;
-  }
-
   const movieReleaseYear: string = movie.releaseDate.toString().substring(0, 4);
 
   return (
     <ElementTransition startYState={50}>
-    <div className="flex mx-10 my-5 space-x-20 font-sans">
-      <div className="max-w-[300px]">
+    <div className="grid md:grid-cols-5 mx-10 my-5 gap-0 md:gap-10 font-sans">
+      <div className="md:col-span-1 max-w-[300px] justify-self-center mb-5">
         <img
           className="object-cover aspect-2/3"
           src={movie.posterPath}
           alt={movie.title}
         />
       </div>
-      <div className="">
+      <div className="md:col-span-4 flex flex-col">
         <div className="mb-5 border-b border-slate-400 border-opacity-20 pb-4">
           <div className="text-4xl font-medium">{movie.title}</div>
           <h5 className="font-semibold opacity-40 text-sm">
@@ -86,7 +82,7 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
         </div>
         <div
           id="movie-ratings"
-          className="flex flex-row space-between justify-between w-1/2 mb-5 border-b border-slate-400 border-opacity-20 pb-4"
+          className="flex flex-row space-between justify-between md:w-1/2 mb-5 border-b border-slate-400 border-opacity-20 pb-4"
         >
           <div>
             <div className="text-2xl">TMDB rating</div>

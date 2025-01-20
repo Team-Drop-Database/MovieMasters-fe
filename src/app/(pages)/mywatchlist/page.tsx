@@ -48,7 +48,7 @@ export default function MyWatchList() {
       }
     }
 
-    fetchWatchlist();
+    void fetchWatchlist();
   }, [userDetails, searchParams]);
 
   // Divide the list of movies into watched and unwatched
