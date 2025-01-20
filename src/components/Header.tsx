@@ -8,7 +8,7 @@ import searchIcon from "@/assets/images/search_icon_black.svg"
 import defaultProfilePicture from "@/assets/images/no-profile-pic.jpg"
 import hamburgerIcon from "@/assets/images/hamburger.svg"
 import caretDownIcon from "@/assets/images/caret-down.svg"
-import {redirect, usePathname} from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation";
 
 export default function Header() {
@@ -219,6 +219,7 @@ type SearchBarProps = {
 
 function SearchBar(props: SearchBarProps) {
   const [searchInput, setSearchInput] = React.useState("");
+  const router = useRouter();
 
   return (
     <div className="grow mx-auto relative">
@@ -228,7 +229,7 @@ function SearchBar(props: SearchBarProps) {
           placeholder="Search for a movie"
           type="text"
           onKeyDown={(e) => {
-            if (e.key === "Enter") onConfirmSearch(searchInput);
+            if (e.key === "Enter") router.push(`/search?title=${searchInput}`);
           }}
           onChange={(e) => setSearchInput(e.target.value)}
           className={`${props.className} w-full sm:text-[1rem] text-sm outline-none placeholder-black py-[0.6rem] px-4 h-fit rounded-3xl text-black bg-gray-500 hover:bg-gray-400 ring-1 ring-slate-500 focus:ring-2 focus:shadow-md focus:bg-gray-200 duration-300 hover:duration-300 font-inter`}
@@ -238,14 +239,10 @@ function SearchBar(props: SearchBarProps) {
                width={25}
                height={25}
                className="max-md:hidden absolute right-2 cursor-pointer sm:scale-[140%] sm:mr-2"
-               onClick={() => onConfirmSearch(searchInput)}></Image>
+               onClick={() => router.push(`/search?title=${searchInput}`)}></Image>
       </div>
     </div>
   );
-}
-
-function onConfirmSearch(input: string) {
-  redirect(`/search?title=${input}`);
 }
 
 type ProfileButtonProps = {
@@ -335,60 +332,60 @@ function ProfileButton({username, profileUrl, logout, handleMobileDropdownMenu}:
   }, [isDropdownOpen]);
 
   return (
-      <div>
-        <div
-            className="sm:hidden flex items-center gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
-            onClick={handleMobileDropdownMenu}>
-          <Image
-              className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md"
-              src={profileUrl || defaultProfilePicture}
-              alt="Profile"
-              width={50}
-              height={50}
-          />
-          <Image
-              src={caretDownIcon}
-              alt="caret down icon"
-              height={10}
-              width={10}
-          />
-        </div>
-        <div className="max-sm:hidden relative profile-button-dropdown">
-          <div
-              className="flex items-center gap-2 rounded-lg p-2 mr-5 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
-              onClick={toggleDropdown}>
-            <p className="font-[family-name:var(--font-jura)] max-sm:text-sm max-md:text-md max-lg:text-lg">{username || "Username"}</p>
-              <Image
-                  className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md aspect-square"
-                  src={profileUrl || defaultProfilePicture}
-                  alt="Profile"
-                  width={50}
-                  height={50}
-              />
-          </div>
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
-              <BasicTransitionLink href="/profile">
-                <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
-                  Profile
-                </div>
-              </BasicTransitionLink>
-              <BasicTransitionLink href="/friends">
-                <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
-                  Friends
-                </div>
-              </BasicTransitionLink>
-              <div
-                className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg"
-                onClick={() => {
-                  logout();
-                  closeDropdown();
-                }}
-              >Logout
-              </div>
-            </div>
-          )}
-        </div>
+    <div>
+      <div
+        className="sm:hidden flex items-center gap-2 rounded-lg p-2 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
+        onClick={handleMobileDropdownMenu}>
+        <Image
+          className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md"
+          src={profileUrl || defaultProfilePicture}
+          alt="Profile"
+          width={50}
+          height={50}
+        />
+        <Image
+          src={caretDownIcon}
+          alt="caret down icon"
+          height={10}
+          width={10}
+        />
       </div>
+      <div className="max-sm:hidden relative profile-button-dropdown">
+        <div
+          className="flex items-center gap-2 rounded-lg p-2 mr-5 hover:cursor-pointer hover:bg-background_secondary duration-300 hover:duration-300"
+          onClick={toggleDropdown}>
+          <p className="font-[family-name:var(--font-jura)] max-sm:text-sm max-md:text-md max-lg:text-lg">{username || "Username"}</p>
+          <Image
+            className="max-lg:w-8 max-lg:h-8 rounded-full object-cover shadow-md aspect-square"
+            src={profileUrl || defaultProfilePicture}
+            alt="Profile"
+            width={50}
+            height={50}
+          />
+        </div>
+        {isDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
+            <BasicTransitionLink href="/profile">
+              <div className="p-2 hover:bg-background_primary cursor-pointer rounded-t-lg">
+                Profile
+              </div>
+            </BasicTransitionLink>
+            <BasicTransitionLink href="/friends">
+              <div className="p-2 hover:bg-background_primary cursor-pointer rounded-b-lg">
+                Friends
+              </div>
+            </BasicTransitionLink>
+            <div
+              className="text-red-600 p-2 hover:bg-background_primary cursor-pointer rounded-b-lg"
+              onClick={() => {
+                logout();
+                closeDropdown();
+              }}
+            >Logout
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
