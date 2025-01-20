@@ -121,15 +121,11 @@ export default function Movies({ params }: { params: Promise<{ id: string }> }) 
             hasWatched={watchedState === WatchedState.WATCHED}
             onReviewCreated={(newReview) => {
               setUserHasReview(true);
-              if (id) {
-                fetchMovie(id);
-              }
+              if (id) {fetchMovie(id);}
             }}
-            onReviewDeleted={(newReview) => {
+            onReviewDeleted={() => {
               setUserHasReview(false);
-              if (id) {
-                fetchMovie(id);
-              }
+              if (id) {fetchMovie(id);}
             }}
             className="mt-4"
           />
