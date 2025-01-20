@@ -11,7 +11,8 @@ interface SortDropdownProps {
 const SortDropdown: React.FC<SortDropdownProps> = ({ sortOption, onSortChange, isDropdownOpen, toggleDropdown }) => {
   return (
     <div className="relative inline-block">
-      <Button onClick={toggleDropdown} text="Sort" className="rounded-md"/>
+      <Button onClick={toggleDropdown} text={`Sort: ${sortOption}`} className="rounded-md hidden md:inline"/>
+      <Button onClick={toggleDropdown} text="Sort" className="rounded-md md:hidden"/>
 
       {isDropdownOpen && (
         <div className="absolute right-0 mt-1 w-40 bg-background_secondary rounded-lg shadow-lg z-50">
