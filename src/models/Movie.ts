@@ -3,6 +3,7 @@
  */
 export type Movie = {
   id: number;
+  tmdbId: number | null;
   title: string;
   description: string;
   language: string;

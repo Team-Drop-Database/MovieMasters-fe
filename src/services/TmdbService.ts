@@ -11,7 +11,7 @@ export async function getTrendingMovies(): Promise<MovieListItemProps[]> {
   const url = `${baseTmdbMovieUrl}/popular?language=${language}&page=${page}`
   const response = await fetch(url, {
     method: "GET",
-    headers: { 
+    headers: {
       accept: "application/json",
       Authorization: `Bearer ${process.env.TMDB_API_KEY}`
     }
@@ -21,7 +21,7 @@ export async function getTrendingMovies(): Promise<MovieListItemProps[]> {
   return mapMovieListToProps(resBody)
 }
 
-export async function getMovieById(movieId: number): Promise<Movie | string> {
+export async function getMovieById(movieId: number): Promise<Movie> {
   try {
     const url = `${baseTmdbMovieUrl}/${movieId}?language=${language}`;
     const response = await fetch(url, {
@@ -35,7 +35,8 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
       const tmdbMovie = await response.json();
 
       return {
-        id: tmdbMovie.id,
+        id: -1,
+        tmdbId: tmdbMovie.id,
         title: tmdbMovie.original_title,
         description: tmdbMovie.overview,
         releaseDate: tmdbMovie.release_date,
@@ -45,7 +46,7 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
       };
     } else {
       const result = await response.json();
-      return result.status_message;
+      throw new Error(result.status_message)
     }
   } catch (error: unknown) {
     if (error instanceof Error) {

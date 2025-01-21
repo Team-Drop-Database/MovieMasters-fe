@@ -4,7 +4,10 @@ import { MovieListItemProps } from "@/utils/mapper/MovieResponseMaps";
 import { setTimeout } from "timers";
 import arrow from "@/assets/images/right-arrow-2.svg";
 import Image from "next/image";
-import Link from "next/link";
+import { redirect } from "next/navigation";
+import { postMovie } from "@/services/MovieService";
+import Movie from "@/models/Movie";
+import { getMovieById } from "@/services/TmdbService";
 
 enum ScrollDirection {
   Forward,
@@ -57,7 +60,7 @@ export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieLi
     if (reachedEnd) {
       newOffset = completeSliderWidth * -1
     }
-    
+
     newOffset >= PAGER_OFFSET ? setShowBackButton(false) : setShowBackButton(true)
 
     setPagerOffset(newOffset)
@@ -79,7 +82,7 @@ export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieLi
       setShowBackButton(false)
     }
   }
-  
+
   return (
     <div className="flex flex-col relative group">
       <div className="flex items-center justify-between px-[4rem] w-full">
@@ -117,12 +120,28 @@ function HorizontalMoviePager({movieItems, cssProperties}: HorizontalMoviePagerP
 }
 
 function MovieListItem({ id, title, posterUrl }: MovieListItemProps) {
+
+  async function navigateToMovie() {
+    let movieId = -1
+    try {
+      const tmdbMovie = await getMovieById(id)
+      const foundMovie = await postMovie(tmdbMovie)
+      movieId = foundMovie.id
+    } catch (error: unknown) {
+      console.warn((error as Error).message)
+    }
+    if (movieId !== -1) {
+      redirect(`/movies/${movieId}#top`)
+    }
+  }
+
   return (
-    <div className=" flex flex-col items-center grow-0 shrink-0 hover:scale-105 transition-transform cursor-pointer">
-      <Link href={`/movies/${id}#top`}>
+    <div
+      className="flex flex-col items-center grow-0 shrink-0 hover:scale-105 transition-transform cursor-pointer"
+      onClick={navigateToMovie}
+    >
       <img src={posterUrl} width={250} className="shadow-2xl" alt={`Poster for ${title}`}></img>
       <p className="font-inter font-semibold mt-2 w-fill text-center max-w-[250px]">{title}</p>
-      </Link>
     </div>
   )
 }

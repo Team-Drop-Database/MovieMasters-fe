@@ -12,6 +12,7 @@ import {useAuthContext} from "@/contexts/AuthContext";
 export default function AddMovie() {
   const defaultMovie: Movie = {
     id: 0,
+    tmdbId: null,
     title: '',
     description: '',
     language: '',
@@ -52,9 +53,7 @@ export default function AddMovie() {
 
   async function getTmdbMovie(formData: FormData): Promise<void> {
     const movieId: FormDataEntryValue | null = formData.get('movieId');
-    if (movieId === null) {
-      return ;
-    }
+    if (movieId === null) { return }
     const tmdbMovie: Movie | string = await getMovieById(+movieId);
     if (typeof tmdbMovie === "object") {
       setMovie(tmdbMovie);

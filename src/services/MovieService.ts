@@ -77,17 +77,17 @@ export async function getNumberOfPages(movieTitle: string | null): Promise<numbe
   }
 }
 
-export async function postMovie(movie: Movie): Promise<boolean | string> {
+export async function postMovie(movie: Movie): Promise<Movie> {
   try {
     const response = await apiClient('/movies', {
       method: 'POST',
       body: JSON.stringify(movie)
     })
 
-    if (response.status === 200) {
-      return true;
+    if (response.status === 200 || response.status === 208) {
+      return await response.json();
     }
-    return await response.text();
+    throw new Error("Could not create movie");
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error);
@@ -123,7 +123,7 @@ export async function getMovieGenres(): Promise<Genre[]> {
 
 /**
  * Retrieves all movies based on a list of genres.
- * 
+ *
  * @param genres list of genre names
  */
 export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
@@ -135,7 +135,7 @@ export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
   }
 
   const endpoint = `/movies/genrefilter${queryString}`;
-  
+
   try {
     const response: Response = await apiClient(endpoint);
 
@@ -156,10 +156,10 @@ export async function getMoviesByGenre(genres: string[]): Promise<Movie[]> {
 }
 
 /**
- * Retrieves a list of lists of movies where each list has its genre 
- * included in it. This mostly utilizes the 'getMoviesByGenre' 
+ * Retrieves a list of lists of movies where each list has its genre
+ * included in it. This mostly utilizes the 'getMoviesByGenre'
  * method and is meant to make it easy to use.
- * 
+ *
  * @param genres list of genre names
  * @returns list of MovieList objects
  */
