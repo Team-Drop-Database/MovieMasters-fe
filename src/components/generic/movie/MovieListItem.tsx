@@ -18,7 +18,7 @@ const SLIDE_TIME = 500
 
 const PAGER_OFFSET = -250;
 
-export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieListItemProps[]}) {
+export function TitledHorizontalMoviePager({ tmdbmode, movieItems }: { tmdbmode: boolean, movieItems: MovieListItemProps[]}) {
   const [movies, setMovies] = React.useState<MovieListItemProps[]>([])
   const [pagerOffset, setPagerOffset] = React.useState(PAGER_OFFSET)
   const [pagerProperties, setPagerProperties] = React.useState<React.CSSProperties>({
@@ -94,34 +94,39 @@ export function TitledHorizontalMoviePager({ movieItems }: { movieItems: MovieLi
           </button>)}
         </div>
       </div>
-      <HorizontalMoviePager movieItems={movies} cssProperties={pagerProperties}/>
+      <HorizontalMoviePager tmdbmode={tmdbmode} movieItems={movies} cssProperties={pagerProperties}/>
     </div>
   )
 }
 
 type HorizontalMoviePagerProps = {
+  tmdbmode: boolean,
   movieItems: MovieListItemProps[],
   cssProperties: React.CSSProperties,
 }
 
-function HorizontalMoviePager({movieItems, cssProperties}: HorizontalMoviePagerProps) {
+function HorizontalMoviePager({tmdbmode, movieItems, cssProperties}: HorizontalMoviePagerProps) {
   return (
     <div className="overflow-x-hidden pt-5 overflow-y-hidden">
       <div style={cssProperties} className="w-fit flex gap-5">
         { [...movieItems, ...movieItems].map((item, index) => (
-          <MovieListItem key={index} id={item.id} title={item.title} posterUrl={item.posterUrl} />
+          <MovieListItem key={index} tmdbmode={tmdbmode} mlip={{
+            id: item.id,
+            title: item.title,
+            posterUrl: item.posterUrl
+          }} />
         ))}
       </div>
     </div>
   )
 }
 
-function MovieListItem({ id, title, posterUrl }: MovieListItemProps) {
+function MovieListItem({ mlip, tmdbmode }: {mlip: MovieListItemProps, tmdbmode: boolean}) {
   return (
     <div className=" flex flex-col items-center grow-0 shrink-0 hover:scale-105 transition-transform cursor-pointer">
-      <Link href={`/movies/${id}#top`}>
-      <img src={posterUrl} width={250} className="shadow-2xl" alt={`Poster for ${title}`}></img>
-      <p className="font-inter font-semibold mt-2 w-fill text-center max-w-[250px]">{title}</p>
+      <Link href={tmdbmode ? `https://www.themoviedb.org/movie/${mlip.id}` : `/movies/${mlip.id}#top`}>
+      <img src={mlip.posterUrl} width={250} className="shadow-2xl" alt={`Poster for ${mlip.title}`}></img>
+      <p className="font-inter font-semibold mt-2 w-fill text-center max-w-[250px]">{mlip. title}</p>
       </Link>
     </div>
   )
