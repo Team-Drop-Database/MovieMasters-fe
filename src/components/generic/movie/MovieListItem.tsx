@@ -91,7 +91,7 @@ export function TitledHorizontalMoviePager({ tmdbmode, movieItems }: { tmdbmode:
         <div className="flex-col justify-end absolute -right-14 top-1/2 origin-center -translate-y-1/2 z-10 opacity-70 hover:opacity-100">
           {showNextButton && (<button className="" onClick={() => scrollMovies(ScrollDirection.Forward)}>
             <Image src={arrow} alt="" className="w-52 hover:scale-110 transition-all opacity-0 group-hover:opacity-100"></Image>
-          </button>)}Heb dit
+          </button>)}
         </div>
       </div>
       <HorizontalMoviePager tmdbmode={tmdbmode} movieItems={movies} cssProperties={pagerProperties}/>
