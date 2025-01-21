@@ -17,6 +17,7 @@ export default function AddMovie() {
     language: '',
     releaseDate: new Date(),
     tmdbRating: 0,
+    mmAvgRating: null,
     posterPath: ''
   }
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
