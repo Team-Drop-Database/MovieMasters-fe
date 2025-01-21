@@ -10,6 +10,7 @@ import SuccessAlert from "@/components/generic/alert/SuccessAlert";
 import ConfirmDialog from "@/components/generic/alert/ConfirmDialog";
 import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink";
 import TextInput from "@/components/generic/TextInput";
+import DeleteIcon from "@/assets/images/delete/delete.svg"
 
 export default function Friends() {
   const {userDetails} = useAuthContext();
@@ -200,7 +201,7 @@ export default function Friends() {
                     <div className="px-2 bg-blue-500 hover:bg-indigo-500 transition-all hover:scale-105 rounded-md">Watchlist</div>
                   </BasicTransitionLink>
                       <Image
-                        src="/delete.svg"
+                        src={DeleteIcon}
                         alt="Delete"
                         width={25}
                         height={25}
