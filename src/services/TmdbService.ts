@@ -41,6 +41,7 @@ export async function getMovieById(movieId: number): Promise<Movie | string> {
         releaseDate: tmdbMovie.release_date,
         language: tmdbMovie.original_language,
         tmdbRating: tmdbMovie.vote_average,
+        mmAvgRating: null,
         posterPath: 'https://image.tmdb.org/t/p/original' + tmdbMovie.poster_path
       };
     } else {
