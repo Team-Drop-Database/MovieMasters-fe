@@ -1,3 +1,4 @@
+import { User, Role } from "@/models/User";
 import apiClient from "@/services/ApiClient";
 
 enum STATUS {
@@ -24,14 +25,30 @@ export async function registerUser(user: object): Promise<string | undefined> {
   }
 }
 
-export async function fetchUserData(username: string) {
+export async function fetchUserData(username: string): Promise<User> {
   const endpoint = `/users/username/${username}`;
   const response = await apiClient(endpoint);
 
-  if (!response.ok) {
+  if (response.ok) {
+    return await response.json();
+  } else if (response.status === STATUS.NOT_FOUND) {
+    throw new Error(`User with username "${username}" could not be found`)
+  } else {
     throw new Error(`Failed to fetch user data. Status: ${response.status}`);
   }
-  return await response.json();
+}
+
+export async function fetchUserByEmail(email: string): Promise<User> {
+  const url = `/users/email/${email}`
+  const response = await apiClient(url)
+
+  if (response.ok) {
+    return await response.json()
+  } else if (response.status === STATUS.NOT_FOUND) {
+    throw new Error(`User with email "${email}" could not be found`)
+  } else {
+    throw new Error(`Failed to fetch user data. Status: ${response.status}`)
+  }
 }
 
 export async function updateUser(
@@ -53,6 +70,18 @@ export async function updateUser(
   }
 
   return await response.json();
+}
+
+export async function updateUserRole(userId: number, role: Role) {
+  const url = `/users/${userId}/role`
+  const response = await apiClient(url, {
+    method: "PUT",
+    body: role,
+  })
+
+  if (!response.ok) {
+    throw new Error("Something went wrong while updating role")
+  }
 }
 
 export async function deleteUser(userId: number | undefined) {

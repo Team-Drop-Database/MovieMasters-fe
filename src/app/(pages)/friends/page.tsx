@@ -9,6 +9,7 @@ import neutral from "@/assets/images/no-profile-pic.jpg";
 import SuccessAlert from "@/components/generic/alert/SuccessAlert";
 import ConfirmDialog from "@/components/generic/alert/ConfirmDialog";
 import BasicTransitionLink from "@/components/generic/transitions/BasicTransitionLink";
+import TextInput from "@/components/generic/TextInput";
 
 export default function Friends() {
   const {userDetails} = useAuthContext();
@@ -21,7 +22,7 @@ export default function Friends() {
   const [selectedUsername, setSelectedUsername] = useState<string | null>(null);
   const [friendRequests, setFriendRequests] = useState([]);
   const [error, setError] = useState<string | null>(null);
-  
+
   useEffect(() => {
     if (userDetails === null) {
       return;
@@ -167,15 +168,7 @@ export default function Friends() {
         <div className="w-full max-w-sm p-6 rounded-lg bg-background_secondary mt-6">
           <h1 className="mb-2">Add Friend</h1>
           <div className="flex items-center space-x-4 mb-4">
-            <input
-              type="text"
-              value={newFriendUsername}
-              onChange={(e) => setNewFriendUsername(e.target.value)}
-              placeholder="Enter friend's username"
-              className="outline-none placeholder-black py-1 px-2 h-fit rounded-md text-black bg-light_grey
-                         hover:bg-light_grey_active hover:duration-300 hover:cursor-text
-                         font-[family-name:var(--font-jura)] w-full"
-            />
+            <TextInput value={newFriendUsername} onChange={setNewFriendUsername} placeholder="Enter friend's username" className="w-full" />
           </div>
           <div className="mb-2">
             <Button text="Add Friend" onClick={handleAddFriend} />

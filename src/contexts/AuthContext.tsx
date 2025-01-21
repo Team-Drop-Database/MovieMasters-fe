@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
 import { refreshToken } from "@/services/AuthService";
-import {Role} from "@/models/Role";
+import { Role } from "@/models/User";
 
 type AuthContextType = {
   isLoggedIn: boolean;
