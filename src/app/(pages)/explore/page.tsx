@@ -65,7 +65,7 @@ export default function Explore() {
                     <div key={i} className="mb-12">
                         <h3 className="font-inter text-3xl ml-4">{movieLists[i].genre}</h3>
                         <div className="">
-                            <TitledHorizontalMoviePager movieItems={formattedMovieList}/>
+                            <TitledHorizontalMoviePager movieItems={formattedMovieList} tmdbmode={false}/>
                         </div>
                     </div>;
                     pageContent.push(content);
